@@ -1,0 +1,77 @@
+A51 MACRO ASSEMBLER  LAB1A                                                                10/07/2016 20:53:21 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.01
+OBJECT MODULE PLACED IN lab1a.OBJ
+ASSEMBLER INVOKED BY: R:\apps-win\Keil\C51\BIN\A51.EXE lab1a.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+----                   1     xseg
+0000                   2     out_str: ds 30
+                       3     
+----                   4     cseg at 0
+0000 8012              5     jmp _start
+0002 54686973          6     in_str: db "This programmator",0
+0006 2070726F                
+000A 6772616D                
+000E 6D61746F                
+0012 7200                    
+                       7     
+0014                   8     _start:
+                       9     
+0014 7800             10     mov R0, #0  
+                      11     
+0016 900000           12     mov dptr, #out_str  
+0019 AA82             13     mov R2, dpl  
+001B AB83             14     mov R3, dph
+                      15     
+001D                  16     __loop:
+001D 900002           17     mov DPTR, #in_str
+0020 E8               18     mov a, R0
+0021 93               19     movc a, @a+DPTR
+                      20     
+0022 6012             21     jz __end  
+                      22     
+0024 8A82             23     mov dpl, R2  
+0026 8B83             24     mov dph, R3
+                      25     
+0028 B46102           26     cjne a, #'a', __nocase  
+                      27     
+002B 7441             28     mov a, #'A'
+                      29     
+002D                  30     __nocase:
+002D F0               31     movx @DPTR, a
+002E A3               32     inc DPTR  
+002F AA82             33     mov R2, dpl  
+0031 AB83             34     mov R3, dph
+                      35     
+0033 08               36     inc R0  
+                      37     
+0034 80E7             38     jmp __loop
+                      39     
+0036                  40     __end:
+                      41     
+                      42     end
+A51 MACRO ASSEMBLER  LAB1A                                                                10/07/2016 20:53:21 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DPH. . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . .  D ADDR   0082H   A   
+IN_STR . . . . . .  C ADDR   0002H   A   
+OUT_STR. . . . . .  X ADDR   0000H   A   
+_START . . . . . .  C ADDR   0014H   A   
+__END. . . . . . .  C ADDR   0036H   A   
+__LOOP . . . . . .  C ADDR   001DH   A   
+__NOCASE . . . . .  C ADDR   002DH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

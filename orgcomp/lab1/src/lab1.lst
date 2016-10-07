@@ -1,9 +1,9 @@
-C51 COMPILER V8.16   LAB1                                                                  09/26/2016 21:50:43 PAGE 1   
+C51 COMPILER V8.16   LAB1                                                                  10/07/2016 20:39:26 PAGE 1   
 
 
 C51 COMPILER V8.16, COMPILATION OF MODULE LAB1
-OBJECT MODULE PLACED IN LAB1.OBJ
-COMPILER INVOKED BY: R:\apps-win\Keil\C51\BIN\C51.exe LAB1.c OPTIMIZE(3,SPEED) BROWSE DEBUG OBJECTEXTEND CODE NOCOND
+OBJECT MODULE PLACED IN lab1.OBJ
+COMPILER INVOKED BY: R:\apps-win\Keil\C51\BIN\C51.exe lab1.c OPTIMIZE(3,SPEED) BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
@@ -29,59 +29,6 @@ line level    source
   20   1      
   21   1          while(1);   // halt
   22   1      }
-C51 COMPILER V8.16   LAB1                                                                  09/26/2016 21:50:43 PAGE 2   
-
-ASSEMBLY LISTING OF GENERATED OBJECT CODE
-
-
-             ; FUNCTION main (BEGIN)
-                                           ; SOURCE LINE # 10
-                                           ; SOURCE LINE # 12
-0000 E4                CLR     A
-0001 F500        R     MOV     i,A
-0003         ?C0001:
-0003 E500        R     MOV     A,i
-0005 900000      R     MOV     DPTR,#source
-0008 93                MOVC    A,@A+DPTR
-0009 602E              JZ      ?C0006
-                                           ; SOURCE LINE # 14
-000B E500        R     MOV     A,i
-000D 93                MOVC    A,@A+DPTR
-000E B50010      R     CJNE    A,from,?C0004
-                                           ; SOURCE LINE # 15
-0011 E500        R     MOV     A,target+01H
-0013 2500        R     ADD     A,i
-0015 F582              MOV     DPL,A
-0017 E4                CLR     A
-0018 3500        R     ADDC    A,target
-001A F583              MOV     DPH,A
-001C E500        R     MOV     A,to
-001E F0                MOVX    @DPTR,A
-001F 8014              SJMP    ?C0003
-0021         ?C0004:
-                                           ; SOURCE LINE # 17
-0021 E500        R     MOV     A,i
-0023 900000      R     MOV     DPTR,#source
-0026 93                MOVC    A,@A+DPTR
-0027 FF                MOV     R7,A
-0028 E500        R     MOV     A,target+01H
-002A 2500        R     ADD     A,i
-002C F582              MOV     DPL,A
-002E E4                CLR     A
-002F 3500        R     ADDC    A,target
-0031 F583              MOV     DPH,A
-0033 EF                MOV     A,R7
-0034 F0                MOVX    @DPTR,A
-                                           ; SOURCE LINE # 19
-0035         ?C0003:
-0035 0500        R     INC     i
-0037 80CA              SJMP    ?C0001
-0039         ?C0006:
-                                           ; SOURCE LINE # 21
-0039 80FE              SJMP    ?C0006
-003B 22                RET     
-             ; FUNCTION main (END)
-
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
@@ -93,8 +40,6 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
-
-C51 COMPILER V8.16   LAB1                                                                  09/26/2016 21:50:43 PAGE 3   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

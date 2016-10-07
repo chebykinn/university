@@ -1,4 +1,4 @@
-\input{../../header.tex}
+\input{header.tex}
 
 \def \labnum {1}
 \def \labsubj {Организация ЭВМ и систем}
@@ -6,14 +6,14 @@
 \def \labgroup {P3301}
 \def \labinsp {Скорубский В. И.}
 \def \labname {}
-\input{../../colored_code.tex}
+\input{colored_code.tex}
 \isnametrue
 \lstset{  
 	caption=\lstname,
 	basicstyle=\ttfamily\selectfont\scriptsize
 }
 \begin{document}
-\input{../../title.tex}
+\input{title.tex}
 \section*{Цель работы}
 \begin{enumerate}
 	\item Обретение базовых навыков работы с MCS51 в среде Keil.
@@ -25,13 +25,13 @@
 В преобразованиях также используется память Data, регистры с адресным и неявным доступом. \\
 Преобразование: Заменить прописную букву “x” на заглавную в тексте 
 \section*{Исходный код}
-\lstinputlisting[language=C]{lab1.c}
+\lstinputlisting[language=C]{src/lab1.c}
 
 \section*{Файл листинга}
-\lstinputlisting{lab1.lst}
+\lstinputlisting{src/lab1.lst}
 
 \section*{Распечатка загрузочного файла}
-\lstinputlisting{lab1.hex}
+\lstinputlisting{src/lab1.hex}
 
 \section*{Таблица значений переменных программы}
 
