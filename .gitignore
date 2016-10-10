@@ -199,3 +199,6 @@ TSWLatexianTemp*
 *.OBJ
 *.lnp
 *.plg
+
+circuitry/*/ise/*
+!circuitry/*/ise/lab.xise
