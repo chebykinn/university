@@ -1,7 +1,26 @@
 `timescale 1ns / 1ps
-`define TPS (100000)
+`define TPS (100000000)
 `define NUM_OF_PIECES 100
 `define PIECE (`TPS / `NUM_OF_PIECES)
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    07:34:42 10/11/2016 
+// Design Name: 
+// Module Name:    pwm 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
 module pwm(
    clk,
 	reset,

@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`define TPS (100000)
+`define TPS (100000000)
 `define NUM_OF_PIECES 100
 `define PIECE (`TPS / `NUM_OF_PIECES)
 module controller(
@@ -25,6 +25,7 @@ module controller(
     wire green;
 	 
     reg [31:0] seconds_counter = 0;
+	 reg [31:0] piece_counter = 0;
 	 reg signed [31:0] border = 0;
 
 	 pwm red_pwm (
@@ -51,9 +52,12 @@ module controller(
 		if(reset || (seconds_counter >= `TPS * 6)) begin
 				border = 0;
 				seconds_counter = 0;
+				piece_counter = 0;
 		end else begin
 			seconds_counter = seconds_counter + 1;
-			if(seconds_counter % `NUM_OF_PIECES == 0) begin
+			piece_counter = piece_counter + 1;
+			if(piece_counter >= `NUM_OF_PIECES) begin
+				piece_counter = 0;
 				if(seconds_counter >= `TPS * 3)
 					border = border - 1;
 				else
