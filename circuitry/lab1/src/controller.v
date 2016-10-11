@@ -37,14 +37,14 @@ module controller(
 	 pwm blue_pwm (
 		.clk(clk), 
 		.reset(reset), 
-		.border(border - `TPS), 
+		.border(border - `PIECE), 
 		.out(blue)
 	 );
 
 	 pwm green_pwm (
 		.clk(clk), 
 		.reset(reset), 
-		.border(border - 2 * `TPS), 
+		.border(border - 2 * `PIECE), 
 		.out(green)
 	 );	 
     always @ (posedge clk) begin

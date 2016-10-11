@@ -35,7 +35,7 @@ module pwm(
 	 
 	wire clk;
 	wire reset;
-	wire border;
+	wire [31:0] border;
 	reg out;
 	 
    reg [15:0] steps_counter = 0;

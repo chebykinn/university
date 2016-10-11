@@ -42,11 +42,27 @@ module test;
 		.green(green)
 	);
 
+	event reset_trigger;
+	event reset_done_trigger;
+	
+	initial begin 
+		forever begin
+			@ (reset_trigger);
+			@ (negedge clk);
+			reset = 1; 
+			@ (negedge clk); 
+			reset = 0; 
+			-> reset_done_trigger;
+		end 
+	end
+
 	initial begin
 		// Initialize Inputs
 		clk = 0;
 		reset = 0;
-
+		
+		#50000 -> reset_trigger;
+		
 	end
 	
 	always begin
