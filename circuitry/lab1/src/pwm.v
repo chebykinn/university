@@ -2,25 +2,6 @@
 `define TPS (100000)
 `define NUM_OF_PIECES 100
 `define PIECE (`TPS / `NUM_OF_PIECES)
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    07:34:42 10/11/2016 
-// Design Name: 
-// Module Name:    pwm 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
 module pwm(
    clk,
 	reset,
@@ -35,10 +16,10 @@ module pwm(
 	 
 	wire clk;
 	wire reset;
-	wire [31:0] border;
+	wire signed [31:0] border;
 	reg out;
 	 
-   reg [15:0] steps_counter = 0;
+   reg signed [31:0] steps_counter = 0;
 
 	
    always @ (posedge clk) begin

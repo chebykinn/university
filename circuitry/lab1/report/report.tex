@@ -2,6 +2,7 @@
 \usepackage{hyperref}
 \hypersetup{pdftex,colorlinks=true,allcolors=black}
 \usepackage{hypcap}
+\usepackage{graphicx}
 \fancyhead[LR]{}
 
 \def \labnum {1}
@@ -52,12 +53,26 @@
 импульсной модуляции (ШИМ) сигнала, подаваемого на светодиод определенного
 цвета. Изменяя скважность сигнала, возможно варьировать яркость светодиода.
 
+\section{Структура модулей}
+\lstinputlisting{src/pwm.v}
+
+\lstinputlisting{src/controller.v}
+
 \section{Структурная схема RTL-модели}
+\centering
+\includegraphics[height=\textheight]{images/scheme.png}
+
+\includegraphics[height=\textheight]{images/pwm.png}
 
 \section{Структура тестового окружения}
+\lstinputlisting{src/test.v}
 
 \section{Временные диаграммы}
+\centering
+\includegraphics[height=\textheight]{images/graph1.png}
+\includegraphics[height=\textheight]{images/graph2.png}
 
+\flushleft
 \section{Вывод}
 В ходе данной лабораторной работы, мы познакомились с основами проектирования цифровых устройств с использованием языка Verilog HDL в среде Xilinx ISE,
 освоили работу с базовыми дискретными элементами ввода/вывода на примере светодиодов.
