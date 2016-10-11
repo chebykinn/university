@@ -17,23 +17,40 @@ module controller(
     output blue;
     output green;
 	 
+	 
     wire clk;
     wire reset;
-    reg red;
-    reg blue;
-    reg green;
+    wire red;
+    wire blue;
+    wire green;
 	 
     reg [31:0] seconds_counter = 0;
-    reg [31:0] steps_counter = 0;
 	 reg signed [31:0] border = 0;
 
-	
-    always @ (posedge clk)
-    begin
+	 pwm red_pwm (
+		.clk(clk), 
+		.reset(reset), 
+		.border(border), 
+		.out(red)
+	 );
+	 
+	 pwm blue_pwm (
+		.clk(clk), 
+		.reset(reset), 
+		.border(border - `TPS), 
+		.out(blue)
+	 );
+
+	 pwm green_pwm (
+		.clk(clk), 
+		.reset(reset), 
+		.border(border - 2 * `TPS), 
+		.out(green)
+	 );	 
+    always @ (posedge clk) begin
 		if(reset || (seconds_counter >= `TPS * 6)) begin
 				border = 0;
 				seconds_counter = 0;
-				steps_counter = 0;
 		end else begin
 			seconds_counter = seconds_counter + 1;
 			if(seconds_counter % `NUM_OF_PIECES == 0) begin
@@ -42,23 +59,8 @@ module controller(
 				else
 					border = border + 1;
 			end;
-			steps_counter = steps_counter + 1;
-			if(steps_counter >= `PIECE)
-				steps_counter = 0;
     	end;
 
-		if(steps_counter < border)
-			red <= 1;
-		else
-			red <= 0;
-		if(steps_counter + `PIECE < border)
-			blue <= 1;
-		else
-			blue <= 0;
-		if(steps_counter + 2 * `PIECE < border)
-			green <= 1;
-		else
-			green <= 0;
 	end;
 	
 endmodule
