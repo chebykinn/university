@@ -1,0 +1,10 @@
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Overhold', 181, 519, '2016-09-01', '288.54');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Domainer', 872, 13, '2016-09-26', '126.99');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Sonair', 369, 231, '2016-09-06', '310.07');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Tin', 201, 73, '2016-09-29', '296.67');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Aerified', 424, 333, '2016-09-28', '369.68');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Veribet', 132, 326, '2016-09-19', '155.08');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Solarbreeze', 353, 73, '2016-09-26', '175.57');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Toughjoyfax', 921, 321, '2016-09-29', '123.31');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Hatity', 526, 225, '2016-09-11', '27.61');
+insert into products (product_id, name, amount, person_id, sell_date, price) values (null, 'Cardguard', 274, 803, '2016-09-06', '199.91');
