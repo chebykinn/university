@@ -1,20 +1,26 @@
 #include <reg51.h>
-typedef unsigned char uint8_t;
-typedef unsigned int uint16_t;
 
-uint16_t bin_to_bcd( uint16_t x ) {
-	// Sign bit
-    uint8_t mask = x & 0x80 ? 0x80 : 0;
-    x *= 10;
-    return ((x & 0x700) >> 4) | ((((x & 0xff) * 10) & 0xf00) >> 8) | mask;
-}
+unsigned long y;
+unsigned long res1;
 
-uint16_t bcd_to_bin( uint16_t x ) {
-    return (((((x & 0x70) >> 4) * 10 + (x & 0x0f)) << 8) / 100)*(x & 0x80 ? -1 : 1);
-}
+main(){
 
-void main() {
-    uint16_t num = bcd_to_bin(P0);
-    P1 = bin_to_bcd(num);
-    while(1);
+	
+	y = (P0 & 0x0f) * 100 + ((P1 & 0xf0) >> 4) * 10 + (P1 & 0x0f);
+	y = y << 16;
+	y = y / 1000;
+	if (P0 & 0x10) y *= -1;
+
+	P2 = 0;
+	if ( (long)y < 0 ) {
+		y *= -1;
+		P2 = 0xD0;
+	}else P2 = 0xC0
+	y = y * 10;
+	P2 |= ((y & 0xf0000)) >> 16;
+	y = (y & 0x0ffff) * 10;
+	P3 = (y & 0xf0000) >> 12;
+	P3 |= ((y & 0xffff) * 10) >> 16;
+	
+	while(1);
 }
