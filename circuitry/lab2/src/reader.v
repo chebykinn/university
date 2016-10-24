@@ -1,23 +1,6 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    19:38:30 10/24/2016 
-// Design Name: 
-// Module Name:    reader 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+`define START 2
+`define END 11
 module reader(
     clk,
 	sdo,
@@ -27,11 +10,11 @@ module reader(
     );
 	
 	input clk;
-    input sdo; //for PmodALS
+   input sdo; //for PmodALS
 	
 	output cs; //for PmodALS
 	output sck; //for PmodALS
-    output data;
+   output data;
 	
 	reg sck;
 	reg cs;
@@ -39,18 +22,21 @@ module reader(
 	reg[7:0] data = 0;
 	reg[3:0] counter = 15;
 	
-	always sck <= clk;
+	// Зацикливается
+	//always sck <= clk;
 		
 	always @ (negedge clk) begin
 		if(counter == 15) begin
 			counter = 0;
 			cs <= 1;
-		end	else begin
+		end else begin
 			cs <= 0;
-			if((counter[2] || counter[3]) && counter < 13) begin
+			//0 0 0 1 1 1 1 1 1 1 1  0  0  0  0
+			//0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+			if(counter > `START && counter < `END) begin
 				tmp = tmp << 1;
 				tmp[0] = sdo;
-			end else if(counter == 13)
+			end else if(counter == `END)
 				data = tmp;	
 			counter = counter + 1;
 		end
