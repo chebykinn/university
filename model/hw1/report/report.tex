@@ -1,0 +1,190 @@
+\input{header.tex}
+\input{hyperref.tex}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{multirow}
+
+\def \labnum {1}
+\def \labtype {Домашняя}
+\def \labsubj {Моделирование}
+\def \labauthor {Чебыкин И. Б.}
+\def \labgroup {P3301}
+\def \labinsp {Муравьева-Витковская Л. А.}
+\def \labname {Вариант: 23/5}
+\input{colored_code.tex}
+\isnametrue
+\lstset{
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+\begin{document}
+\input{title.tex}
+\tableofcontents
+\newpage
+\section{Цель работы}
+Изучение метода Марковских случайных процессов и его
+применение для исследования простейших моделей – систем массового
+обслуживания (СМО) с однородным потоком заявок.
+\section{Задание}
+Разработка и расчет Марковских моделей одно- и многоканальных
+СМО с однородным потоком заявок и выбор наилучшего варианта
+построения СМО в соответствии с заданным критерием эффективности.
+\subsection{Этапы задания}
+\begin{enumerate}
+	\item Разработка Марковских моделей исследуемых систем.
+	\item Освоение программы по расчету Марковских моделей.
+	\item Проведение расчетов по разработанным моделям и обработка результатов.
+	\item Анализ полученных результатов.
+	\item Выбор наилучшего варианта организации системы
+\end{enumerate}
+
+\section{Выполнение}
+\subsection{Параметры}
+
+\subsubsection{Параметры структурной и функциональной организации систем}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{2}{|c|}{Система 1} & \multicolumn{2}{c|}{Система 2} & \multirow{2}{*}{Критерий эффективности} \\ \cline{1-4}
+П             & ЕН              & П            & ЕН              &                                         \\ \hline
+2             & 0/2             & 3            & 0/0/2           & максимальная загрузка системы           \\ \hline
+\end{tabular}
+
+\subsubsection{Параметры структурной и функциональной организации систем}
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Интенс. потока  & Ср. длит. обслуж. & \multicolumn{3}{c|}{Вероятности занятия прибора} \\ \hline
+$\lambda$ (1/c) & B (c)             & П1             & П2             & П3             \\ \hline
+0.5             & 10                & 0.5            & 0.4            & 0.1            \\ \hline
+\end{tabular}
+\\
+
+\newpage
+\subsection{Система 1}
+\includegraphics[width=200px]{img/s1.png}
+
+$p_1 = 0.5, p_2 = 0.5$
+
+\includegraphics[resolution=128]{img/g1.png}
+
+\subsubsection{Стационарные вероятности состояний}
+
+\begin{tabular}{|l|l|}
+\hline
+Код состояния & Вероятность \\ \hline
+E0            & 0.0113      \\ \hline
+E1            & 0.0281      \\ \hline
+E2            & 0.0704      \\ \hline
+E3            & 0.1759      \\ \hline
+E4            & 0.0281      \\ \hline
+E5            & 0.0704      \\ \hline
+E6            & 0.1759      \\ \hline
+E7            & 0.4398      \\ \hline
+\end{tabular}
+
+\subsubsection{Характеристики системы 1}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Характеристика                      & Прибор & Расчетная формула                                                       & Значение \\ \hline
+\multirow{3}{*}{Нагрузка}           & П1     & $y_1 = \lambda\cdot b\cdot b p_1$                                       & 2,5      \\ \cline{2-4}
+                                    & П2     & $y_2 = \lambda\cdot b\cdot b p_2$                                       & 2,5      \\ \cline{2-4}
+                                    & Сумма  & $y = y_1 + y_2$                                                         & 5        \\ \hline
+\multirow{3}{*}{Загрузка}           & П1     & $\rho_1 = p_4 + p_5 + p_6 + p_7$                                        & 0,7142   \\ \cline{2-4}
+                                    & П2     & $\rho_2 = p_1 + p_2 + p_3 + p_5 + p_6 + p_7$                            & 0,9605   \\ \cline{2-4}
+                                    & Сумма  & $\rho = \frac{\rho_1 + \rho_2}{2}$                                      & 0,83735  \\ \hline
+\multirow{3}{*}{Длина очереди}      & П1     & $l_1 = 0$                                                               & 0        \\ \cline{2-4}
+                                    & П2     & $l_2 = p_2 + 2p_3 + p_6 + 2p_7$                                         & 1,4777   \\ \cline{2-4}
+                                    & Сумма  & $l = l_2$                                                               & 1,4777   \\ \hline
+\multirow{3}{*}{Число заявок}       & П1     & $m_1 = p_4 + p_5 + p_6 + p_7$                                           & 0,9671   \\ \cline{2-4}
+                                    & П2     & $m_2 = p1 + 2p_2 + 3p_3 + p_5 + 2p_6 + 3p_7$                            & 3,9583   \\ \cline{2-4}
+                                    & Сумма  & $m = m_1 + m_2$                                                         & 4,9254   \\ \hline
+\multirow{3}{*}{Время ожидания}     & П1     & $w_1=\frac{l_1}{\lambda'_1}$                                            & 0        \\ \cline{2-4}
+                                    & П2     & $w_2=\frac{l_2}{\lambda'_2}$                                            & 15,3815  \\ \cline{2-4}
+                                    & Сумма  & $w = \frac{\lambda'_1 w_1}{\lambda'} + \frac{\lambda'_2 w_2}{\lambda'}$ & 8,8168   \\ \hline
+\multirow{3}{*}{Время пребывания}   & П1     & $u_1 = \frac{m_1}{\lambda'_1}$                                          & 13,5353  \\ \cline{2-4}
+                                    & П2     & $u_2 = \frac{m_2}{\lambda'_2}$                                          & 41,2022  \\ \cline{2-4}
+                                    & Сумма  & $u = \frac{m}{\lambda'}$                                                & 29,3878  \\ \hline
+\multirow{3}{*}{Вероятность потери} & П1     & $\pi_1 = p_4 + p_5 + p_6 + p_7$                                         & 0,7142   \\ \cline{2-4}
+                                    & П2     & $\pi_2 = p_3 + p_7$                                                     & 0,6157   \\ \cline{2-4}
+                                    & Сумма  & $\pi = q_1 \cdot \pi_1 + q_2 \cdot \pi_2$                               & 0,66495  \\ \hline
+\multirow{3}{*}{Производительность} & П1     & $\lambda'_1 = \lambda \cdot q_1(1 - \pi_1)$                             & 0,07145  \\ \cline{2-4}
+                                    & П2     & $\lambda'_2 = \lambda \cdot q_2(1 - \pi_2)$                             & 0,09607  \\ \cline{2-4}
+                                    & Сумма  & $\lambda' = \lambda \cdot (1 - \pi)$                                    & 0,1676   \\ \hline
+\end{tabular}
+
+\newpage
+\subsection{Система 2}
+\includegraphics[width=200px]{img/s2.png}
+
+$p_1 = 0.5, p_2 = 0.4, p_3 = 0.1$\\
+
+\includegraphics[resolution=128]{img/g2.png}
+
+\subsubsection{Стационарные вероятности состояний}
+
+\begin{tabular}{|l|l|}
+\hline
+Код состояния & Вероятность \\ \hline
+E0            & 0.2962      \\ \hline
+E1            & 0.1481      \\ \hline
+E2            & 0.0740      \\ \hline
+E3            & 0.0370      \\ \hline
+E4            & 0.1481      \\ \hline
+E5            & 0.0740      \\ \hline
+E6            & 0.0370      \\ \hline
+E7            & 0.0185      \\ \hline
+E8            & 0.0592      \\ \hline
+E9            & 0.0296      \\ \hline
+E10           & 0.0148      \\ \hline
+E11           & 0.0074      \\ \hline
+E12           & 0.0296      \\ \hline
+E13           & 0.0148      \\ \hline
+E14           & 0.0074      \\ \hline
+E15           & 0.0037      \\ \hline
+\end{tabular}
+
+\subsubsection{Характеристики системы 2}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Характеристика                      & Прибор & Расчетная формула                                                                                        & Значение \\ \hline
+\multirow{4}{*}{Нагрузка}           & П1     & $y_1 = \lambda\cdot b\cdot b p_1$                                                                        & 2,5      \\ \cline{2-4}
+                                    & П2     & $y_2 = \lambda\cdot b\cdot b p_2$                                                                        & 2        \\ \cline{2-4}
+                                    & П3     & $y_3 = \lambda\cdot b\cdot b p_3$                                                                        & 0.5      \\ \cline{2-4}
+                                    & Сумма  & $y = y_1 + y_2 + y_3$                                                                                    & 5        \\ \hline
+\multirow{4}{*}{Загрузка}           & П1     & $\rho_1 = p_8 + p_9 + p_{10} + p_{11} + p_{12} + p_{13} + p_{14} + p_{15}$                                           & 0,1665   \\ \cline{2-4}
+                                    & П2     & $\rho_2 = p_4 + p_5 + p_6 + p_7 + p_8 + p_9 + p_{10} + p_{11}$                                               & 0,3886   \\ \cline{2-4}
+                                    & П3     & $\rho_3 = p_1 + p_2 + p_3 + p_5 + p_6 + p_7 + p_9 + p_{10} + p_{11} + p_{13} + p_{14} + p_{15}$                    & 0,4663   \\ \cline{2-4}
+                                    & Сумма  & $\rho = \frac{\rho_1 + \rho_2 + \rho_3}{3}$                                                              & 0,34046  \\ \hline
+\multirow{4}{*}{Длина очереди}      & П1     & $l_1 = 0$                                                                                                & 0        \\ \cline{2-4}
+                                    & П2     & $l_2 = 0$                                                                                                & 0        \\ \cline{2-4}
+                                    & П3     & $l_3 = p_2 + 2p_3 + p_6 + 2p_7 + p_{10} + 2p_{11} + p_{14} + 2p_{15}$                                            & 0,2664   \\ \cline{2-4}
+                                    & Сумма  & $l = l_3$                                                                                                & 0,2664   \\ \hline
+\multirow{4}{*}{Число заявок}       & П1     & $m_1 = p_8+p_9+p_{10}+p_{11}+p_{12}+p_{13}+p_{14}+p_{15}$                                                            & 0,1665   \\ \cline{2-4}
+                                    & П2     & $m_2 = p_4+p_5+p_6+p_7+p_8+p_9+p_{10}+p_{11}$                                                                & 0,3886   \\ \cline{2-4}
+                                    & П3     & $m_3 = p_1 + 2p_2+3p_3 + p_5 + 2p_6 + 3p_7 + p9+ 2p_{10} + 3p_{11} + p_{13} + 2p_{14} + 3p_{15}$                   & 0,7327   \\ \cline{2-4}
+                                    & Сумма  & $m = m_1 + m_2 + m_3$                                                                                    & 1,2878   \\ \hline
+\multirow{4}{*}{Время ожидания}     & П1     & $w_1=\frac{l_1}{\lambda'_1}$                                                                             & 0        \\ \cline{2-4}
+                                    & П2     & $w_2=\frac{l_2}{\lambda'_2}$                                                                             & 0        \\ \cline{2-4}
+                                    & П3     & $w_3=\frac{l_3}{\lambda'_3}$                                                                             & 5,70816  \\ \cline{2-4}
+                                    & Сумма  & $w = \frac{\lambda'_1 w_1}{\lambda'} + \frac{\lambda'_2 w_2}{\lambda'}+ \frac{\lambda'_3 w_3}{\lambda'}$ & 0,70602  \\ \hline
+\multirow{4}{*}{Время пребывания}   & П1     & $u_1 = \frac{m_1}{\lambda'_1}$                                                                           & 0,7990   \\ \cline{2-4}
+                                    & П2     & $u_2 = \frac{m_2}{\lambda'_2}$                                                                           & 3,1780   \\ \cline{2-4}
+                                    & П3     & $u_3 = \frac{m_3}{\lambda'_3}$                                                                           & 15,6996  \\ \cline{2-4}
+                                    & Сумма  & $u = \frac{m}{\lambda'}$                                                                                 & 3,4130   \\ \hline
+\multirow{4}{*}{Вероятность потери} & П1     & $\pi_1 = p_8+p_9+p_{10}+p_{11}+p_{12}+p_{13}+p_{14}+p_{15}$                                                          & 0,1665   \\ \cline{2-4}
+                                    & П2     & $\pi_2 = p_4+p_5+p_6+p_7+p_8+p_9+p_{10}+p_{11}$                                                              & 0,3886   \\ \cline{2-4}
+                                    & П3     & $\pi_3 = p_3 + p_7 + p_{11} + p_{15}$                                                                        & 0,0666   \\ \cline{2-4}
+                                    & Сумма  & $\pi = q_1 \cdot \pi_1 + q_2 \cdot \pi_2 + q_3 \cdot \pi_3$                                              & 0,24535  \\ \hline
+\multirow{4}{*}{Производительность} & П1     & $\lambda'_1 = \lambda \cdot q_1(1 - \pi_1)$                                                              & 0,208375 \\ \cline{2-4}
+                                    & П2     & $\lambda'_2 = \lambda \cdot q_2(1 - \pi_2)$                                                              & 0,12228  \\ \cline{2-4}
+                                    & П3     & $\lambda'_3 = \lambda \cdot q_3(1 - \pi_3)$                                                              & 0,04667  \\ \cline{2-4}
+                                    & Сумма  & $\lambda' = \lambda \cdot (1 - \pi)$                                                                     & 0,377325 \\ \hline
+\end{tabular}
+\end{adjustbox}
+
+\section{Вывод}
+Исходя из заданного критерия эффективности по максимальной загрузке системы,
+система 1 со значением 0,83735 эффективнее системы 2 со значением 0,34046.
+\end{document}
