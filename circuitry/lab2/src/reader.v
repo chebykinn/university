@@ -42,17 +42,17 @@ module reader(
 	always sck <= clk;
 		
 	always @ (negedge clk) begin
-		if(counter < 15) begin
-			cs <= 0;
-			if(counter > 4 || counter < 13) begin
-				tmp = tmp << 1;
-				tmp[0] = sdo;
-			end else if(counter == 12)
-					data = tmp;	
-			counter = counter + 1;
-		end	else begin
+		if(counter == 15) begin
 			counter = 0;
 			cs <= 1;
+		end	else begin
+			cs <= 0;
+			if((counter[2] || counter[3]) && counter < 13) begin
+				tmp = tmp << 1;
+				tmp[0] = sdo;
+			end else if(counter == 13)
+				data = tmp;	
+			counter = counter + 1;
 		end
 	end;
 	
