@@ -19,13 +19,42 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module reader(
-    input CLK,
-    input CS,
-    input SDO,
-    output [7:0] data
+    clk,
+	sdo,
+	data,
+	cs,
+	sck
     );
-	 
-	 reg[7:0] data;
-
+	
+	input clk;
+    input sdo; //for PmodALS
+	
+	output cs; //for PmodALS
+	output sck; //for PmodALS
+    output data;
+	
+	reg sck;
+	reg cs;
+	reg[7:0] tmp = 0;
+	reg[7:0] data = 0;
+	reg[3:0] counter = 15;
+	
+	always sck <= clk;
+		
+	always @ (negedge clk) begin
+		if(counter < 15) begin
+			cs <= 0;
+			if(counter > 4 || counter < 13) begin
+				tmp = tmp << 1;
+				tmp[0] = sdo;
+			end else if(counter == 12)
+					data = tmp;	
+			counter = counter + 1;
+		end	else begin
+			counter = 0;
+			cs <= 1;
+		end
+	end;
+	
 
 endmodule
