@@ -11,7 +11,7 @@
 \def \labname {Вариант: 2}
 \input{colored_code.tex}
 \isnametrue
-\lstset{  
+\lstset{
 	caption=\lstname,
 	basicstyle=\ttfamily\selectfont\scriptsize
 }
@@ -48,10 +48,24 @@ LED[15:0] 0x0000 – свет включен. Таким образом, все 
 \lstinputlisting{src/write_led.v}
 
 \section{Структурная схема RTL-модели}
+\begin{centering}
+\includegraphics[width=\textwidth]{img/scheme1.png}
+
+\includegraphics[width=\textwidth]{img/scheme2.png}
+\end{centering}
 
 \section{Структура тестового окружения}
 \lstinputlisting{src/test.v}
 
 \section{Временные диаграммы}
+\begin{centering}
+\includegraphics[width=\textwidth]{img/graph1.png}
+
+\includegraphics[width=\textwidth]{img/graph2.png}
+\end{centering}
 \section{Вывод}
+В ходе данной лабораторной работы мы ознакомились с принципами работы последовательных
+интерфейсов ввода/вывода на примере SPI, а также мы изучили основы работы с
+цифровыми датчиками и научились разрабатывать аппаратные контроллеры периферийных
+устройств.
 \end{document}
