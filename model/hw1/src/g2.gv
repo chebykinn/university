@@ -21,38 +21,61 @@ digraph finite_state_machine {
 	node [label="E2  0/0/2"] E2;
 	node [label="E3  0/0/3"] E3;
 
-	E12 -> E13 -> E14 -> E15 [label=<&lambda;p<sub>3</sub>>];
-	E15 -> E14 -> E13 -> E12 [label=<&mu;>];
+
+
 	E8  -> E9  -> E10 -> E11 [label=<&lambda;p<sub>3</sub>>];
 	E11 -> E10 -> E9  -> E8  [label=<&mu;>];
+
+	E12 -> E13 -> E14 -> E15 [label=<&lambda;p<sub>3</sub>>];
+	E15 -> E14 -> E13 -> E12 [label=<&mu;>];
+
 	E4  -> E5  -> E6  -> E7  [label=<&lambda;p<sub>3</sub>>];
 	E7  -> E6  -> E5  -> E4  [label=<&mu;>];
+
 	E0  -> E1  -> E2  -> E3  [label=<&lambda;p<sub>3</sub>>];
 	E3  -> E2  -> E1  -> E0  [label=<&mu;>];
 
-	{ rank=same E0  -> E4  [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E4  -> E8  [label=<&lambda;p<sub>1</sub>>]; }
-	{ rank=same E8  -> E12 [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E1  -> E5  [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E5  -> E9  [label=<&lambda;p<sub>1</sub>>]; }
-	{ rank=same E9  -> E13 [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E2  -> E6  [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E6  -> E10 [label=<&lambda;p<sub>1</sub>>]; }
-	{ rank=same E10 -> E14 [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E3  -> E7  [label=<&lambda;p<sub>2</sub>>]; }
-	{ rank=same E7  -> E11 [label=<&lambda;p<sub>1</sub>>]; }
-	{ rank=same E11 -> E15 [label=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E0:e -> E4:e[dir=forward, xlabel=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E0 -> E12[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E4:w -> E0:w [dir=backward, xlabel=<&mu;>]; }
 
-	{ rank=same E4  -> E0  [label=<&mu;>]; }
-	{ rank=same E8  -> E4  [label=<&mu;>]; }
-	{ rank=same E12 -> E8  [label=<&mu;>]; }
-	{ rank=same E5  -> E1  [label=<&mu;>]; }
-	{ rank=same E9  -> E5  [label=<&mu;>]; }
-	{ rank=same E13 -> E9  [label=<&mu;>]; }
-	{ rank=same E6  -> E2  [label=<&mu;>]; }
-	{ rank=same E10 -> E6  [label=<&mu;>]; }
-	{ rank=same E14 -> E10 [label=<&mu;>]; }
-	{ rank=same E7  -> E3  [label=<&mu;>]; }
-	{ rank=same E11 -> E7  [label=<&mu;>]; }
-	{ rank=same E15 -> E11 [label=<&mu;>]; }
+	{rank=same E1:e -> E5:e[dir=forward, xlabel=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E1 -> E13[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E5:w -> E1:w[dir=backward, xlabel=<&mu;>]; }
+
+	{rank=same E2:e -> E6:e[dir=forward, xlabel=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E2 -> E14[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E6:w -> E2:w[dir=backward, xlabel=<&mu;>]; }
+
+	{rank=same E3:e -> E7:e[dir=forward, xlabel=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E3 -> E15[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E7:w -> E3:w[dir=backward, xlabel=<&mu;>]; }
+
+	{rank=same E4 -> E8[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E8 -> E4[label=<&mu;>]; }
+
+	{rank=same E5 -> E9[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E9 -> E5[label=<&mu;>]; }
+
+	{rank=same E6 -> E10[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E10 -> E6[label=<&mu;>]; }
+
+	{rank=same E7 -> E11[label=<&lambda;p<sub>1</sub>>]; }
+	{rank=same E11 -> E7[label=<&mu;>]; }
+	
+	{rank=same E12 -> E8[label=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E12 -> E0[label=<&mu;>]; }
+	{rank=same E8 -> E12[label=<&mu;>]; }
+
+	{rank=same E13 -> E9[label=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E13 -> E1[label=<&mu;>]; }
+	{rank=same E9 -> E13[label=<&mu;>]; }
+
+	{rank=same E14 -> E10[label=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E14 -> E2[label=<&mu;>]; }
+	{rank=same E10 -> E14[label=<&mu;>]; }
+
+	{rank=same E15 -> E11[label=<&lambda;p<sub>2</sub>>]; }
+	{rank=same E15 -> E3[label=<&mu;>]; }
+	{rank=same E11 -> E15[label=<&mu;>]; }
 }
