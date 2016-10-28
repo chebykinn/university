@@ -1,0 +1,42 @@
+\input{header.tex}
+\isonefalse
+\def \labnum {2}
+\def \labsubj {Организация ЭВМ и систем}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
+\def \labgroup {P3301}
+\def \labinsp {Скорубский В. И.}
+\def \labname {}
+\input{colored_code.tex}
+\isnametrue
+\lstset{
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+\begin{document}
+\input{title.tex}
+\section*{Цель работы}
+\begin{enumerate}
+	\item Обретение базовых навыков работы с MCS51 в среде Keil.
+	\item Изучение архитектуры MCS51.
+	\item Изучение C51 и A51.
+\end{enumerate}
+\section*{Задание}
+Разработать программу ввода и вывода целых чисел со знаком в С51 и А51
+через порты.
+
+Разработать программу ввода и вывода дробных двоичных чисел со знаком в
+С51 и А51 через порты.
+\section*{Исходный код}
+\subsection*{Целые числа}
+\lstinputlisting[language=C]{src/int.c}
+
+\subsection*{Дробные числа}
+\lstinputlisting[language=C]{src/float.c}
+
+\subsection*{Реализация на ассемблере}
+\lstinputlisting{src/int.asm}
+
+\lstinputlisting{src/float.asm}
+
+
+\end{document}
