@@ -1,51 +1,36 @@
-Dseg at 8
-S: ds 2
-Cseg at 0
-Jmp start
-
-start: 
-	clr a
-	mov r0,#8
-	mov r1,P1		//in r1 - dividend
-	mov r2,P2		//in r2 - divider
-
-loop:
+i equ r0
+wrk equ r1
+cseg at 0
+jmp start
+start:
+	mov A, P0
+	mov B, P1
+	mov wrk, P2
+	subb A, wrk
+	jc sta
+	setb ov
+	jmp out
+sta:
+	mov i, #10
+m1:
+	add A, wrk
 	clr c
-	mov b,r1
-	mov a,r2
-	rr a			//r2 div on 2 for comparing
-	anl a,#0x7f
-	xch a,b
-	subb a,b
-	jc below_zero
+cikl:
+	djnz i,m2
+	jmp out
+m2:
+	xch A, B
+	rlc A
+	xch A,B
+	rlc A
+	mov F0, C
+	subb A, wrk
+	jb F0, cikl
+	jc m1
+	setb c
+	jmp cikl
+out:
+	mov P3, B
+	sjmp $
+	end
 
-above_zero:		// r1*2 > r2
-	clr a
-	mov a,r1
-	mov b,r2
-	subb a,b
-	mov b,r1
-	add a,b
-	mov r1,a
-	clr a
-	mov a,r3
-	rl a
-	inc a
-	mov r3,a
-	jmp finish
-
-below_zero:		//r1*2 < r2
-	mov a,r1
-	rl a
-	anl a,#0xfe
-	mov r1,a
-	mov a,r3
-	rl a
-	mov r3,a
-
-finish:
-	djnz r0,loop
-	mov P3,r3
-	
-	jmp $
-end

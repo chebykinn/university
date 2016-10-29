@@ -1,6 +1,6 @@
 \input{header.tex}
 \isonefalse
-\def \labnum {2}
+\def \labnum {3}
 \def \labsubj {Организация ЭВМ и систем}
 \def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
 \def \labgroup {P3301}
@@ -14,29 +14,18 @@
 }
 \begin{document}
 \input{title.tex}
-\section*{Цель работы}
-\begin{enumerate}
-	\item Обретение базовых навыков работы с MCS51 в среде Keil.
-	\item Изучение архитектуры MCS51.
-	\item Изучение C51 и A51.
-\end{enumerate}
 \section*{Задание}
-Разработать программу ввода и вывода целых чисел со знаком в С51 и А51
-через порты.
+\subsection*{Умножение}
+Program Size: data=15.0 xdata=0 code=138
+\lstinputlisting[language=C]{src/mul.c}
 
-Разработать программу ввода и вывода дробных двоичных чисел со знаком в
-С51 и А51 через порты.
-\section*{Исходный код}
-\subsection*{Целые числа}
-\lstinputlisting[language=C]{src/int.c}
+Program Size: data=10.0 xdata=0 code=64
+\lstinputlisting{src/mul.asm}
 
-\subsection*{Дробные числа}
-\lstinputlisting[language=C]{src/float.c}
+\subsection*{Деление}
+Program Size: data=13.0 xdata=0 code=94
+\lstinputlisting[language=C]{src/div.c}
 
-\subsection*{Реализация на ассемблере}
-\lstinputlisting{src/int.asm}
-
-\lstinputlisting{src/float.asm}
-
-
+Program Size: data=10.0 xdata=0 code=46
+\lstinputlisting{src/div.asm}
 \end{document}
