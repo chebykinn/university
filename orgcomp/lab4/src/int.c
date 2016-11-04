@@ -1,17 +1,18 @@
-#include <stdio.h>
+#include <reg51.h>
 
 typedef unsigned int uint16_t;
 typedef unsigned char uint8_t;
 
 int main(){
-	uint16_t num = 0, x, m = 100;
+	int num, x, m;	  
+	m = 100;
+	while(1)
     for( x = 0; x < 100; x++ ) {
     	num = 1;
-		num = ( m - 5 * x / 9 ) / m;
-		num = ( m - x / 2 * num ) / m;
-		num = ( m - x / 4 * num ) / m;
-		num = x / 2 * num;
+		num = ( m - (5 * x) / 9 );
+		num = ( m - (x * num) / 2 / m);
+		num = ( m - (x * num) / 4 / m);
+		num = (x * num) / 2 / m;
 		P3 = num;
     }
-	while(1);
 }
