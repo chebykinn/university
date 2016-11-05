@@ -1,4 +1,4 @@
-
+#include <reg51.h>
 
 int main(){
 	int num, x, m;	  

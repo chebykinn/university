@@ -1,11 +1,11 @@
 \input{header.tex}
 \isonefalse
-\def \labnum {3}
+\def \labnum {4}
 \def \labsubj {Организация ЭВМ и систем}
 \def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
 \def \labgroup {P3301}
 \def \labinsp {Скорубский В. И.}
-\def \labname {}
+\def \labname {Вариант 3}
 \input{colored_code.tex}
 \isnametrue
 \lstset{
@@ -15,17 +15,24 @@
 \begin{document}
 \input{title.tex}
 \section*{Задание}
-\subsection*{Умножение}
-Program Size: data=15.0 xdata=0 code=138
-\lstinputlisting[language=C]{src/mul.c}
 
-Program Size: data=10.0 xdata=0 code=64
-\lstinputlisting{src/mul.asm}
+Исходная формула:
+$$x^{0.5} = \frac{x}{2} - \frac{x^2}{2\cdot4} + \frac{1\cdot3\cdot x^3}{2\cdot4\cdot6} - \frac{1\cdot3\cdot5\cdot x^4}{2\cdot4\cdot6\cdot9}$$
+Преобразованная по схеме Гарнера:
+$$\frac{x}{2}(1 - \frac{x}{4}(1 - \frac{x}{2}(1 - \frac{5x}{9})))$$
 
-\subsection*{Деление}
-Program Size: data=13.0 xdata=0 code=94
-\lstinputlisting[language=C]{src/div.c}
+Program Size: data=11.0 xdata=0 code=302, time=0.112s
+\lstinputlisting[language=C]{src/int.c}
 
-Program Size: data=10.0 xdata=0 code=46
-\lstinputlisting{src/div.asm}
+Program Size: data=11.0 xdata=0 code=229, time=0.078s
+\lstinputlisting[language=C]{src/int3.c}
+
+Program Size: data=11.0 xdata=0 code=128, time=0.046s
+\lstinputlisting[language=C]{src/int2.c}
+
+Size: data=21.0 xdata=0 code=853, time=2.46s
+\lstinputlisting[language=C]{src/float.c}
+
+Program Size: data=9.0 xdata=0 code=42, time=0.0189s
+\lstinputlisting[language=C]{src/int.asm}
 \end{document}
