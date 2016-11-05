@@ -1,44 +1,37 @@
-Dseg at 0x08 ;размещение данных в сегменте Data
-	;ai: ds 1
+Dseg at 0x08
+	ai: ds 1
 	s: ds 1
-	x equ r0 ;требуется регистр в команде cjne
-	ai equ r1 ;требуется регистр в команде cjne
+	x equ r0
 
-	cseg at 0x0 ; начало программы в сегменте Code
+	cseg at 0x0
 	jmp start
 
-Si1: ; Si в АСС
-	; S= 0xff- (((y*S)>>8)*ai)>>8
+Si1: 
 	mov b, x
-	mul ab ;y*S
+	mul ab
 	mov a, ai
-	mul ab ;(( )>>8)*ai
+	mul ab
 	mov a, #0xff
-	subb a, b ;возврат Si+1 в АСС
+	subb a, b
+	ret
 
 start: 
 	mov x,#0
-	;y=(x*x)>>8; S=0xff;
 
 cikl: 
-	;mov a,x
-	;mov b,x
-	;mul ab
-	;mov y,b
-	mov s,#0x01
-	mov ai, #142 ;a1
-	call Si1 ; S= 0xff- (((y*S)>>8)*6)>>8 )
-	mov ai, #128 ;a2
-	call Si1 ; S= 0xff- (((y*S)>>8)*13)>>8)
-	mov ai, #64 ;a3
-	call Si1 ; S= 0xff- (((y*S)>>8)*43)>>8)
-	mov ai, #128 ;a3
-	call Si1 ; S= 0xff- (((y*S)>>8)*43)>>8)
-	;mov b,x ;S=(S*x)>>8
-	;mul ab
+	mov a,#0x01
+	mov ai, #142
+	call Si1
+	mov ai, #128
+	call Si1
+	mov ai, #64
+	call Si1
+	mov b, x
+	mul ab
+	mov a, #128
+	mul ab
 	mov P3, b
-	inc x
-	cjne x, #0xff,cikl
-	jmp start
-	nop
+		inc x
+		jmp cikl
+		nop
 	end
