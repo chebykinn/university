@@ -25,12 +25,17 @@ module read (
 	reg[3:0] counter = 15;
 	
 	always @ (clk) sck = clk;
-		
-	always @ (posedge clk) begin
+
+	always @ (clk) begin
 		if(counter == 15) begin
-			cs = 1;
+			cs = clk;
 		end else begin
 			cs = 0;
+		end
+	end;
+		
+	always @ (posedge clk) begin
+		if(counter < 15) begin
 			if(counter > `START && counter < `END) begin
 				data = data << 1;
 				data[0] = sdo;

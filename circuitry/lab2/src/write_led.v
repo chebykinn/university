@@ -3,26 +3,26 @@
 module write_led (
 	clk,
 	data,
-	cmprtr_data,
+	comp_data,
 	switch,
 	led
 	);
 	
 	input clk;
 	input data;
-	input cmprtr_data;
+	input comp_data;
 	input switch;
 	
 	output led;
 	
 	wire[7:0] data;
-	wire[7:0] cmprtr_data;
+	wire[7:0] comp_data;
 	
 	reg[15:0] led = 16'hFFFF;
 	
-	always @(posedge clk or switch) begin
+	always @(posedge clk) begin
 		if( switch == 0 ) begin
-			if( data > cmprtr_data )
+			if( data > comp_data )
 				led = 16'h0000;
 			else
 				led = 16'hFFFF;		

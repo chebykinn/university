@@ -4,7 +4,7 @@ module lab2(
     clk,
     sdo,
     switch,
-	cmprtr_data,
+	comp_data,
     sck,
     led,
     cs
@@ -13,7 +13,7 @@ module lab2(
 	input clk;
 	input sdo;
     input switch;
-	input cmprtr_data;
+	input comp_data;
 	
     output sck;
     output[15:0] led;
@@ -34,7 +34,7 @@ read reader (
 write_led writer (
 		.clk(read_flag),
 		.data(data),
-		.cmprtr_data(cmprtr_data),
+		.comp_data(comp_data),
 		.switch(switch),
 		.led(led)
 	);
