@@ -35,7 +35,7 @@ module read (
 	end;
 		
 	always @ (posedge clk) begin
-		if(counter < 15) begin
+		if(counter != 15) begin
 			if(counter > `START && counter < `END) begin
 				data = data << 1;
 				data[0] = sdo;
