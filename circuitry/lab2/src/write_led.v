@@ -1,43 +1,33 @@
 `timescale 1ns / 1ps
 
-module write_led(
-	sdo,
+module write_led (
 	clk,
-	sw,
-	cs,
-	sck,
+	data,
+	cmprtr_data,
+	switch,
 	led
 	);
 	
-	input sdo; //for PmodALS
 	input clk;
-	input sw;
+	input data;
+	input cmprtr_data;
+	input switch;
 	
-	output cs; //for PmodALS
-	output sck; //for PmodALS
 	output led;
 	
 	wire[7:0] data;
+	wire[7:0] cmprtr_data;
 	
 	reg[15:0] led = 16'hFFFF;
 	
-	reader read (
-		.clk(clk),
-		.sdo(sdo),
-		.data(data),
-		.cs(cs),
-		.sck(sck)
-	);
-	
-	always @(negedge clk) begin
-		if( sw == 0 ) begin
-			if( data > 0 )
-				led <= 16'h0000;
+	always @(posedge clk or switch) begin
+		if( switch == 0 ) begin
+			if( data > cmprtr_data )
+				led = 16'h0000;
 			else
-				led <= 16'hFFFF;
-				
+				led = 16'hFFFF;		
 		end else begin
-			led <= data;
+			led = data;
 		end;
 	end;
 

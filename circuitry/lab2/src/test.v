@@ -6,8 +6,9 @@ module test;
 	// Inputs
 	reg clk;
 	reg sdo;
-	reg sw;
+	reg switch = 0;
 	reg pf;
+	reg [7:0] cmprtr_data = 8'h0F;
 	reg [15:0] test_input = 16'b0001111011100000;
 	reg [3:0] i;
 	
@@ -15,13 +16,14 @@ module test;
 	wire sck;
 
 	// Instantiate the Unit Under Test (UUT)
-	write_led uut (
-		.sdo(sdo),
+	lab2 uut (
 		.clk(clk), 
-		.sw(sw), 
-		.cs(cs),
+		.sdo(sdo),
+		.switch(switch),
+		.cmprtr_data(cmprtr_data),
 		.sck(sck),
-		.led(led)
+		.led(led),
+		.cs(cs)
 	);
 	
 	event sw_trigger;
@@ -30,7 +32,7 @@ module test;
 		forever begin
 			@ (sw_trigger);
 			@ (posedge clk); 
-			sw = ~sw; 
+			switch = ~switch; 
 		end 
 	end
 	
@@ -38,7 +40,7 @@ module test;
 		// Initialize Inputs
 		pf = 0;
 		clk = 0;
-		sw = 0;
+		switch = 0;
 		sdo = 0;
 	end
       
@@ -47,7 +49,7 @@ module test;
 	end
 	
 	always begin
-		#100 sw <= ~sw;
+		#100 switch <= ~switch;
 	end
 	
 	always @(posedge cs)
@@ -56,7 +58,7 @@ module test;
 	always @(negedge cs)
 		pf = 1;
 	
-	always @(posedge sck) begin
+	always @(negedge sck) begin
 		if(pf && i > 0) begin
 			sdo = test_input[i];
 			i = i - 1;
