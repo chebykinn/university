@@ -10,7 +10,7 @@ module test;
 	reg pf;
 	reg [7:0] comp_data = 8'h0F;
 	reg [15:0] test_input = 16'b0001111011100000;
-	reg [3:0] i;
+	reg [3:0] i = 15;
 	
 	wire [15:0] led;
 	wire sck;
