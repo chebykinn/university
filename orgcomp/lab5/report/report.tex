@@ -1,0 +1,31 @@
+\input{header.tex}
+\isonefalse
+\def \labnum {3}
+\def \labsubj {Организация ЭВМ и систем}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
+\def \labgroup {P3301}
+\def \labinsp {Скорубский В. И.}
+\def \labname {}
+\input{colored_code.tex}
+\isnametrue
+\lstset{
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+\begin{document}
+\input{title.tex}
+\section*{Задание}
+\subsection*{Умножение}
+Program Size: data=15.0 xdata=0 code=138
+\lstinputlisting[language=C]{src/mul.c}
+
+Program Size: data=10.0 xdata=0 code=64
+\lstinputlisting{src/mul.asm}
+
+\subsection*{Деление}
+Program Size: data=13.0 xdata=0 code=94
+\lstinputlisting[language=C]{src/div.c}
+
+Program Size: data=10.0 xdata=0 code=46
+\lstinputlisting{src/div.asm}
+\end{document}
