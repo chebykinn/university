@@ -1,9 +1,9 @@
 Dseg at 0x10
-	aa: ds 1
-	bb: ds 1
-	cc: ds 1
-	dd: ds 1
-	ii: ds 1
+	aa equ r7
+	bb equ r6
+	cc equ r5
+	dd equ r4
+	ii equ r3
 
 	cseg at 0x0
 jmp start
@@ -33,8 +33,9 @@ loop:
 	anl a, #0x02
 	mov cc, a
 
+	clr c
 	mov a, ii
-	subb a, #4
+	subb a, #0x04
 	mov dd, a
 
 ;(aa > dd)
@@ -45,7 +46,9 @@ loop:
 	
 ;(aa > dd) & (bb != cc) 
 	mov a, cc
-	cjne a, bb, M3 ; if(cc!=dd) goto M3
+	clr c
+	subb a, bb
+	jnz M2 ; if(cc!=dd) goto M3
 
 ;(dd >= cc)
 M1: 
@@ -55,12 +58,12 @@ M1:
 	jz M2
 	jnc M3 ; if (bb==0) goto M3
 M2: 
-	mov R7,#0x01
+	mov r1, #0x01
 	sjmp M4
 M3: 
-	mov R7,#0x00 ; S=0
+	mov r1, #0x00 ; S=0
 M4: 
-	mov P3,R7 ; S=1
+	mov P3, r1 ; S=1
 	
 	inc ii
 	sjmp loop
