@@ -1,6 +1,6 @@
 package com.part2;
 import org.jooq.impl.DSL;
-import org.jooq.util.maven.example.tables.Persons;
+import classes.tables.Persons;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

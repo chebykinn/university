@@ -80,7 +80,7 @@
                             <inputSchema>${jdbc.database.name}</inputSchema>
                         </database>
                         <target>
-                            <packageName>org.jooq.util.maven.example</packageName>
+                            <packageName>classes</packageName>
                             <directory>target/generated-sources/jooq</directory>
                         </target>
                     </generator>
