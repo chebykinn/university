@@ -19,6 +19,8 @@ public class Main {
                 System.out.println(rc);
             }catch (IllegalArgumentException e){
                 System.err.println(e.getMessage());
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

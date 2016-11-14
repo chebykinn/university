@@ -1,5 +1,7 @@
 package com.part2;
 
+import classes.routines.AddSellLog;
+import classes.routines.UpdateSellLog;
 import classes.tables.*;
 import classes.tables.records.*;
 import classes.udt.records.PassportRecord;
@@ -247,6 +249,9 @@ public class Store {
 
         // sell_log add 9 1 100
         if( out_args != null ){
+            out_args[0] = Integer.parseInt(out_args[0].toString());
+            out_args[1] = Integer.parseInt(out_args[1].toString());
+            out_args[2] = Integer.parseInt(out_args[2].toString());
             if(out_args[3] != null ){
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date parsed;
@@ -256,6 +261,25 @@ public class Store {
                     parsed = new java.util.Date();
                 }
                 out_args[3] = new java.sql.Date(parsed.getTime());
+            }else{
+                out_args[3] = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+            }
+
+
+            if( type == CmdType.ADD ){
+                AddSellLog add = new AddSellLog();
+                add.setPId((int)out_args[0]);
+                add.setShId((int)out_args[1]);
+                add.setInAmount((int)out_args[2]);
+                add.setDate((java.sql.Date)out_args[3]);
+                return add.execute(ctx.configuration());
+            }else{
+                UpdateSellLog upd = new UpdateSellLog();
+                upd.setPId((int)out_args[0]);
+                upd.setShId((int)out_args[1]);
+                upd.setInAmount((int)out_args[2]);
+                upd.setInDate((Date)out_args[3]);
+                return upd.execute(ctx.configuration());
             }
         }
         return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
