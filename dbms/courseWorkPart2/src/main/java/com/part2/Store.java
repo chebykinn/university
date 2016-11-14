@@ -3,6 +3,7 @@ package com.part2;
 import classes.tables.*;
 import classes.tables.records.*;
 import classes.udt.records.PassportRecord;
+import org.apache.jackrabbit.webdav.ordering.Position;
 import org.jooq.*;
 import org.jooq.impl.TableImpl;
 import org.jooq.types.Interval;
@@ -28,14 +29,14 @@ public class Store {
         FIELDS,
     };
 
-    public Store(){
+    Store(){
     }
 
-    public Store(DSLContext ctx){
+    Store(DSLContext ctx){
         this.ctx = ctx;
     }
 
-    public CmdType checkCmd(String[] args) throws IllegalArgumentException{
+    private CmdType checkCmd(String[] args) throws IllegalArgumentException{
         if( ctx == null ){
             throw new IllegalArgumentException("not connected");
         }
@@ -66,7 +67,7 @@ public class Store {
         return type;
     }
 
-    public<R extends UpdatableRecord, T extends TableImpl<R>, F extends TableField<R, Integer>>
+    private <R extends UpdatableRecord, T extends TableImpl<R>, F extends TableField<R, Integer>>
                                 int doCommand(T table, F[] pkey, CmdType type, int[] id, String fieldName, Object[] args, boolean skip_id){
         R record = null;
         if( type == CmdType.ADD || type == CmdType.FIELDS ){
@@ -114,9 +115,7 @@ public class Store {
         return (int)record.getValue(0);
     }
 
-    public<R extends UpdatableRecord, T extends TableImpl<R>> Object[]
-            prepareArgs(T table, CmdType type, String[] args, int[] ids, String[] field_name, boolean skip_id) throws IllegalArgumentException{
-
+    private Object[] prepareArgs(int fields_len, CmdType type, String[] args, int[] ids, String[] field_name, boolean skip_id) throws IllegalArgumentException{
         int argsStart = 2;
         Object[] out_args = null;
         if( type == CmdType.READ || type == CmdType.UPDATE || type == CmdType.DELETE ){
@@ -131,14 +130,13 @@ public class Store {
             }
         }
         if( type == CmdType.ADD || type == CmdType.UPDATE ) {
-            int fields_len = table.fields().length;
             out_args = new Object[fields_len];
             System.arraycopy(args, argsStart, out_args, 0, args.length-argsStart);
         }
         return out_args;
     }
 
-    public int personCmd(String[] args) throws IllegalArgumentException{
+    int personCmd(String[] args) throws IllegalArgumentException{
         CmdType type = checkCmd(args);
         String[] field_name = new String[1];
         int[] ids = new int[1];
@@ -146,7 +144,7 @@ public class Store {
         TableField<PersonsRecord, Integer>[] pkey = new TableField[1];
         pkey[0] = Persons.PERSONS.PERSON_ID;
 
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
+        Object[] out_args = prepareArgs(table.fields().length, type, args, ids, field_name, true);
         if( out_args != null ) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsed;
@@ -172,142 +170,72 @@ public class Store {
 
     }
 
-    public int positionCmd(String[] args) {
+    <R extends UpdatableRecord, F extends TableField<R, Integer>>
+            int generalCmd(TableImpl<R> table, F[] pkey, boolean skipId, String[] args){
         CmdType type = checkCmd(args);
         String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<PositionsRecord> table = Positions.POSITIONS;
-        TableField<PositionsRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = Positions.POSITIONS.POSITION_ID;
+        int[] ids = new int[pkey.length];
 
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
+        Object[] out_args = prepareArgs(table.fields().length, type, args, ids, field_name, skipId);
 
+        return doCommand(table, pkey, type, ids, field_name[0], out_args, skipId);
+    }
+
+    int positionCmd(String[] args) {
         // position add name desc
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(Positions.POSITIONS, new TableField[]{Positions.POSITIONS.POSITION_ID}, true, args);
     }
 
-    public int positionSalaryCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[2];
-        TableImpl<PositionSalaryRecord> table = PositionSalary.POSITION_SALARY;
-        TableField<PositionSalaryRecord, Integer>[] pkey = new TableField[2];
-        pkey[0] = PositionSalary.POSITION_SALARY.POSITION_ID;
-        pkey[1] = PositionSalary.POSITION_SALARY.SHOP_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
-
-
-
+    int positionSalaryCmd(String[] args) {
         // salary add 1 1 100000
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(PositionSalary.POSITION_SALARY, new TableField[]{
+                PositionSalary.POSITION_SALARY.POSITION_ID,
+                PositionSalary.POSITION_SALARY.SHOP_ID,
+        }, true, args);
     }
 
-    public int scheduleCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<PersonScheduleRecord> table = PersonSchedule.PERSON_SCHEDULE;
-        TableField<PersonScheduleRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = PersonSchedule.PERSON_SCHEDULE.SCHED_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
-
+    int scheduleCmd(String[] args) {
         // schedule add 9 0
-        if( out_args != null ){
-            out_args[1] = out_args[1].toString();
-            out_args[2] = null;
-        }
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(PersonSchedule.PERSON_SCHEDULE, new TableField[]{PersonSchedule.PERSON_SCHEDULE.SCHED_ID}, true, args);
     }
 
-    public int personShopCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<PersonShopRecord> table = PersonShop.PERSON_SHOP;
-        TableField<PersonShopRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = PersonShop.PERSON_SHOP.PERSON_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, false);
-
+    int personShopCmd(String[] args) {
         // shop_person add 9 1
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, false);
+        return generalCmd(PersonShop.PERSON_SHOP, new TableField[]{PersonShop.PERSON_SHOP.PERSON_ID}, false, args);
     }
 
-    public int shopCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<ShopsRecord> table = Shops.SHOPS;
-        TableField<ShopsRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = Shops.SHOPS.SHOP_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
-
+    int shopCmd(String[] args) {
         // shop add testst
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(Shops.SHOPS, new TableField[]{Shops.SHOPS.SHOP_ID}, true, args);
     }
 
-    public int productCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<ProductsRecord> table = Products.PRODUCTS;
-        TableField<ProductsRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = Products.PRODUCTS.PRODUCT_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
-
+    int productCmd(String[] args) {
         // product add testproduct 1
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(Products.PRODUCTS, new TableField[]{Products.PRODUCTS.PRODUCT_ID}, true, args);
     }
 
-    public int productAmountCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[2];
-        TableImpl<ProductAmountsRecord> table = ProductAmounts.PRODUCT_AMOUNTS;
-        TableField<ProductAmountsRecord, Integer>[] pkey = new TableField[2];
-        pkey[0] = ProductAmounts.PRODUCT_AMOUNTS.PRODUCT_ID;
-        pkey[1] = ProductAmounts.PRODUCT_AMOUNTS.SHOP_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, false);
-
+    int productAmountCmd(String[] args) {
         // product_amount add 1 1 100
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, false);
+        return generalCmd(ProductAmounts.PRODUCT_AMOUNTS, new TableField[]{
+                ProductAmounts.PRODUCT_AMOUNTS.PRODUCT_ID,
+                ProductAmounts.PRODUCT_AMOUNTS.SHOP_ID,
+        }, false, args);
     }
 
-    public int productPriceCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[2];
-        TableImpl<ProductPricesRecord> table = ProductPrices.PRODUCT_PRICES;
-        TableField<ProductPricesRecord, Integer>[] pkey = new TableField[2];
-        pkey[0] = ProductPrices.PRODUCT_PRICES.PRODUCT_ID;
-        pkey[1] = ProductPrices.PRODUCT_PRICES.SHOP_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, false);
-
+    int productPriceCmd(String[] args) {
         // product_amount add 1 1 100
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, false);
+        return generalCmd(ProductPrices.PRODUCT_PRICES, new TableField[]{
+                ProductPrices.PRODUCT_PRICES.PRODUCT_ID,
+                ProductPrices.PRODUCT_PRICES.SHOP_ID,
+        }, false, args);
     }
 
-    public int productTypeCmd(String[] args) {
-        CmdType type = checkCmd(args);
-        String[] field_name = new String[1];
-        int[] ids = new int[1];
-        TableImpl<ProductTypesRecord> table = ProductTypes.PRODUCT_TYPES;
-        TableField<ProductTypesRecord, Integer>[] pkey = new TableField[1];
-        pkey[0] = ProductTypes.PRODUCT_TYPES.TYPE_ID;
-
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
-
+    int productTypeCmd(String[] args) {
         // product_type add title desc
-        return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+        return generalCmd(ProductTypes.PRODUCT_TYPES, new TableField[]{ProductTypes.PRODUCT_TYPES.TYPE_ID}, true, args);
     }
 
-    public int sellLogCmd(String[] args) {
+    int sellLogCmd(String[] args) {
         CmdType type = checkCmd(args);
         String[] field_name = new String[1];
         int[] ids = new int[1];
@@ -315,7 +243,7 @@ public class Store {
         TableField<SellLogRecord, Integer>[] pkey = new TableField[1];
         pkey[0] = SellLog.SELL_LOG.LOG_ID;
 
-        Object[] out_args = prepareArgs(table, type, args, ids, field_name, true);
+        Object[] out_args = prepareArgs(table.fields().length, type, args, ids, field_name, true);
 
         // sell_log add 9 1 100
         if( out_args != null ){
