@@ -1,10 +1,5 @@
 package com.part2;
-import org.jooq.impl.DSL;
-import classes.tables.Persons;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.logging.LogManager;
 
 public class Main {
@@ -13,20 +8,18 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String user = "coursework";
-        String password = "123456789";
-        String url = "jdbc:postgresql://chebykinn.ru:1488/coursework";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-
-            DSL.using(connection)
-                    .select(Persons.PERSONS.FIRST_NAME).from(Persons.PERSONS)
-                    .forEach(
-                            (l) -> System.out.println(l.get(0))
-                    );
-        } catch (SQLException e) {
-            e.printStackTrace();
+        CLI cli = new CLI();
+        while (true){
+            System.out.print("> ");
+            Scanner s = new Scanner(System.in);
+            String cmdline = s.nextLine();
+            try {
+                int rc = cli.readline(cmdline);
+                if( rc == -1 ) break;
+                System.out.println(rc);
+            }catch (IllegalArgumentException e){
+                System.err.println(e.getMessage());
+            }
         }
-
     }
 }
