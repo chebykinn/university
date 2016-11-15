@@ -6,6 +6,7 @@ import classes.tables.*;
 import classes.tables.records.*;
 import classes.udt.records.PassportRecord;
 import org.jooq.*;
+import org.jooq.impl.AbstractRoutine;
 import org.jooq.impl.TableImpl;
 
 import java.sql.Date;
@@ -24,8 +25,6 @@ public class Store {
         DELETE,
         FIELDS,
     }
-
-    ;
 
     Store() {
     }
@@ -54,9 +53,6 @@ public class Store {
         }
 
         if (args.length < 3) {
-            if (type == CmdType.READ) {
-                throw new IllegalArgumentException("Need field name for read command");
-            }
             if (type == CmdType.ADD) {
                 throw new IllegalArgumentException("Need at least one field");
             }
@@ -74,9 +70,34 @@ public class Store {
             record = ctx.newRecord(table);
         }
 
-        if (type == CmdType.READ && id[0] == 0) {
+        if (type == CmdType.READ || type == CmdType.UPDATE || type == CmdType.DELETE) {
+            if (pkey.length == 1) {
+                record = ctx.fetchOne(table, pkey[0].equal(id[0]));
+            } else {
+                record = ctx.fetchOne(table, pkey[0].equal(id[0]).and(pkey[1].equal(id[1])));
+            }
+            if (record == null && type != CmdType.READ) {
+                throw new IllegalArgumentException("No such row");
+            }
+        }
+        if (type == CmdType.DELETE) {
+            record.delete();
+            return 0;
+        }
+
+        if (type == CmdType.READ) {
+            if( id[0] > 0 && record == null ){
+                throw new IllegalArgumentException("No such row");
+            }
+            Result<R> records;
+            if( record != null ) {
+                records = ctx.newResult(table);
+                records.add(record);
+            }else{
+                records = ctx.fetch(table);
+            }
             boolean printed = false;
-            for (R r : ctx.fetch(table)) {
+            for (R r : records) {
                 if (fieldName != null) {
                     Object data = r.getValue(fieldName);
                     System.out.println(data);
@@ -95,27 +116,6 @@ public class Store {
                     System.out.println();
                 }
             }
-            return 0;
-        }
-
-        if (type == CmdType.READ || type == CmdType.UPDATE || type == CmdType.DELETE) {
-            if (pkey.length == 1) {
-                record = ctx.fetchOne(table, pkey[0].equal(id[0]));
-            } else {
-                record = ctx.fetchOne(table, pkey[0].equal(id[0]).and(pkey[1].equal(id[1])));
-            }
-            if (record == null) {
-                throw new IllegalArgumentException("No such row");
-            }
-        }
-        if (type == CmdType.DELETE) {
-            record.delete();
-            return 0;
-        }
-
-        if (type == CmdType.READ) {
-            Object data = record.getValue(fieldName);
-            System.out.println(data);
             return 0;
         }
 
@@ -144,6 +144,7 @@ public class Store {
         int argsStart = 2;
         Object[] out_args = null;
         if (type == CmdType.READ || type == CmdType.UPDATE || type == CmdType.DELETE) {
+            if( args.length <= argsStart ) return out_args;
             ids[0] = Integer.parseInt(args[argsStart]);
             if (skip_id) argsStart++;
             if (ids.length > 1) {
@@ -151,7 +152,7 @@ public class Store {
                 if (skip_id) argsStart++;
             }
             if (type == CmdType.READ) {
-                if (args.length < argsStart) {
+                if (args.length > argsStart) {
                     field_name[0] = args[argsStart++];
                 } else field_name[0] = null;
             }
@@ -289,7 +290,6 @@ public class Store {
             } else {
                 out_args[3] = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
             }
-
 
             if (type == CmdType.ADD) {
                 AddSellLog add = new AddSellLog();
