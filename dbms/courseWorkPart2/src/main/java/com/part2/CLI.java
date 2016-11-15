@@ -24,11 +24,11 @@ public class CLI {
             connection = DriverManager.getConnection(url, user, password);
             DSLContext ctx = DSL.using(connection);
             store = new Store(ctx);
-            return 1;
+            return 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int connect(String[] args){
@@ -62,7 +62,7 @@ public class CLI {
         for (HashMap.Entry<String, Command> e : commandList.entrySet()) {
             System.out.println(e.getKey());
         }
-        return 1;
+        return 0;
     }
 
     public int readline(String cmdline) throws IllegalArgumentException{

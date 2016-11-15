@@ -16,7 +16,7 @@ public class Main {
             try {
                 int rc = cli.readline(cmdline);
                 if( rc == -1 ) break;
-                System.out.println(rc);
+                if( rc > 0 ) System.out.println(rc);
             }catch (IllegalArgumentException e){
                 System.err.println(e.getMessage());
             }catch (Exception e){
