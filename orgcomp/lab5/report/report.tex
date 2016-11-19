@@ -1,31 +1,37 @@
 \input{header.tex}
 \isonefalse
-\def \labnum {3}
+\def \labnum {5}
 \def \labsubj {Организация ЭВМ и систем}
 \def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
 \def \labgroup {P3301}
 \def \labinsp {Скорубский В. И.}
-\def \labname {}
+\def \labname {Вариант: 3}
 \input{colored_code.tex}
 \isnametrue
 \lstset{
 	caption=\lstname,
-	basicstyle=\ttfamily\selectfont\scriptsize
+	captionpos=t,
+	basicstyle=\ttfamily\selectfont\tiny
 }
 \begin{document}
 \input{title.tex}
 \section*{Задание}
-\subsection*{Умножение}
-Program Size: data=15.0 xdata=0 code=138
-\lstinputlisting[language=C]{src/mul.c}
+Предикат:
+\begin{verbatim}
+(a>d)&(b!=c)||(d>=c)
+\end{verbatim}
+\lstinputlisting[language=C]{src/pred.c}
+program size: data=9.0 xdata=0 code=86
 
-Program Size: data=10.0 xdata=0 code=64
-\lstinputlisting{src/mul.asm}
+\lstinputlisting{src/pred.asm}
+program size: data=8.0 xdata=0 code=63
 
-\subsection*{Деление}
-Program Size: data=13.0 xdata=0 code=94
-\lstinputlisting[language=C]{src/div.c}
+\lstinputlisting[language=C]{src/bit.c}
+Program Size: data=10.0 xdata=0 code=56
 
-Program Size: data=10.0 xdata=0 code=46
-\lstinputlisting{src/div.asm}
+\lstinputlisting{src/bit.asm}
+Program Size: data=8.0 xdata=0 code=41
+
+\lstinputlisting[language=C]{src/bit_and.c}
+Program Size: data=10.0 xdata=0 code=59
 \end{document}

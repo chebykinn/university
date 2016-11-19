@@ -14,7 +14,7 @@ compare:
 	mov r0, a
 	mov a, b
 	xrl a, #0x80 ; s.aa^1.00 инверсия знака
-	subb a, r0 ; s.dd – s.aa
+	subb a, r0 ; s.dd - s.aa
 	ret
 
 start:
