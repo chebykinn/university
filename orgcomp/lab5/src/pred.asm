@@ -19,9 +19,13 @@ compare:
 
 start:
 	mov ii, 0
+	mov a, ii
 
 loop:
-	mov a, ii
+	mov a, P1
+	add a, ACC
+	mov P1, a
+
 	anl a, #0x08
 	mov aa, a
 
@@ -63,7 +67,15 @@ M2:
 M3: 
 	mov r1, #0x00 ; S=0
 M4: 
-	mov P3, r1 ; S=1
+	mov a, P1
+	orl a, r1 ; S=1
+	mov P1, a
 	
 	inc ii
+	mov a, ii
+	cjne a, #0x08, continue
+	mov P0, P1
 	sjmp loop
+continue:	
+	cjne a, #0x10, loop
+end
