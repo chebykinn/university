@@ -86,15 +86,15 @@ digraph finite_state_machine {
 
 	E3 -> E0 [color=gray32,dir=backward,xlabel=μ₃];
 
-	E3 -> E1 [color=gray32,dir=backward,xlabel=μ₁];
+	E3 -> E1 [color=gray32,dir=backward,xlabel=λ₁];
 
-	E3 -> E2 [color=gray32,dir=backward,xlabel=μ₂];
+	E3 -> E2 [color=gray32,dir=backward,xlabel=λ₂];
 
-	E4 -> E3 [color=gray32,dir=backward,xlabel=μ₃];
+	E4 -> E3 [color=gray32,dir=backward,xlabel=μ₁];
 
-	E5 -> E2 [color=gray32,dir=backward,xlabel=μ₂];
+	E5 -> E2 [color=gray32,dir=backward,xlabel=μ₁];
 
-	E6 -> E11 [color=gray32,dir=backward,xlabel=μ₂];
+	E6 -> E11 [color=gray32,dir=backward,xlabel=μ₁];
 
 	E7 -> E1 [color=gray32,dir=backward,xlabel=μ₁];
 
@@ -104,22 +104,22 @@ digraph finite_state_machine {
 
 	E10 -> E6 [color=gray32,dir=backward,xlabel=μ₁];
 
-	E11 -> E3 [color=gray32,dir=backward,xlabel=μ₃];
+	E11 -> E3 [color=gray32,dir=backward,xlabel=μ₂];
 
 	E12 -> E2 [color=gray32,dir=backward,xlabel=μ₂];
 
 	E13 -> E11 [color=gray32,dir=backward,xlabel=μ₂];
 
-	E14 -> E1 [color=gray32,dir=backward,xlabel=μ₁];
+	E14 -> E1 [color=gray32,dir=backward,xlabel=μ₂];
 
-	E15 -> E4 [color=gray32,dir=backward,xlabel=μ₁];
+	E15 -> E4 [color=gray32,dir=backward,xlabel=μ₂];
 
-	E16 -> E5 [color=gray32,dir=backward,xlabel=μ₁];
+	E16 -> E5 [color=gray32,dir=backward,xlabel=μ₂];
 
-	E17 -> E6 [color=gray32,dir=backward,xlabel=μ₁];
+	E17 -> E6 [color=gray32,dir=backward,xlabel=μ₂];
 
 	E18 -> E3 [color=gray32,dir=backward,xlabel=μ₃];
 
-	E18 -> E4 [color=gray32,dir=backward,xlabel=μ₁];
-	E18 -> E11 [color=gray32,dir=backward,xlabel=μ₂];
+	E18 -> E4 [color=gray32,dir=backward,xlabel=λ₁];
+	E18 -> E11 [color=gray32,dir=backward,xlabel=λ₂];
 }
