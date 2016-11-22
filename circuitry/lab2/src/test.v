@@ -11,9 +11,13 @@ module test;
 	reg [7:0] comp_data = 8'h0F;
 	reg [15:0] test_input = 16'b0001111011100000;
 	reg [3:0] i = 15;
+	reg out_cs = 0;
 	
+	wire cs;
 	wire [15:0] led;
 	wire sck;
+ 
+	assign cs = out_cs == 1? 0: 1'bz;
 
 	// Instantiate the Unit Under Test (UUT)
 	lab2 uut (
@@ -52,13 +56,15 @@ module test;
 		#100 switch <= ~switch;
 	end
 	
-	always @(posedge cs)
-		pf = 0;
-		
-	always @(negedge cs)
-		pf = 1;
-	
 	always @(negedge sck) begin
+		if(!i) begin
+			pf = 0;
+			out_cs = 0;
+		end
+		if(cs) begin 
+			out_cs = 1;
+			pf = 1;
+		end;
 		if(pf && i > 0) begin
 			sdo = test_input[i];
 			i = i - 1;

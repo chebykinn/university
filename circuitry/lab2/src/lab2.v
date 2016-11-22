@@ -13,11 +13,11 @@ module lab2(
 	input clk;
 	input sdo;
     input switch;
-	input comp_data;
+	input[7:0] comp_data;
 	
     output sck;
     output[15:0] led;
-    output cs;
+    inout cs;
 
 	wire[7:0] data;
 	wire read_flag;
