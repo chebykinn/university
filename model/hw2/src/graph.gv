@@ -1,0 +1,125 @@
+digraph finite_state_machine {
+	rankdir=TB;
+
+
+	node [label="E0  0,0,0/0"] E0;
+	node [label="E1  0,0,0/1"] E1;
+	node [label="E2  0,0,0/2"] E2;
+	node [label="E3  0,0,0/3"] E3;
+
+	node [label="E4  0,0,1/1"] E4;
+	node [label="E5  0,1,0/1"] E5;
+	node [label="E6  0,1,1/1"] E6;
+	node [label="E7  1,0,0/1"] E7;
+	node [label="E8  1,0,1/1"] E8;
+	node [label="E9  1,1,0/1"] E9;
+	node [label="E10 1,1,1/1"] E10;
+
+	node [label="E11 0,0,1/2"] E11;
+	node [label="E12 0,1,0/2"] E12;
+	node [label="E13 0,1,1/2"] E13;
+	node [label="E14 1,0,0/2"] E14;
+	node [label="E15 1,0,1/2"] E15;
+	node [label="E16 1,1,0/2"] E16;
+	node [label="E17 1,1,1/2"] E17;
+
+	node [label="E18 0,0,1/3"] E18;
+
+	{ rank=same; E4; E7; E5 }
+	{ rank=same; E2; E9 }
+	{ rank=same; E6; E8; E17 }
+
+	//{ rank=same; E1; E3 }
+	//{ rank=same; E4; E5; E7 }
+	//{ rank=same; E6; E8; E2; E9 }
+	//{ rank=same; E10; E11; E12; E14 }
+	//{ rank=same; E13; E15; E16 }
+
+	E0 -> E1 [dir=forward,xlabel=λ₁];
+	E0 -> E2 [dir=forward,xlabel=λ₂];
+	E0 -> E3 [dir=forward,xlabel=λ₃];
+
+	E1 -> E4 [dir=forward,xlabel=λ₃];
+	E1 -> E5 [dir=forward,xlabel=λ₂];
+	E1 -> E7 [dir=forward,xlabel=λ₁];
+
+	E4 -> E6 [dir=forward,xlabel=λ₂];
+	E4 -> E8 [dir=forward,xlabel=λ₁];
+
+	E5 -> E6 [dir=forward,xlabel=λ₃];
+	E5 -> E9 [dir=forward,xlabel=λ₁];
+
+	E6 -> E10 [dir=forward,xlabel=λ₁];
+
+	E7 -> E8 [dir=forward,xlabel=λ₃];
+	E7 -> E9 [dir=forward,xlabel=λ₂];
+
+	E8 -> E10 [dir=forward,xlabel=λ₂];
+
+	E9 -> E10 [dir=forward,xlabel=λ₃];
+
+	E2 -> E11 [dir=forward,xlabel=λ₃];
+	E2 -> E12 [dir=forward,xlabel=λ₂];
+	E2 -> E14 [dir=forward,xlabel=λ₁];
+
+	E11 -> E13 [dir=forward,xlabel=λ₂];
+	E11 -> E15 [dir=forward,xlabel=λ₁];
+
+	E12 -> E13 [dir=forward,xlabel=λ₃];
+	E12 -> E16 [dir=forward,xlabel=λ₁];
+
+	E13 -> E17 [dir=forward,xlabel=λ₁];
+
+	E14 -> E15 [dir=forward,xlabel=λ₃];
+	E14 -> E16 [dir=forward,xlabel=λ₂];
+
+	E15 -> E17 [dir=forward,xlabel=λ₂];
+
+	E16 -> E17 [dir=forward,xlabel=λ₃];
+
+	E3 -> E18 [dir=forward,xlabel=λ₃];
+
+
+	E1 -> E0 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E2 -> E0 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E3 -> E0 [color=gray32,dir=backward,xlabel=μ₃];
+
+	E3 -> E1 [color=gray32,dir=backward,xlabel=λ₁];
+
+	E3 -> E2 [color=gray32,dir=backward,xlabel=λ₂];
+
+	E4 -> E3 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E5 -> E2 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E6 -> E11 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E7 -> E1 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E8 -> E4 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E9 -> E5 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E10 -> E6 [color=gray32,dir=backward,xlabel=μ₁];
+
+	E11 -> E3 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E12 -> E2 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E13 -> E11 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E14 -> E1 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E15 -> E4 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E16 -> E5 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E17 -> E6 [color=gray32,dir=backward,xlabel=μ₂];
+
+	E18 -> E3 [color=gray32,dir=backward,xlabel=μ₃];
+
+	E18 -> E4 [color=gray32,dir=backward,xlabel=λ₁];
+	E18 -> E11 [color=gray32,dir=backward,xlabel=λ₂];
+}
