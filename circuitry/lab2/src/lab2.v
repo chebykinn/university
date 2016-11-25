@@ -17,7 +17,7 @@ module lab2(
 	
     output sck;
     output[15:0] led;
-    inout cs;
+    output cs;
 
 	wire[7:0] data;
 	wire read_flag;

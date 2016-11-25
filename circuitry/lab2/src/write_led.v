@@ -21,7 +21,7 @@ module write_led (
 	reg[15:0] led = 16'hFFFF;
 	
 	always @(posedge clk) begin
-		if(!switch) begin
+		if( switch == 0 ) begin
 			if( data > comp_data )
 				led = 16'h0000;
 			else
