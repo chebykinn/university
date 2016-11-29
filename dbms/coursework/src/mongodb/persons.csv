@@ -1,0 +1,5 @@
+_id,last_name,first_name,second_name,date_of_birth,sex,place_of_birth,address,phone,photo,passport,position_id
+16,test,test,test,2016-11-01,M,test,test,test,,"(1001,666666)",1
+26,kekkek,kek,lol,2016-11-14,M,asdasdasd,ololo st.,8123812313,,"(5710,635585)",1
+30,lol,ololo,asdasd,2016-11-14,M,place,address,phone,,"(6666,666666)",1
+32,123,123,123,2016-01-01,M,adsads,asdasd,adasd,,"(5716,478596)",1
