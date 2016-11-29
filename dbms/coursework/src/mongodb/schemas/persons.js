@@ -11,6 +11,6 @@ module.exports = {
 		phone: String,
 		photo: Buffer,
 		passport: String,
-		position_id: Number
+		position_id: {type: mongoose.Schema.Types.ObjectId, ref: 'positions'}
 	})
 }
