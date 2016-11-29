@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 `define START 4
-`define END 13
+`define END 12
 module read (
     clk,
 	sdo,
@@ -43,13 +43,14 @@ module read (
 		if(cs)
 			counter = 0;
 
-		if(counter > `START && counter < `END) begin
-			data = data << 1;
-			data[0] = sdo;
-		end else if(counter == `START)
+		if(counter == `START)
 			read_flag <= 0;
 		else if(counter == `END)
 			read_flag <= 1;	
+		if(!read_flag) begin
+			data = data << 1;
+			data[0] = sdo;
+		end 
 	
 	end;
 	
