@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var table = 'positions';
+var table = 'products';
 var schema = mongoose.Schema({
 	name: String,
-	description: String,
+	type_id: {type: mongoose.Schema.Types.ObjectId, ref: 'product_types'}
 });
 
 module.exports = {

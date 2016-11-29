@@ -1,21 +1,20 @@
 // getting-started.js
 var mongoose = require('mongoose');
 var schemas = require('./schemas');
-//var persons = require('./persons.js');
-//var positions = require('./positions.js');
 
 mongoose.connect('mongodb://192.168.1.123/coursework');
 var db = mongoose.connection;
 
-var Person = mongoose.model('persons', schemas.persons.schema);
-var Position = mongoose.model('positions', schemas.positions.schema);
+//var Person = mongoose.model('persons', schemas.persons.schema);
+//var Position = mongoose.model('positions', schemas.positions.schema);
+//var Shop = mongoose.model('positions', schemas.positions.schema);
 
-var pp = new Position;
+var pp = new schemas.positions.model;
 
 pp.name = "dima lalka";
 pp.description = "aga";
 
-var p = new Person;
+var p = new schemas.persons.model;
 p.last_name = "kek";
 p.first_name = "lol";
 p.second_name = "lal";

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var table = 'positions';
+var table = 'product_types';
 var schema = mongoose.Schema({
-	name: String,
+	title: String,
 	description: String,
 });
 
@@ -9,3 +9,4 @@ module.exports = {
 	schema: schema,
 	model: mongoose.model(table, schema)
 }
+

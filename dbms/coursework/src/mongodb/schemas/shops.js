@@ -1,10 +1,8 @@
 var mongoose = require('mongoose');
-var table = 'positions';
+var table = 'shops';
 var schema = mongoose.Schema({
-	name: String,
-	description: String,
+	street: String,
 });
-
 module.exports = {
 	schema: schema,
 	model: mongoose.model(table, schema)
