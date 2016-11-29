@@ -2,7 +2,15 @@ var mongoose = require('mongoose');
 var table = 'products';
 var schema = mongoose.Schema({
 	name: String,
-	type_id: {type: mongoose.Schema.Types.ObjectId, ref: 'product_types'}
+	type: {
+		name: String,
+		description: String,
+	},
+	sell_info: {
+		shop_id: {type: mongoose.Schema.Types.ObjectId, ref: 'shops'},
+		price: Number,
+		amount: Number,
+	}
 });
 
 module.exports = {

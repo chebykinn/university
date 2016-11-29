@@ -11,7 +11,12 @@ var schema = mongoose.Schema({
 	phone: String,
 	photo: Buffer,
 	passport: String,
-	position_id: {type: mongoose.Schema.Types.ObjectId, ref: 'positions'}
+	position: {
+		name: String,
+		description: String,
+		shop_id: {type: mongoose.Schema.Types.ObjectId, ref: 'shops'},
+		salary: Number,
+	}
 });
 
 module.exports = {
