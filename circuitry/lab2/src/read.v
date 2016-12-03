@@ -4,6 +4,7 @@
 module read (
     clk,
 	sdo,
+	reset,
 	data,
 	cs,
 	sck,
@@ -12,6 +13,7 @@ module read (
 	
 	input clk;
 	input sdo; //for PmodALS
+	input reset;
 	
 	output data;
 	output cs; //for PmodALS
@@ -26,8 +28,9 @@ module read (
 	
 	assign sck = divider[5];
 	
-	always @ (posedge clk)
-		divider = divider + 1;
+	always @ (posedge clk or posedge reset)
+		if(reset) divider = 0;
+		else divider = divider + 1;
 		
 	always @ (sck) begin
 		if(counter == 15) begin
@@ -37,20 +40,26 @@ module read (
 		end
 	end;
 		
-	always @ (posedge sck) begin
-		if(counter != 15)
-			counter = counter + 1;
-		if(cs)
-			counter = 0;
+	always @ (posedge sck or posedge reset) begin
+		if(reset) begin
+			data = 0;
+			read_flag <= 1;
+			counter = 15;
+		end else begin
+			if(counter != 15)
+				counter = counter + 1;
+			if(cs)
+				counter = 0;
 
-		if(counter == `START)
-			read_flag <= 0;
-		else if(counter == `END)
-			read_flag <= 1;	
-		if(!read_flag) begin
-			data = data << 1;
-			data[0] = sdo;
-		end 
+			if(counter == `START)
+				read_flag <= 0;
+			else if(counter == `END)
+				read_flag <= 1;	
+			if(!read_flag) begin
+				data = data << 1;
+				data[0] = sdo;
+			end 
+		end
 	
 	end;
 	

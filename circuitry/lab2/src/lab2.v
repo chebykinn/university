@@ -3,6 +3,7 @@
 module lab2(
     clk,
     sdo,
+	 reset,
     switch,
 	comp_data,
     sck,
@@ -12,7 +13,8 @@ module lab2(
 	
 	input clk;
 	input sdo;
-    input switch;
+	input reset;
+   input switch;
 	input[7:0] comp_data;
 	
     output sck;
@@ -25,6 +27,7 @@ module lab2(
 read reader (
 		.clk(clk),
 		.sdo(sdo),
+		.reset(reset),
 		.data(data),
 		.cs(cs),
 		.sck(sck),
