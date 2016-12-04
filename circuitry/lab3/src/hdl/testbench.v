@@ -10,6 +10,11 @@ module testbench;
                   
      //Outputs
      wire [15:0] led;
+	  
+	  // SPI ports
+	  wire    sdo;
+	  wire		sck;
+	  wire		cs;
 
      //Instantiate the Unit Under Test (UUT)
      mips_system uut (
@@ -17,7 +22,11 @@ module testbench;
           .rst(mips_rst), 
 		    
           .sw(sw),
-          .led(led)
+          .led(led),
+			 
+			 .sdo_i(sdo),
+			 .sck_o(sck),
+			 .cs_o(cs)
      );
 
      initial begin
