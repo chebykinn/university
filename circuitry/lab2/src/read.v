@@ -41,17 +41,18 @@ module read (
 		end else begin
 			if(counter == `START)
 				read_flag = 0;
-			else if(counter == `END)
+			if(counter == `END)
 				read_flag = 1;
+				
+			if(!read_flag) begin
+				data = data << 1;
+				data[0] = sdo;
+			end 
+	
 			if(cs)
 				counter = 0;
 		end
 		
-		if(!read_flag) begin
-			data = data << 1;
-			data[0] = sdo;
-		end 
-	
 	end;
 	
 
