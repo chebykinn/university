@@ -20,46 +20,37 @@ module read (
 	output sck; //for PmodALS
 	output read_flag;
 	
-	reg cs = 0;
 	reg read_flag = 0;
 	reg[7:0] data = 0;
 	reg[3:0] counter = 15;
 	reg[5:0] divider = 0;
 	
 	assign sck = divider[5];
+	assign cs = counter == 15? 1: 0;
 	
-	always @ (posedge clk or posedge reset)
-		if(reset) divider = 0;
-		else divider = divider + 1;
+	always @ (posedge clk)
+		divider = divider + 1;
 		
-	always @ (sck) begin
-		if(counter == 15) begin
-			cs = 1;
-		end else begin
-			cs = 0;
-		end
-	end;
-		
-	always @ (posedge sck or posedge reset) begin
+	always @ (posedge sck) begin
+		if(!cs)
+			counter = counter + 1;
+			
 		if(reset) begin
 			data = 0;
-			read_flag <= 1;
-			counter = 15;
+			read_flag = 1;
 		end else begin
-			if(counter != 15)
-				counter = counter + 1;
+			if(counter == `START)
+				read_flag = 0;
+			else if(counter == `END)
+				read_flag = 1;
 			if(cs)
 				counter = 0;
-
-			if(counter == `START)
-				read_flag <= 0;
-			else if(counter == `END)
-				read_flag <= 1;	
-			if(!read_flag) begin
-				data = data << 1;
-				data[0] = sdo;
-			end 
 		end
+		
+		if(!read_flag) begin
+			data = data << 1;
+			data[0] = sdo;
+		end 
 	
 	end;
 	
