@@ -22,6 +22,7 @@ module ioctrl_wb #(parameter BASE_ADDR = 32'h00000800) (
 
 localparam IDLE = 0;
 localparam ACK  = 1;
+wire read_flag;
 
 // Request to read from slave
 wire read  = cyc_i & stb_i & !we_i;
@@ -30,13 +31,22 @@ wire read  = cyc_i & stb_i & !we_i;
 wire write = cyc_i & stb_i & we_i;
     
 reg state_r;
-reg [31:0] data_r;
+wire[7:0] data_r;
+
+spi_read spi (
+   .clk(clk_i),
+	.sdo(sdo_i),
+	.reset(rst_i),
+	.data(data_r),
+	.cs(cs_o),
+	.sck(sck_o),
+	.read_flag(read_flag)
+);
 
 always@(posedge clk_i, posedge rst_i)
     if(rst_i) begin
         state_r <= 0;
         ack_o   <= 1'b0;
-        data_r  <= 0;
         dat_o   <= 0;
     end else begin
     
@@ -45,10 +55,8 @@ always@(posedge clk_i, posedge rst_i)
         case(state_r)
             IDLE: 
                 begin
-                    if(read) begin
-								// TODO: SPI Code
-								
-                        //dat_o <= (adr_i == BASE_ADDR)? data_r: 0;
+                    if(read && read_flag) begin
+                        dat_o <= (adr_i == BASE_ADDR)? data_r: 0;
                         state_r <= ACK;
                     end
                 end

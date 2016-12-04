@@ -7,7 +7,12 @@ module mips_system (
     input wire    rst,
              
     input  [15:0] sw,         
-    output [15:0] led
+    output [15:0] led,
+	 
+	 // SPI ports
+	 input wire    sdo_i,
+	 output wire	sck_o,
+	 output wire	cs_o
 );
      localparam [31:0] instr_addr_high  = 32'h000001ff,
                        instr_addr_low   = 32'h00000000,
@@ -45,11 +50,6 @@ module mips_system (
      wire ioctrl_cyc_i; 
      wire ioctrl_stb_i; 
      wire ioctrl_ack_o;
-	  
-	  // IOCTRL SPI signals
-	  wire ioctrl_sdo_i;
-	  wire ioctrl_sck_o;
-     wire ioctrl_cs_o;
 	  
      // MIPS wb signals
      wire [31:0] mips_wbm_dat_i;
@@ -111,10 +111,11 @@ module mips_system (
         .ack_o(ioctrl_ack_o),
 		  
 		  // spi signals
-		  .sdo_i(ioctrl_sdo_i),
-		  .sck_o(ioctrl_sck_o),
-		  .cs_o(ioctrl_cs_o),
+		  .sdo_i(sdo_i),
+		  .sck_o(sck_o),
+		  .cs_o(cs_o)
      );
+	  
      
      data_ram_wb #( 
         .addr_high(data_addr_high),
