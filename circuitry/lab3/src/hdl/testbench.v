@@ -7,14 +7,19 @@ module testbench;
      reg mips_clk;
      reg mips_rst;
      reg [15:0] sw;
+	  
                   
      //Outputs
      wire [15:0] led;
 	  
 	  // SPI ports
-	  wire    sdo;
-	  wire		sck;
-	  wire		cs;
+	  reg    sdo;
+	  wire	sck;
+	  wire	cs;
+	  
+	  // SPI Test
+	  reg [15:0] test_input = 16'b0001111011100000;
+	  reg [3:0] spi_i = 15;
 
      //Instantiate the Unit Under Test (UUT)
      mips_system uut (
@@ -35,20 +40,22 @@ module testbench;
           // Wait 100 ns for global reset to finish
           #100;
           mips_rst = 0;
+			 
       
      end // initial begin
 
      initial begin
           mips_clk = 0;
+			 sdo = 0;
           sw = 7;
           forever
-               #10 mips_clk = !mips_clk;      
+               #0.1 mips_clk = !mips_clk;      
      end
      
 	integer i;
      
      initial begin
-          for (i = 0; i < 500; i=i+1)
+          for (i = 0; i < 2000; i=i+1)
                @(posedge mips_clk);
 
           $stop();      
@@ -66,6 +73,13 @@ module testbench;
                $display("%d ns: $t1 (REG9) = %x", $time, uut.pipeline_inst.idecode_inst.regfile_inst.rf[9]);           
           end
      end
-   
+	  
+   always @(negedge sck) begin
+		if(!cs && spi_i > 0) begin
+			sdo = test_input[spi_i];
+			spi_i = spi_i - 1;
+		end else
+			spi_i = 15;
+	end
 endmodule
 
