@@ -47,7 +47,7 @@ module testbench;
      initial begin
           mips_clk = 0;
 			 sdo = 0;
-          sw = 7;
+          sw = 1;
           forever
                #0.1 mips_clk = !mips_clk;      
      end

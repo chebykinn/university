@@ -20,12 +20,40 @@
 
 \tableofcontents
 \newpage
-\section{Цели работы}
+Контроллер должен реализовывать следующие функции:
+\begin{itemize}
+\item Поддерживать обмен данными с датчиком освещенности посредством интерфейса SPI
+\item При значении переключателя SW[0] = 0 показывать факт наличия света в
+аудитории с помощью светодиодов: LED[15:0] = 0xFFFF – свет выключен,
+LED[15:0] 0x0000 – свет включен. Таким образом, все светодиоды должны
+загораться, когда свет в аудитории выключается, и выключаться – когда свет в
+аудитории есть.
+\item При значении переключателя SW[0] = 1 показывать на светодиодах текущее
+значение освещенности, считанное с датчика
+\end{itemize}
 
-\section{Задача}
 \section{Структура модулей}
+\lstinputlisting{src/hdl/ioctrl_wb.v}
+
+\lstinputlisting{src/hdl/spi_read.v}
+
 \section{Структурная схема RTL-модели}
+\begin{centering}
+\includegraphics[width=\textwidth]{img/read.png}
+\end{centering}
+
 \section{Структура тестового окружения}
+\lstinputlisting{src/hdl/testbench.v}
+
 \section{Временные диаграммы}
+\begin{centering}
+\includegraphics[width=\textwidth]{img/graph1.png}
+
+\includegraphics[width=\textwidth]{img/graph2.png}
+\end{centering}
 \section{Вывод}
+В ходе данной лабораторной работы мы ознакомились с принципами работы последовательных
+интерфейсов ввода/вывода на примере SPI, а также мы изучили основы работы с
+цифровыми датчиками и научились разрабатывать аппаратные контроллеры периферийных
+устройств.
 \end{document}
