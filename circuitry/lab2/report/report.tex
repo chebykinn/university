@@ -11,8 +11,10 @@
 \def \labname {Вариант: 2}
 \input{colored_code.tex}
 \isnametrue
+\isonefalse
 \lstset{
 	caption=\lstname,
+	captionpos=t,
 	basicstyle=\ttfamily\selectfont\scriptsize
 }
 \begin{document}
@@ -43,15 +45,19 @@ LED[15:0] 0x0000 – свет включен. Таким образом, все 
 \end{itemize}
 
 \section{Структура модулей}
-\lstinputlisting{src/reader.v}
+\lstinputlisting{src/lab2.v}
+
+\lstinputlisting{src/read.v}
 
 \lstinputlisting{src/write_led.v}
 
 \section{Структурная схема RTL-модели}
 \begin{centering}
-\includegraphics[width=\textwidth]{img/scheme1.png}
+\newpage
+\includegraphics[width=\textwidth]{img/read.png}
+\newpage
 
-\includegraphics[width=\textwidth]{img/scheme2.png}
+\includegraphics[width=\textwidth]{img/write_led.png}
 \end{centering}
 
 \section{Структура тестового окружения}
