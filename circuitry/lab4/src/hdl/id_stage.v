@@ -34,7 +34,8 @@ module id_stage( input             clk, rst,
                  output reg        ID_EX_mem_write,
                  output reg        ID_EX_ex_imm_command,
                  output reg        ID_EX_ex_alu_src_b,
-                 output reg        ID_EX_ex_dst_reg_sel,
+                 output reg        ID_EX_ex_alu_rslt_src,
+                 output reg [1:0]  ID_EX_ex_dst_reg_sel,
                  output reg [1:0]  ID_EX_ex_alu_op,
                 
                  output [31:0]     branch_addr, jump_addr,    // branch and jump adresses
@@ -47,8 +48,9 @@ module id_stage( input             clk, rst,
      wire [31:0] sign_extend_offset;
    
      wire        ex_imm_command;   
-     wire        ex_alu_src_b;   
-     wire        ex_dst_reg_sel;   
+     wire        ex_alu_src_b;  
+	wire		  ex_alu_rslt_src;
+     wire [1:0]  ex_dst_reg_sel;   
      wire [1:0]  ex_alu_op;   
      wire        mem_read;   
      wire        mem_write;   
@@ -103,11 +105,13 @@ module id_stage( input             clk, rst,
 
      control cunit_instance (
           .opcode( instruction [31:26] ),
+          .special( instruction [5:0] ),
           .branch_eq( branch_eq ),
           .id_rt_is_source(id_rt_is_source),
           .if_pc_source(if_pc_source),
           .ex_imm_command(ex_imm_command),
           .ex_alu_src_b(ex_alu_src_b),
+          .ex_alu_rslt_src(ex_alu_rslt_src),
           .ex_dst_reg_sel(ex_dst_reg_sel),
           .ex_alu_op(ex_alu_op),
           .mem_read(mem_read),
@@ -132,6 +136,7 @@ module id_stage( input             clk, rst,
                ID_EX_mem_write <= 0;
                ID_EX_ex_imm_command <= 0;
                ID_EX_ex_alu_src_b <= 0;
+			ID_EX_ex_alu_rslt_src <= 0;
                ID_EX_ex_dst_reg_sel <= 0;
                ID_EX_ex_alu_op <= 0;
           end
@@ -151,14 +156,15 @@ module id_stage( input             clk, rst,
                
                if(!pstop_i) begin
                    if (is_nop || hazard) begin
-                        ID_EX_wb_reg_write   <= 0;
-                        ID_EX_wb_mem_to_reg  <= 0;
-                        ID_EX_mem_read       <= 0;
-                        ID_EX_mem_write      <= 0;
-                        ID_EX_ex_imm_command <= 0;
-                        ID_EX_ex_alu_src_b   <= 0;
-                        ID_EX_ex_dst_reg_sel <= 0;
-                        ID_EX_ex_alu_op      <= 0;                        
+                        ID_EX_wb_reg_write    <= 0;
+                        ID_EX_wb_mem_to_reg   <= 0;
+                        ID_EX_mem_read        <= 0;
+                        ID_EX_mem_write       <= 0;
+                        ID_EX_ex_imm_command  <= 0;
+                        ID_EX_ex_alu_src_b    <= 0;
+				    ID_EX_ex_alu_rslt_src <= 0;
+                        ID_EX_ex_dst_reg_sel  <= 0;
+                        ID_EX_ex_alu_op       <= 0;                        
                     end
                     else begin
                         ID_EX_wb_reg_write <= wb_reg_write;
@@ -167,6 +173,7 @@ module id_stage( input             clk, rst,
                         ID_EX_mem_write <= mem_write;
                         ID_EX_ex_imm_command <= ex_imm_command;
                         ID_EX_ex_alu_src_b <= ex_alu_src_b;
+				    ID_EX_ex_alu_rslt_src <= ex_alu_rslt_src;
                         ID_EX_ex_dst_reg_sel <= ex_dst_reg_sel;
                         ID_EX_ex_alu_op <= ex_alu_op;   
                     end

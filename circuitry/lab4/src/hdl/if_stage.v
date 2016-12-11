@@ -15,7 +15,7 @@ module if_stage( input             clk, rst,
                  output     [31:0] i_addr,
  
                  input      [31:0] i_instr_in, 
-                 input      [31:0] jump_addr, branch_addr,
+                 input      [31:0] jump_addr, branch_addr, reg_data_1,
                  
                  output reg [31:0] IF_ID_next_i_addr,
                  output reg [31:0] IF_ID_instruction );
@@ -40,7 +40,8 @@ module if_stage( input             clk, rst,
           case (pc_source)
                2'b00: pc_next = next_i_addr;
                2'b01: pc_next = branch_addr;
-               2'b10: pc_next = jump_addr;                   
+               2'b10: pc_next = jump_addr;  
+			2'b11: pc_next = reg_data_1; 
           endcase
      end
    

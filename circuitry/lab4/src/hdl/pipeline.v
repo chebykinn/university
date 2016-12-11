@@ -33,6 +33,7 @@ module pipeline ( input wire         clk,
 
      wire [4:0]  ex_dst_reg;
      wire [5:0]  ex_opcode;
+	wire [31:0] ex_reg_data_1;		// for jr
 
      wire [4:0]  id_rs;
      wire [4:0]  id_rt;
@@ -44,7 +45,8 @@ module pipeline ( input wire         clk,
      wire        ID_EX_mem_write;
      wire        ID_EX_ex_imm_command;
      wire        ID_EX_ex_alu_src_b;
-     wire        ID_EX_ex_dst_reg_sel;
+     wire        ID_EX_ex_alu_rslt_src;
+     wire [1:0]  ID_EX_ex_dst_reg_sel;
      wire [1:0]  ID_EX_ex_alu_op;
      wire [31:0] ID_EX_A;
      wire [31:0] ID_EX_B;
@@ -92,6 +94,7 @@ module pipeline ( input wire         clk,
           .i_instr_in        ( i_instr_in),
           .jump_addr         ( jump_addr ),
           .branch_addr       ( branch_addr ),
+		.reg_data_1	    ( ex_reg_data_1 ),
           .IF_ID_instruction ( i_fetched ),
           .IF_ID_next_i_addr ( next_i_addr ));
 
@@ -164,6 +167,7 @@ module pipeline ( input wire         clk,
           .ID_EX_mem_write ( ID_EX_mem_write ),
           .ID_EX_ex_imm_command ( ID_EX_ex_imm_command ),
           .ID_EX_ex_alu_src_b ( ID_EX_ex_alu_src_b ),
+          .ID_EX_ex_alu_rslt_src ( ID_EX_ex_alu_rslt_src ),
           .ID_EX_ex_dst_reg_sel ( ID_EX_ex_dst_reg_sel ),
           .ID_EX_ex_alu_op ( ID_EX_ex_alu_op ),
 
@@ -184,11 +188,13 @@ module pipeline ( input wire         clk,
           .mem_write ( ID_EX_mem_write ),
           .ex_imm_command ( ID_EX_ex_imm_command ),
           .ex_alu_src_b ( ID_EX_ex_alu_src_b ),
+          .ex_alu_rslt_src ( ID_EX_ex_alu_rslt_src ),
           .ex_dst_reg_sel ( ID_EX_ex_dst_reg_sel ),
           .ex_alu_op ( ID_EX_ex_alu_op ),
           .A ( ID_EX_A ),
           .B ( ID_EX_B ),
           .sign_extend_offset ( ID_EX_sign_extend_offset ),
+		.next_i_addr ( next_i_addr ),			// execute: PC + 8
           .rt ( ID_EX_rt ),                                 // target register
           .rd ( ID_EX_rd ),                                 // destination register
           .opcode ( ID_EX_opcode ),
@@ -197,6 +203,7 @@ module pipeline ( input wire         clk,
           .mem_fwd_val ( EX_MEM_alu_result ),               // forwarding from MEM
           .wb_fwd_val ( wreg_data ),                        // forwarding from WB
           .ex_dst_reg ( ex_dst_reg ),
+		.alu_a_in ( ex_reg_data_1 ),
           .ex_opcode ( ex_opcode ),
           .EX_MEM_alu_result ( EX_MEM_alu_result ),
           .EX_MEM_B_value ( EX_MEM_B_value ),

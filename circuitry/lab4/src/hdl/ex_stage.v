@@ -6,7 +6,8 @@ module ex_stage( input             clk,
                  input             mem_write,
                  input             ex_imm_command,
                  input             ex_alu_src_b,
-                 input             ex_dst_reg_sel,
+                 input             ex_alu_rslt_src,		// 
+                 input [1:0]       ex_dst_reg_sel,
                  input [1:0]       ex_alu_op,
                  
                  input pstop_i,
@@ -14,6 +15,7 @@ module ex_stage( input             clk,
                  input [31:0]      A,
                  input [31:0]      B,
                  input [31:0]      sign_extend_offset,
+                 input [31:0]      next_i_addr,		// PC + 8
                  input [4:0]       rt,                 // target register
                  input [4:0]       rd,                 // destination register
                  input [5:0]       opcode, 
@@ -22,8 +24,10 @@ module ex_stage( input             clk,
                  input [31:0]      mem_fwd_val,        // forwarding from EX_MEM
                  input [31:0]      wb_fwd_val,         // forwarding from WB
                 
-                 output [4:0]      ex_dst_reg,
                  output [5:0]      ex_opcode,
+			  
+                 output reg [31:0] alu_a_in,  
+                 output reg [4:0]  ex_dst_reg,
                 
                  output reg [31:0] EX_MEM_alu_result,
                  output reg [31:0] EX_MEM_B_value,
@@ -38,7 +42,6 @@ module ex_stage( input             clk,
      wire [5:0]  func_code;      // func code for ALU control   
      wire [4:0]  alu_ctl;        // ALU control lines
 
-     reg  [31:0] alu_a_in;
      wire [31:0] alu_b_in;
      reg  [31:0] b_value;
    
@@ -63,11 +66,19 @@ module ex_stage( input             clk,
           endcase
      end
 
+	always @* begin
+          case(ex_dst_reg_sel)
+               0: ex_dst_reg = rt;
+               1: ex_dst_reg = rd;
+               2: ex_dst_reg = 5'd31;
+               default: ex_dst_reg = 5'd0;    //
+          endcase
+     end
+
      assign alu_b_in   = ex_alu_src_b ? sign_extend_offset : b_value;
      assign func_field = sign_extend_offset [5:0]; // looks wierd, but func code is encoded there
      assign func_code  = ex_imm_command ? {{2'b10},{~opcode[2] & opcode[1] & ~opcode[0]},opcode[2:0]} : func_field;
      assign ex_opcode  = opcode;
-     assign ex_dst_reg = ex_dst_reg_sel ? rd : rt;
  
      alu_ctrl aluctl_inst(
           .alu_op    (ex_alu_op),
@@ -93,7 +104,7 @@ module ex_stage( input             clk,
                 EX_MEM_wb_mem_to_reg <= 0;
           end
           else begin
-                EX_MEM_alu_result <= alu_result;
+                EX_MEM_alu_result <= ex_alu_rslt_src ? next_i_addr : alu_result;
                 EX_MEM_B_value <= b_value;
                 EX_MEM_dst_reg <= ex_dst_reg;
                 EX_MEM_opcode <= opcode;           
