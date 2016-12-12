@@ -6,10 +6,7 @@ mongoose.connect('mongodb://chebykinn.ru:1337/coursework');
 var db = mongoose.connection;
 
 var funcs = { 
-	'add': function(input) {
-		var splitted_input = input.split(/\s+/, 3);
-		if(check_fields_num(splitted_input, 2))
-			return;
+	'add': function(splitted_input) {
 		var schema = get_schema_by_name(splitted_input[1]);
 		if(schema == null) 
 			return;
@@ -37,10 +34,10 @@ db.once('open', function() {
 		input = rl.question();
 		if(input == "q")
 			break;
-		var splitted_input = input.split(/\s+/, 1);
-		var func = get_command_by_name(splitted_input[0]);
+		var splitted_input = input.split(/\s+/, 2);
+		var func = get_func_by_name(splitted_input[0]);
 		if(func != null)
-			func(input);
+			func(splitted_input);
 	}
 });
 
@@ -64,7 +61,7 @@ function get_schema_by_name(name) {
 	return get_field_by_name(schemas, name, 'Unknown table: ' + name);
 }
 
-function get_command_by_name(name) {
+function get_func_by_name(name) {
 	return get_field_by_name(funcs, name, 'Unknown command, see help');
 }
 

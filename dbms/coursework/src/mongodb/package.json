@@ -5,6 +5,7 @@
   "main": "crud.js",
   "dependencies": {
     "mongoose": "undefined4.7.0",
+    "mongoose-hidden": "^0.7.0",
     "mongoose-unique-validator": "undefined1.0.3"
   },
   "devDependencies": {},

@@ -10,7 +10,7 @@ var db = mongoose.connection;
 //var Shop = mongoose.model('positions', schemas.positions.schema);
 
 var sh = new schemas.shops.model;
-sh.street = "lol st.";
+sh.street = "Lol st.";
 
 var pr = new schemas.products.model;
 
@@ -36,7 +36,7 @@ p.address = "asdasdasd";
 p.phone = "123123123123";
 p.photo = new Buffer(0);
 p.passport = "1231,182313";
-	p["position.name"] = "test";
+	p.position.name = "test";
 	p.position.description = "test desc";
 	p.position.shop_id = sh;
 	p.position.salary = 1000;
@@ -45,6 +45,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
 	// we're connected!
 	console.log('kek');
+	console.log(sh);
 	sh.save((err) => print_errors(err));
 	pr.save((err) => print_errors(err));
 	p.save((err) => print_errors(err));
