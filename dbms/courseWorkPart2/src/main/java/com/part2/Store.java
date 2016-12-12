@@ -8,6 +8,7 @@ import classes.udt.records.PassportRecord;
 import org.jooq.*;
 import org.jooq.impl.AbstractRoutine;
 import org.jooq.impl.TableImpl;
+import redis.clients.jedis.Jedis;
 
 import java.sql.Date;
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 
 public class Store {
     private DSLContext ctx = null;
+    private Jedis jedis;
 
     enum CmdType {
         ADD,
@@ -29,8 +31,9 @@ public class Store {
     Store() {
     }
 
-    Store(DSLContext ctx) {
+    Store(DSLContext ctx, Jedis jedis) {
         this.ctx = ctx;
+        this.jedis = jedis;
     }
 
     private CmdType checkCmd(String[] args) throws IllegalArgumentException {
@@ -89,6 +92,8 @@ public class Store {
             if( id[0] > 0 && record == null ){
                 throw new IllegalArgumentException("No such row");
             }
+//            if( jedis.exists(new StringBuilder().append(table.toString()).append(type.toString()).append(pkey.toString()).toString()) ){
+ //           }
             Result<R> records;
             if( record != null ) {
                 records = ctx.newResult(table);
