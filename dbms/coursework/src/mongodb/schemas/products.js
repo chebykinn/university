@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var table = 'products';
 var schema = mongoose.Schema({
-	name: String,
+	name: {type: String, index: {unique: true}},
 	type: {
-		name: String,
-		description: String,
+		name: {type: String, required: true}, 
+		description: String
 	},
 	sell_info: {
 		shop_id: {type: mongoose.Schema.Types.ObjectId, ref: 'shops'},

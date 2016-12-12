@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 var schemas = require('./schemas');
 
-mongoose.connect('mongodb://192.168.1.123/coursework');
+mongoose.connect('mongodb://chebykinn.ru:1337/coursework');
 var db = mongoose.connection;
 
 //var Person = mongoose.model('persons', schemas.persons.schema);
@@ -35,18 +35,21 @@ p.place_of_birth = "asd";
 p.address = "asdasdasd";
 p.phone = "123123123123";
 p.photo = new Buffer(0);
-p.passport = "123123,12313";
-p.position = {
-	name: "test",
-	description: "test desc",
-	shop_id: sh,
-	salary: 1000
-};
+p.passport = "1231,182313";
+	p["position.name"] = "test";
+	p.position.description = "test desc";
+	p.position.shop_id = sh;
+	p.position.salary = 1000;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
 	// we're connected!
 	console.log('kek');
-	sh.save();
-	pr.save();
-	p.save();
+	sh.save((err) => print_errors(err));
+	pr.save((err) => print_errors(err));
+	p.save((err) => print_errors(err));
 });
+
+function print_errors(err) {
+	console.log(err.message);
+};
