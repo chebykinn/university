@@ -14,7 +14,7 @@ OBJDUMP=$(CPATH)/$(CPREFIX)objdump
 OBJCOPY=$(CPATH)/$(CPREFIX)objcopy
 CONVERT=python convert.py 512 1024
 
-CFLAGS=
+CFLAGS=-O0
 LDFLAGS=
 
 OBJEXT=o
