@@ -1,0 +1,33 @@
+\input{header.tex}
+\input{hyperref.tex}
+\usepackage{graphicx}
+\fancyhead[LR]{}
+
+\def \labnum {4}
+\def \labsubj {Схемотехника ЭВМ}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
+\def \labgroup {P3301}
+\def \labinsp {Баевских А. Н.}
+\def \labname {Вариант: 2}
+\input{colored_code.tex}
+\isnametrue
+\lstset{
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+\begin{document}
+\input{title.tex}
+
+\tableofcontents
+\newpage
+\section{Задание}
+Реализовать выполнение команды JAL, JR
+\section{Формат команд}
+
+\includegraphics[width=\textwidth]{img/jal.png}
+
+\includegraphics[width=\textwidth]{img/jr.png}
+
+\section{Внесенные изменения}
+\lstinputlisting[language=diff]{diff}
+\end{document}
