@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var table = 'persons';
 var schema = mongoose.Schema({
-	last_name: {type: String, required: true}, 
+	last_name: {type: String, requiered: true},
 	first_name: {type: String, required: true},
 	second_name: String,
 	date_of_birth: {type: String, required: true},
@@ -11,8 +11,8 @@ var schema = mongoose.Schema({
 	phone: {type: String, required: true},
 	photo: Buffer,
 	passport: {
-		type: String, 
-		unique: true, 
+		type: String,
+		unique: true,
 		validate: /\d{4},\d{6}/,
 		required: true
 	},
@@ -20,8 +20,7 @@ var schema = mongoose.Schema({
 		name: {type: String, required: true},
 		description: String,
 		shop_id: {
-			type: mongoose.Schema.Types.ObjectId, 
-			ref: 'shops',
+			type: Number,
 			required: true
 		},
 		salary: {type: Number, required: true},

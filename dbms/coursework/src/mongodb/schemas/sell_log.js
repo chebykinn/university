@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var table = 'sell_log';
 var schema = mongoose.Schema({
 	name: {type: String, index: {unique: true} },
-	product_id: {type: mongoose.Schema.Types.ObjectId, ref: 'products'},
-	shop_id: {type: mongoose.Schema.Types.ObjectId, ref: 'shops'},
+	product_id: { type: Number, unique: true },
+	shop_id: { type: Number, unique: true },
 	amount: Number,
 	date: Date,
 });

@@ -3,11 +3,11 @@ var table = 'products';
 var schema = mongoose.Schema({
 	name: {type: String, index: {unique: true}},
 	type: {
-		name: {type: String, required: true}, 
+		name: {type: String, required: true},
 		description: String
 	},
 	sell_info: {
-		shop_id: {type: mongoose.Schema.Types.ObjectId, ref: 'shops'},
+		shop_id: Number,
 		price: Number,
 		amount: Number,
 	}
