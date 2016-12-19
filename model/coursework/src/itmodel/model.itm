@@ -1,0 +1,51 @@
+<model>
+<mlib:model  xmlns:mlib="http://cis.ifmo.ru/modelation/lib">
+	<mlib:model-name>QSM::QSM</mlib:model-name>
+	<mlib:model-version>257</mlib:model-version>
+	<mlib:model-class>ru.ifmo.cis.education.JQMS.lib.QSM</mlib:model-class>
+	<mlib:model-detalization-level>QSM::SeveralServerSeveralCustomerClass</mlib:model-detalization-level>
+	<mlib:attribute-values>
+		<mlib:attribute name="QSM::CustomerClassesCount">2</mlib:attribute>
+		<mlib:attribute name="QSM::OverallServiceTime">0.1</mlib:attribute>
+		<mlib:attribute name="QSM::ServerDownTime">0.9</mlib:attribute>
+		<mlib:attribute name="QSM::ServerLoad">0.2</mlib:attribute>
+		<mlib:attribute name="QSM::ServersCount">2</mlib:attribute>
+		<mlib:attribute name="QSM::ServiceStrategy">2:[[2]]</mlib:attribute>
+		<mlib:attribute name="QSM::TimeInSystem">0.301010115</mlib:attribute>
+		<mlib:attribute name="QSM::OverallArrivalRate">2.0</mlib:attribute>
+		<mlib:attribute name="QSM::CustomersInQueue">0.0020202022</mlib:attribute>
+		<mlib:attribute name="QSM::CustomersInSystem">0.202020204</mlib:attribute>
+		<mlib:attribute name="QSM::ServerUtilization">0.1</mlib:attribute>
+		<mlib:attribute name="QSM::TimeInQueue">0.0010101011</mlib:attribute>
+	</mlib:attribute-values>
+	<mlib:submodels>
+		<mlib:submodel-collection>
+			<mlib:model-name>Customer::Customer</mlib:model-name>
+			<mlib:model-version>257</mlib:model-version>
+			<mlib:model-class>ru.ifmo.cis.education.JQMS.lib.Customer</mlib:model-class>
+			<mlib:submodel>
+				<mlib:attribute-values>
+					<mlib:attribute name="Customer::CustomersInSystem">0.10025063</mlib:attribute>
+					<mlib:attribute name="Customer::ServerUtilization">0.05</mlib:attribute>
+					<mlib:attribute name="Customer::TimeInQueue">0.0002506266</mlib:attribute>
+					<mlib:attribute name="Customer::CustomersInQueue">0.0002506266</mlib:attribute>
+					<mlib:attribute name="Customer::CustomerArrivalRate">1.0</mlib:attribute>
+					<mlib:attribute name="Customer::TimeInSystem">0.30025065</mlib:attribute>
+					<mlib:attribute name="Customer::ServerLoad">0.1</mlib:attribute>
+				</mlib:attribute-values>
+			</mlib:submodel>
+			<mlib:submodel>
+				<mlib:attribute-values>
+					<mlib:attribute name="Customer::CustomersInSystem">0.101769574</mlib:attribute>
+					<mlib:attribute name="Customer::ServerUtilization">0.05</mlib:attribute>
+					<mlib:attribute name="Customer::TimeInQueue">0.0017695756</mlib:attribute>
+					<mlib:attribute name="Customer::CustomersInQueue">0.0017695756</mlib:attribute>
+					<mlib:attribute name="Customer::CustomerArrivalRate">1.0</mlib:attribute>
+					<mlib:attribute name="Customer::TimeInSystem">0.30176958</mlib:attribute>
+					<mlib:attribute name="Customer::ServerLoad">0.1</mlib:attribute>
+				</mlib:attribute-values>
+			</mlib:submodel>
+		</mlib:submodel-collection>
+	</mlib:submodels>
+</mlib:model>
+</model>

@@ -9,7 +9,7 @@ SOURCES=$(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 OBJECTS=$(patsubst $(SRCDIR)/%,$(OBJPATH)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
 all: graphs
-	TEXINPUTS=$(TEXINPUTS):../../../assets/:../ pdflatex report.tex
+	TEXINPUTS=$(TEXINPUTS):../../../assets/:../ pdflatex -halt-on-error report.tex
 
 graphs: $(OBJECTS)
 
