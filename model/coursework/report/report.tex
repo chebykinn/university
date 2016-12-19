@@ -264,7 +264,6 @@
 сохраняя высокую загрузку и малую длину очереди.
 
 
-
 \newpage
 \section{Аналитическая модель}
 С помощью заданных допущений была составлена СМО с неоднородным потоком заявок,
@@ -304,17 +303,31 @@ l & R & b & ДО & Ср. время ожидания & Ср. время преб
 \caption{Без приоритетов}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[resolution=200]{img/op.png}
 \caption{Относительные приоритеты}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[resolution=200]{img/ap.png}
 \caption{Абсолютные приоритеты}
 \end{figure}
 
-Исходя из графиков видно, что приоритеты влияют на
+\subsubsection{Зависимости характеристик от приоритетов и от суммарной загрузки}
+\begin{figure}[h]
+\centering
+\includegraphics[resolution=128]{img/bp_op_ap_load.png}
+\caption{БП, ОП, АП, от суммарной загрузки}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[resolution=128]{img/bp_op_ap_prio.png}
+\caption{БП, ОП, АП, от приоритета}
+\end{figure}
+
+Исходя из графиков видно, что число заявок увеличивается для более приоритетного
+класса 2, когда как для класса 1 оно уменьшается.
 \end{document}
