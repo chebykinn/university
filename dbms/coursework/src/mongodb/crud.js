@@ -1,15 +1,23 @@
 var mongoose = require('mongoose');
-var MongooseCache = require('mongoose-redis');
+var MongooseCache = require('mongoose-redis-cache');
 var schemas = require('./schemas');
-var cache = MongooseCache(mongoose, {port: 6379, host: '192.168.1.123'});
 
-var uri = 'mongodb://192.168.1.123:27017/coursework';
-//var uri = 'mongodb://chebykin.org:1337/coursework';
+//var host = '192.168.1.123';
+//var redis_port = '6379';
+//var mongo_port = '27017';
+
+var host = 'chebykin.org';
+var redis_port = '4242';
+var mongo_port = '1337';
+
+var uri = 'mongodb://'+host+':'+mongo_port+'/coursework';
 var options = { promiseLibrary: require('bluebird') };
 mongoose.Promise = require('bluebird');
 mongoose.connect(uri, options);
 var db = mongoose.connection;
-
+var cache = MongooseCache(mongoose, {
+	host: host, port: redis_port, cache: true, prefix: "mongo"
+});
 
 const rl = require('readline-sync');
 
@@ -24,7 +32,7 @@ var funcs = {
 	'read': function(splitted_input) {
 		var schema = get_schema_by_name(splitted_input[1]);
 		if(schema == null) return;
-		schema.model.find({}).exec(function(err, row){
+		schema.model.find({}).lean().exec(function(err, row){
 			console.log(row);
 		});
 	},
@@ -64,24 +72,31 @@ var funcs = {
 
 var err_code = 0;
 db.on('error', console.error.bind(console, 'connection error:'));
-//db.once('open', function() {
-input = rl.question();
-if( input == 'q' ) err_code = 1;
-var splitted_input = input.split(/\s+/, 2);
-var func = get_func_by_name(splitted_input[0]);
-if(func != null)
-	func(splitted_input);
-//db.close();
-//db.on('close', function(){
-	//process.exit(err_code);
-//});
-//});
+db.once('open', function() {
+
+function run(){
+	input = rl.question();
+	var splitted_input = input.split(/\s+/, 2);
+	var func = get_func_by_name(splitted_input[0]);
+	if(func != null)
+		func(splitted_input);
+}
+
+run();
+setTimeout(function(){
+	console.log('>');
+	process.exit(0);
+}, 1000);
+
+
+
+});
 
 function fill_fields(schema, model) {
 	if( model == null ) model = new schema.model;
 
 	schema.schema.eachPath((field) => {
-		if( !field.match(/^_/) ){
+		if( field[0] != '_' ){
 			if( field.match(/\./) ){
 				var nested = field.split(".");
 				var nested_head = nested[0];
@@ -104,8 +119,7 @@ function get_unique_field(schema) {
 				 || (field.hasOwnProperty('unique') && field.unique) ) {
 				return property;
 			}
-		}
-	}
+		} }
 	return null;
 }
 
@@ -127,6 +141,7 @@ function get_func_by_name(name) {
 
 function get_field_by_name(container, name, error) {
 	var f = container[name];
+	//f.set('redisCache', true);
 	if(f == null) {
 		console.log(error);
 	}
@@ -136,5 +151,4 @@ function get_field_by_name(container, name, error) {
 function print_errors(err) {
 	if( err != null ) console.log(err.message);
 	db.close();
-	cache.close();
 };

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var table = 'persons';
 var schema = mongoose.Schema({
-	last_name: {type: String, requiered: true},
+	last_name: {type: String, required: true},
 	first_name: {type: String, required: true},
 	second_name: String,
 	date_of_birth: {type: String, required: true},
