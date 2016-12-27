@@ -35,7 +35,7 @@ public class CLI {
 
     public int connect(String[] args){
         if( args.length < 3 ){
-            jedis = new Jedis("chebykin.org:4242");
+            jedis = new Jedis("chebykinn.ru", 4242);
             return createContext(user, password);
         }else{
             return createContext(args[1], args[2]);

@@ -5,6 +5,7 @@ import classes.routines.UpdateSellLog;
 import classes.tables.*;
 import classes.tables.records.*;
 import classes.udt.records.PassportRecord;
+import com.sun.xml.internal.ws.developer.Serialization;
 import org.jooq.*;
 import org.jooq.impl.AbstractRoutine;
 import org.jooq.impl.TableImpl;
@@ -14,6 +15,9 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
+
+import static javafx.scene.input.KeyCode.R;
 
 
 public class Store {
@@ -69,6 +73,12 @@ public class Store {
     private <R extends UpdatableRecord, T extends TableImpl<R>, F extends TableField<R, Integer>>
     int doCommand(T table, F[] pkey, CmdType type, int[] id, String fieldName, Object[] args, boolean skip_id) {
         R record = null;
+
+        if (type != CmdType.READ) {
+            Set<String> keys = jedis.keys(table + "*");
+            keys.forEach(key -> jedis.del(key));
+        }
+
         if (type == CmdType.ADD || type == CmdType.FIELDS) {
             record = ctx.newRecord(table);
         }
@@ -92,8 +102,7 @@ public class Store {
             if( id[0] > 0 && record == null ){
                 throw new IllegalArgumentException("No such row");
             }
-//            if( jedis.exists(new StringBuilder().append(table.toString()).append(type.toString()).append(pkey.toString()).toString()) ){
- //           }
+            String key = table.toString() + id[0] + " " + (id.length > 1? id[1]: "");
             Result<R> records;
             if( record != null ) {
                 records = ctx.newResult(table);
@@ -101,26 +110,10 @@ public class Store {
             }else{
                 records = ctx.fetch(table);
             }
-            boolean printed = false;
-            for (R r : records) {
-                if (fieldName != null) {
-                    Object data = r.getValue(fieldName);
-                    System.out.println(data);
-                } else {
-                    if( !printed ) {
-                        for (Field<?> f : r.fields()) {
-                            System.out.print(f.getName()+" ");
-                        }
-                        printed = true;
-                        System.out.println();
-                    }
-                    for (Field<?> f : r.fields()) {
-                        Object data = r.getValue(f);
-                        System.out.print(data + " ");
-                    }
-                    System.out.println();
-                }
+            if(!jedis.exists(key)) {
+                jedis.set(key, serialize(records, fieldName));
             }
+            System.out.print(jedis.get(key));
             return 0;
         }
 
@@ -313,5 +306,30 @@ public class Store {
             }
         }
         return doCommand(table, pkey, type, ids, field_name[0], out_args, true);
+    }
+
+
+    private <R extends UpdatableRecord>
+    String serialize(Result<R> records, String fieldName) {
+        String result = "";
+        boolean serialized = false;
+        for (UpdatableRecord r : records) {
+            if (fieldName != null) {
+                result = "" + r.getValue(fieldName);
+            } else {
+                if( !serialized ) {
+                    for (Field<?> f : r.fields()) {
+                        result = result + f.getName() + " ";
+                    }
+                    serialized = true;
+                    result = result + "\n";
+                }
+                for (Field<?> f : r.fields()) {
+                    result = result + r.getValue(f) + " ";
+                }
+                result = result + "\n";
+            }
+        }
+        return result;
     }
 }

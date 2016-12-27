@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class SellLog extends TableImpl<SellLogRecord> {
 
-    private static final long serialVersionUID = 2138090150;
+    private static final long serialVersionUID = 1015653966;
 
     /**
      * The reference instance of <code>public.sell_log</code>
@@ -75,7 +75,7 @@ public class SellLog extends TableImpl<SellLogRecord> {
     /**
      * The column <code>public.sell_log.date</code>.
      */
-    public final TableField<SellLogRecord, Date> DATE = createField("date", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
+    public final TableField<SellLogRecord, Date> DATE = createField("date", org.jooq.impl.SQLDataType.DATE.defaultValue(org.jooq.impl.DSL.field("date(now())", org.jooq.impl.SQLDataType.DATE)), this, "");
 
     /**
      * Create a <code>public.sell_log</code> table reference
