@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
-var MongooseCache = require('mongoose-redis-cache');
+var cacheman = require('cacheman-redis');
 var schemas = require('./schemas');
+
 
 //var host = '192.168.1.123';
 //var redis_port = '6379';
@@ -10,14 +11,19 @@ var host = 'chebykin.org';
 var redis_port = '4242';
 var mongo_port = '1337';
 
+var options = {
+  host: host,
+  port: redis_port,
+};
+
+// adding mongoose cachebox
+var cache = new cacheman(options);
+
 var uri = 'mongodb://'+host+':'+mongo_port+'/coursework';
 var options = { promiseLibrary: require('bluebird') };
 mongoose.Promise = require('bluebird');
 mongoose.connect(uri, options);
 var db = mongoose.connection;
-var cache = MongooseCache(mongoose, {
-	host: host, port: redis_port, cache: true, prefix: "mongo"
-});
 
 const rl = require('readline-sync');
 
@@ -30,11 +36,25 @@ var funcs = {
 		model.save((err) => print_errors(err));
 	},
 	'read': function(splitted_input) {
-		var schema = get_schema_by_name(splitted_input[1]);
-		if(schema == null) return;
-		schema.model.find({}).lean().exec(function(err, row){
-			console.log(row);
+		var key = splitted_input.toString();
+		cache.get(key, function (err, value) {
+			if (err) throw err;
+			if( value == null ){
+				var schema = get_schema_by_name(splitted_input[1]);
+				if(schema == null) return;
+				schema.model.find({}).exec(function(err, row){
+					cache.set(key, row, function (err, value) {
+						if (err) throw err;
+						console.log(value);
+						console.log("added to cache");
+					});
+				});
+			}else{
+				console.log(value);
+				console.log("cached");
+			}
 		});
+
 	},
 	'update': function(splitted_input) {
 		var schema = get_schema_by_name(splitted_input[1]);
@@ -151,4 +171,4 @@ function get_field_by_name(container, name, error) {
 function print_errors(err) {
 	if( err != null ) console.log(err.message);
 	db.close();
-};
+}
