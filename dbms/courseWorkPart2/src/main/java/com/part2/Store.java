@@ -74,9 +74,14 @@ public class Store {
     int doCommand(T table, F[] pkey, CmdType type, int[] id, String fieldName, Object[] args, boolean skip_id) {
         R record = null;
 
+        String key = table.toString() + id[0] + " " + (id.length > 1? id[1]: "");
+
         if (type != CmdType.READ) {
             Set<String> keys = jedis.keys(table + "*");
-            keys.forEach(key -> jedis.del(key));
+            keys.forEach(k -> jedis.del(k));
+        } else if(jedis.exists(key)) {
+            System.out.print(jedis.get(key));
+            return 0;
         }
 
         if (type == CmdType.ADD || type == CmdType.FIELDS) {
@@ -102,7 +107,6 @@ public class Store {
             if( id[0] > 0 && record == null ){
                 throw new IllegalArgumentException("No such row");
             }
-            String key = table.toString() + id[0] + " " + (id.length > 1? id[1]: "");
             Result<R> records;
             if( record != null ) {
                 records = ctx.newResult(table);
@@ -110,9 +114,7 @@ public class Store {
             }else{
                 records = ctx.fetch(table);
             }
-            if(!jedis.exists(key)) {
-                jedis.set(key, serialize(records, fieldName));
-            }
+            jedis.set(key, serialize(records, fieldName));
             System.out.print(jedis.get(key));
             return 0;
         }
