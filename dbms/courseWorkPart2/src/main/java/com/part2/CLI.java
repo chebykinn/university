@@ -2,6 +2,7 @@ package com.part2;
 
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
+import redis.clients.jedis.Jedis;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +17,7 @@ public class CLI {
     private String password = "123456789";
     private String url = "jdbc:postgresql://chebykinn.ru:1488/coursework";
     private Connection connection;
+    private Jedis jedis;
     private Store store = new Store();
     private HashMap<String, Command> commandList;
 
@@ -23,7 +25,7 @@ public class CLI {
         try {
             connection = DriverManager.getConnection(url, user, password);
             DSLContext ctx = DSL.using(connection);
-            store = new Store(ctx);
+            store = new Store(ctx, jedis);
             return 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,6 +35,7 @@ public class CLI {
 
     public int connect(String[] args){
         if( args.length < 3 ){
+            jedis = new Jedis("chebykinn.ru", 4242);
             return createContext(user, password);
         }else{
             return createContext(args[1], args[2]);

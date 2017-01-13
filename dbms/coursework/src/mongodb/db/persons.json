@@ -1,0 +1,56 @@
+{
+	"_id": 16,
+	"last_name": "test",
+	"first_name": "test",
+	"second_name": "test",
+	"date_of_birth": "2016-11-01",
+	"sex": "M",
+	"place_of_birth": "test",
+	"address": "test",
+	"phone": "test",
+	"photo": "",
+	"passport": "(1001,666666)",
+	"position_id": 1
+}
+{
+	"_id": 26,
+	"last_name": "kekkek",
+	"first_name": "kek",
+	"second_name": "lol",
+	"date_of_birth": "2016-11-14",
+	"sex": "M",
+	"place_of_birth": "asdasdasd",
+	"address": "ololo st.",
+	"phone": 8.123812313e+09,
+	"photo": "",
+	"passport": "(5710,635585)",
+	"position_id": 1
+}
+{
+	"_id": 30,
+	"last_name": "lol",
+	"first_name": "ololo",
+	"second_name": "asdasd",
+	"date_of_birth": "2016-11-14",
+	"sex": "M",
+	"place_of_birth": "place",
+	"address": "address",
+	"phone": "phone",
+	"photo": "",
+	"passport": "(6666,666666)",
+	"position_id": 1
+}
+{
+	"_id": 32,
+	"last_name": 123,
+	"first_name": 123,
+	"second_name": 123,
+	"date_of_birth": "2016-01-01",
+	"sex": "M",
+	"place_of_birth": "adsads",
+	"address": "asdasd",
+	"phone": "adasd",
+	"photo": "",
+	"passport": "(5716,478596)",
+	"position_id": 1
+}

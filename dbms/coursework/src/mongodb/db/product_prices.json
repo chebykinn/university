@@ -1,0 +1,5 @@
+{
+	"_id": { "product_id": 9, "shop_id": 1 },
+	"price": 100,
+	"updated": {"$date": 1480406222}
+}
