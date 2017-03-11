@@ -14,7 +14,7 @@ public class CosinusTest extends Assert {
     private static final double DELTA = 0.001;
 
     @Before
-    public void setUpCos() {
+    public void setUp() {
         //hashMap, key - table result, value - input value
         arrayTestValues.put((double) 1, (double) 0);
         arrayTestValues.put(Math.sqrt(3) / 2, Math.PI / 6);
@@ -28,7 +28,7 @@ public class CosinusTest extends Assert {
     }
 
     @After
-    public void tearDownCos() {
+    public void tearDown() {
         arrayTestValues.clear();
     }
 
