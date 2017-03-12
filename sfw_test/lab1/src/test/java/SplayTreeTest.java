@@ -100,11 +100,21 @@ public class SplayTreeTest {
 
     @Test
     public void check() throws Exception {
-        assert(walkCheck(tree.root, Integer.MIN_VALUE, Integer.MAX_VALUE) == true);
+        tree.insert(128);
+        tree.insert(1);
+        tree.insert(256);
+        tree.insert(64);
+        tree.insert(32);
+        assertTrue(walkCheck(tree.root, Integer.MIN_VALUE, Integer.MAX_VALUE) == true);
     }
     
     @Test
     public void dfs() throws Exception {
+        tree.insert(128);
+        tree.insert(1);
+        tree.insert(256);
+        tree.insert(64);
+        tree.insert(32);
         int prev = 0;
         for (SplayTreeNode node : tree) {
             System.out.println("Node value: "+node.value);
