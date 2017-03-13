@@ -25,6 +25,9 @@ public class CosinusTest extends Assert {
         arrayTestValues.put(-Math.sqrt(2) / 2, 3 * Math.PI / 4);
         arrayTestValues.put(-Math.sqrt(3) / 2, 5 * Math.PI / 6);
         arrayTestValues.put((double) -1, Math.PI);
+
+        arrayTestValues.put(Math.sqrt(3) / 2, - Math.PI / 6);
+        arrayTestValues.put(-Math.sqrt(3) / 2, - 5 * Math.PI / 6);
     }
 
     @After
