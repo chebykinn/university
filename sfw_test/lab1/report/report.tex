@@ -1,9 +1,10 @@
 \input{header.tex}
 \isonefalse
-\def \labnum {}
-\def \labsubj {}
+\def \labnum {1}
+\def \labsubj {Тестирование программного обеспечения}
 \def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
 \def \labgroup {P3301}
+\isinspfalse
 \def \labinsp {}
 \def \labname {Вариант: 756}
 \input{colored_code.tex}
@@ -13,6 +14,23 @@
 	captionpos=t,
 	basicstyle=\ttfamily\selectfont\tiny
 }
+\usepackage{graphicx}
 \begin{document}
 \input{title.tex}
+\section{Функция cos(x)}
+\lstinputlisting[language=Java]{src/main/java/Cosinus.java}
+\subsection{Тестирование}
+\lstinputlisting[language=Java]{src/test/java/CosinusTest.java}
+\section{Расширяющееся дерево}
+\lstinputlisting[language=Java]{src/main/java/SplayTree.java}
+\subsection{Тестирование}
+\lstinputlisting[language=Java]{src/test/java/SplayTreeTest.java}
+\section{Описание предметной области}
+Медленно и осторожно он подошел к первому телу. Оно лежало обнадеживающе тихо,
+и продолжало лежать так, когда он приблизился к нему вплотную и поставил ногу
+на килобац, который оно все еще сжимало скрюченными пальцами.
+\section{UML диаграмма}
+\includegraphics[resolution=100]{img/uml.png}
+
+
 \end{document}
