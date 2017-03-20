@@ -1,4 +1,4 @@
-\input{header.tex}
+\input{header_xe.tex}
 \isonefalse
 \def \labnum {1}
 \def \labsubj {Тестирование программного обеспечения}
@@ -7,30 +7,69 @@
 \isinspfalse
 \def \labinsp {}
 \def \labname {Вариант: 756}
-\input{colored_code.tex}
 \isnametrue
-\lstset{
-	caption=\lstname,
-	captionpos=t,
-	basicstyle=\ttfamily\selectfont\tiny
-}
+
 \usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{fancyvrb}
+
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput} {
+ fontsize=\scriptsize,
+ %
+ frame=lines,  % top and bottom rule only
+ framesep=2em, % separation between frame and text
+ rulecolor=\color{Gray},
+ %
+ label=\fbox{\color{Black}source},
+ labelposition=topline,
+ %
+}
+
 \begin{document}
 \input{title.tex}
-\section{Функция cos(x)}
-\lstinputlisting[language=Java]{src/main/java/Cosinus.java}
-\subsection{Тестирование}
-\lstinputlisting[language=Java]{src/test/java/CosinusTest.java}
-\section{Расширяющееся дерево}
-\lstinputlisting[language=Java]{src/main/java/SplayTree.java}
-\subsection{Тестирование}
-\lstinputlisting[language=Java]{src/test/java/SplayTreeTest.java}
+\section{Задание}
+\begin{enumerate}
+\item Для указанной функции провести модульное тестирование разложения функции в степенной ряд. Выбрать достаточное тестовое покрытие.
+
+\item Провести модульное тестирование указанного алгоритма. Для этого выбрать характерные точки внутри алгоритма, и для предложенных самостоятельно наборов исходных данных записать последовательность
+попадания в характерные точки. Сравнить последовательность попадания с эталонной.
+\item Сформировать доменную модель для заданного текста. Разработать тестовое покрытие для данной до-
+менной модели.
+\end{enumerate}
+
+\section{Выполнение}
+
+\subsection{Функция cos(x)}
+Для тестирования были выделены точки, в которых функция меняется одинаково.
+\VerbatimInput[label=cos]{src/test/java/CosinusTest.java}
+
+\subsection{Расширяющееся дерево}
+Данное дерево, основанное на бинарном, позволяет быстро осуществлять доступ
+к недавно добавленным элементам.
+
+Это реализуется за счет перемещения вершины в корень.
+Таким образом можно рассмотреть три случая:
+\begin{itemize}
+\item Если родительская вершина -- корень, тогда достаточно поменять их местами.
+\item Если родительская вершина не корень, и если она и текущая вершина являются
+левыми или правыми сыновями, тогда сначала меняются местами родитель и родитель
+родителя, а затем текущая вершина меняется с родителем, становясь корнем.
+\item Если родительская вершина и текущая не одинаково левые или правые сыновья,
+тогда они меняются местами, затем текущая вершина меняется с родителем родительской
+вершины.
+
+\end{itemize}
 \section{Описание предметной области}
 Медленно и осторожно он подошел к первому телу. Оно лежало обнадеживающе тихо,
 и продолжало лежать так, когда он приблизился к нему вплотную и поставил ногу
 на килобац, который оно все еще сжимало скрюченными пальцами.
 \section{UML диаграмма}
-\includegraphics[resolution=100]{img/uml.png}
-
+\includegraphics[width=400bp]{img/uml.png}
+\section{Вывод}
+В ходе выполнения данной лабораторной работы было проведено тестирование
+разработанных программых модулей с использованием средств JUnit4. Данная библиотека
+предоставляет удобные средства тестирования.
 
 \end{document}
