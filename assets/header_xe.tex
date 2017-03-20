@@ -1,0 +1,29 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{fontspec}
+\setmainfont[
+  Ligatures=TeX,
+  Extension=.otf,
+  UprightFont=*-regular,
+  ItalicFont=*-italic,
+  BoldFont=*-bold,
+  BoldItalicFont=*-bolditalic,
+]{xits}
+\usepackage[english,russian]{babel}
+
+\newif\ifisinsp
+\newif\ifisone
+\newif\ifisname
+\newif\ifisnum
+\isinsptrue
+\isonetrue
+\isnamefalse
+\isnumtrue
+
+\def \labtype {Лабораторная}
+% Это для нумерации страниц после титульника
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C] {\thepage}
