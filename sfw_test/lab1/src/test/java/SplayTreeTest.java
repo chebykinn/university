@@ -1,9 +1,8 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by ivan on 11.03.17.
@@ -29,6 +28,26 @@ public class SplayTreeTest {
         assertEquals(tree.count(), 0);
         tree.insert(10);
         assertEquals(tree.count(), 1);
+
+    }
+
+    @Test
+    public void insertRoot() throws Exception{
+        assertEquals(tree.root, null);
+        tree.insert(5);
+        assertNotEquals(tree.root, null);
+        assertEquals(tree.root.value, 5);
+        tree.insert(10);
+        assertEquals(tree.root.value, 10);
+        assertEquals(tree.root.left.value, 5);
+        tree.clear();
+        assertEquals(tree.root, null);
+        tree.insert(5);
+        assertNotEquals(tree.root, null);
+        assertEquals(tree.root.value, 5);
+        tree.insert(1);
+        assertEquals(tree.root.value, 1);
+        assertEquals(tree.root.right.value, 5);
 
     }
 
@@ -91,23 +110,6 @@ public class SplayTreeTest {
 
     }
 
-    private boolean walkCheck(SplayTreeNode node, int minKey, int maxKey) {
-        if(node == null) return true;
-        if(node.value < minKey || node.value > maxKey) return false;
-
-        return walkCheck(node.left, minKey, node.value-1) && walkCheck(node.right, node.value+1, maxKey);
-    }
-
-    @Test
-    public void check() throws Exception {
-        tree.insert(128);
-        tree.insert(1);
-        tree.insert(256);
-        tree.insert(64);
-        tree.insert(32);
-        assertTrue(walkCheck(tree.root, Integer.MIN_VALUE, Integer.MAX_VALUE) == true);
-    }
-    
     @Test
     public void dfs() throws Exception {
         tree.insert(128);
@@ -117,7 +119,6 @@ public class SplayTreeTest {
         tree.insert(32);
         int prev = 0;
         for (SplayTreeNode node : tree) {
-            System.out.println("Node value: "+node.value);
             assertTrue(node.value > prev);
             prev = node.value;
         }
