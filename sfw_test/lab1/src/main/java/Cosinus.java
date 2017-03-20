@@ -17,4 +17,5 @@ public class Cosinus {
         else
             return val * (factorial(val - 1));
     }
+
 }

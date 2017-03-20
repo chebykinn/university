@@ -5,29 +5,41 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Created by daituganov on 11.03.17.
  */
 public class CosinusTest extends Assert {
-    private HashMap<Double, Double> arrayTestValues = new HashMap<Double, Double>();
+    private HashMap<Double, Double> arrayTestValues = new HashMap<>();
+    private HashMap<Double, Double> arrayWrongTestValues = new HashMap<>();
     private static final double DELTA = 0.001;
 
     @Before
     public void setUp() {
         //hashMap, key - table result, value - input value
+        //zero check
         arrayTestValues.put((double) 1, (double) 0);
+
+        //right side check
         arrayTestValues.put(Math.sqrt(3) / 2, Math.PI / 6);
-        arrayTestValues.put(Math.sqrt(2) / 2, Math.PI / 4);
-        arrayTestValues.put(0.5, Math.PI / 3);
         arrayTestValues.put((double) 0, Math.PI / 2);
-        arrayTestValues.put(-0.5, 2 * Math.PI / 3);
         arrayTestValues.put(-Math.sqrt(2) / 2, 3 * Math.PI / 4);
-        arrayTestValues.put(-Math.sqrt(3) / 2, 5 * Math.PI / 6);
+
+        //parity check
+        arrayTestValues.put(Math.sqrt(3) / 2, -Math.PI / 6);
+
+        //test coverage boundaries
+        arrayTestValues.put((double) -1, -Math.PI);
         arrayTestValues.put((double) -1, Math.PI);
 
-        arrayTestValues.put(Math.sqrt(3) / 2, - Math.PI / 6);
-        arrayTestValues.put(-Math.sqrt(3) / 2, - 5 * Math.PI / 6);
+        //test NaN, Infinity
+        arrayTestValues.put(Double.NaN, Double.NaN);
+        arrayTestValues.put(Double.NaN, Double.POSITIVE_INFINITY);
+
+        //test values outside the coverage boundaries
+        arrayWrongTestValues.put(Math.sqrt(3) / 2, 7 * Math.PI / 6);
+        arrayWrongTestValues.put(Math.sqrt(3) / 2, -7 * Math.PI / 6);
     }
 
     @After
@@ -37,10 +49,16 @@ public class CosinusTest extends Assert {
 
     @Test
     public void testCos() {
+        double expected, actual;
         for(Map.Entry entry : arrayTestValues.entrySet()) {
-            double expected = ( (Double) entry.getKey()).doubleValue();
-            double actual = Cosinus.cos( ( (Double) entry.getValue() ).doubleValue());
+            expected = ( (Double) entry.getKey()).doubleValue();
+            actual = Cosinus.cos( ( (Double) entry.getValue() ).doubleValue());
             assertEquals(expected, actual, DELTA);
+        }
+        for(Map.Entry entry : arrayWrongTestValues.entrySet()) {
+            expected = ( (Double) entry.getKey()).doubleValue();
+            actual = Cosinus.cos( ( (Double) entry.getValue() ).doubleValue());
+            assertNotEquals(expected, actual, DELTA);
         }
     }
 }
