@@ -1,0 +1,67 @@
+\input{header.tex}
+
+\def \labnum {1}
+\def \labsubj {Организация ЭВМ и систем}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
+\def \labgroup {P3301}
+\def \labinsp {Скорубский В. И.}
+\def \labname {}
+\input{colored_code.tex}
+\isnametrue
+\lstset{  
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+\begin{document}
+\input{title.tex}
+\section*{Цель работы}
+\begin{enumerate}
+	\item Обретение базовых навыков работы с MCS51 в среде Keil.
+	\item Изучение архитектуры MCS51.
+	\item Изучение C51 и A51.
+\end{enumerate}
+\section*{Задание}
+Задана текстовая строка - константа в ASCII в памяти Code, предлагается преобразование этой строки с сохранением в ASCII в расширенной памяти данных Xdata.
+В преобразованиях также используется память Data, регистры с адресным и неявным доступом. \\
+Преобразование: Заменить прописную букву “x” на заглавную в тексте 
+\section*{Исходный код}
+\lstinputlisting[language=C]{src/lab1.c}
+
+\section*{Файл листинга}
+\lstinputlisting{src/lab1.lst}
+
+\section*{Распечатка загрузочного файла}
+\lstinputlisting{src/lab1.hex}
+
+\section*{Таблица значений переменных программы}
+
+\begin{flushleft}
+
+	\scriptsize
+	\begin{tabular}{llllllllllllllllll}
+		i      & 0   & 1    & 2     & 3      & 4 \\
+		target & "T" & "Th" & "Thi" & "This" & "This "
+	\end{tabular}
+	
+	\begin{tabular}{llllllllllllllllll}
+		i      & 5   & 6    & 7     & 8      & 9 \\
+		target & "This p" & "This pr" & "This pro" & "This prog" & "This progr"
+	\end{tabular}
+	
+	\begin{tabular}{llllllllllllllllll}
+		i      & 10   & 11    & 12  \\
+		target & "This progrA" & "This progrAm" & "This progrAmm"
+	\end{tabular}
+	
+	\begin{tabular}{llllllllllllllllll}
+		i      & 13      & 14  & 15  & 16   \\
+		target & "This progrAmmA" & "This progrAmmAt" & "This progrAmmAto" & "This progrAmmAtor"
+	\end{tabular}
+
+
+\end{flushleft}
+
+\section*{Вывод}
+В результате выполнения лабораторной работы были изучены основы архитектуры MCS51, исследована его иерархия памяти и способы адресации её сегментов.
+
+\end{document}
