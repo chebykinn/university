@@ -1,4 +1,7 @@
 #include <reg51.h>
+
+int count = 0, min = 0, sec = 0, Ts = 65000, Tm = 60, Too = 1;
+
 intt0() interrupt 1 {
 	TH0= -(Too >>8);
 	TL0= -Too;
