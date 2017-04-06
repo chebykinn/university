@@ -1,7 +1,11 @@
+#define _DEFAULT_SOURCE
 #include <assert.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "ipc.h"
 #include "io.h"
@@ -53,9 +57,15 @@ int receive(void * self, local_id from, Message * msg) {
 	Channel *c = get_channel(h, from, h->src_pid);
 	if( c == NULL ) return -1;
 
-	int rc = read(c->readfd, msg, sizeof *msg);
-	if( rc < 0 ) return -1;
-	return 0;
+	char buff[MAX_MESSAGE_LEN];
+	while( 1 ){
+		int rc = read(c->readfd, buff, sizeof buff);
+		if( rc > 0 ) {
+			memcpy(msg, buff, rc);
+			return 0;
+		}
+		usleep(100000);
+	}
 }
 
 int receive_any(void * self, Message * msg) {
