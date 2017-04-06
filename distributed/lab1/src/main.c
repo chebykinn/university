@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <assert.h>
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -15,17 +16,30 @@
 #include "io.h"
 #include "pa1.h"
 
-static const char e_no_args[]  = "not enough arguments";
-static const char e_proc_num[] = "number of processes should be from 1 to 10";
+static const char e_no_args[]  = "Error: not enough arguments\n";
+static const char e_proc_num[] = "Error: number of processes should be from 1 to 10\n";
+static const char e_log_write[] = "Error: failed to write event to log\n";
+
+static int events_log_fd = -1;
 
 int start_process(int pid){
 
 	return 0;
 }
 
+int log_event(char *msg){
+	assert(events_log_fd > 0 && "Called before opening log file");
+	int rc = write(events_log_fd, msg, strlen(msg));
+	if( rc < 0 ){
+		write(STDERR_FILENO, e_log_write, sizeof e_log_write);
+		return 1;
+	}
+	return 0;
+}
+
 int main(int argc, char *const argv[]) {
 	if ( argc < 2 ) {
-		fprintf(stderr, "Error: %s\n", e_no_args);
+		write(STDERR_FILENO, e_no_args, sizeof e_no_args);
         return 1;
     }
 
@@ -35,7 +49,7 @@ int main(int argc, char *const argv[]) {
 		case 'p':
 			proc_num = strtoul(optarg, &endp, 10);
 			if ( *endp != '\0' || proc_num == 0 || proc_num > 10 ) {
-				fprintf(stderr, "Error: %s\n", e_proc_num);
+				write(STDERR_FILENO, e_proc_num, sizeof e_proc_num);
 				return 1;
 			}
 			break;
@@ -54,10 +68,13 @@ int main(int argc, char *const argv[]) {
 	int pipes_log_fd = open(pipes_log, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if( pipes_log_fd < 0 ) return 1;
 
+	events_log_fd = open(events_log, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if( events_log_fd < 0 ) return 1;
+
 	char msg[64];
 	for(int32_t i = 0; i < proc_num; i++){
 		for(int32_t j = 0; j < proc_num; j++){
-			int	rc = pipe2((int*)&channel_table[i * proc_num + j], O_NONBLOCK);
+			int	rc = pipe2((int*)&channel_table[i * proc_num + j], O_NONBLOCK | O_DIRECT);
 			snprintf(msg, 64, "opened pipe(%d, %d)\n", i, j);
 			int n = write(pipes_log_fd, msg, strlen(msg));
 			if( n < 0 ) return 1;
@@ -104,7 +121,7 @@ int main(int argc, char *const argv[]) {
 				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
 				return 1;
 			}
-			printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);
+			/*printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
 		}
 
 		for(local_id i = 1; i < proc_num; i++){
@@ -113,7 +130,7 @@ int main(int argc, char *const argv[]) {
 				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
 				return 1;
 			}
-			printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);
+			/*printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
 		}
 
 		for(local_id pid = 1; pid < proc_num; pid++){
@@ -122,7 +139,8 @@ int main(int argc, char *const argv[]) {
 	}else{
 		close(channel_table[current_pid * proc_num + current_pid].readfd);
 		close(channel_table[current_pid * proc_num + current_pid].writefd);
-		/*printf(log_started_fmt, current_pid, current_sys_pid, ppid);*/
+		char log_buff[MAX_PAYLOAD_LEN];
+		int rc = 0;
 		Message msg;
 		memset(&msg, 0, sizeof msg);
 		msg.s_header.s_magic = MESSAGE_MAGIC;
@@ -130,11 +148,16 @@ int main(int argc, char *const argv[]) {
 				 log_started_fmt, current_pid, current_sys_pid, ppid);
 		msg.s_header.s_payload_len = strlen(msg.s_payload);
 		msg.s_header.s_type = STARTED;
-		int rc = send_multicast(&handle, &msg);
-		if( rc < 0 ){
+
+		rc = log_event(msg.s_payload);
+		if( rc != 0 ) return 1;
+
+		rc = send_multicast(&handle, &msg);
+		if( rc != 0 ){
 			fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
 			return 1;
 		}
+		memset(&msg, 0, sizeof msg);
 
 		for(local_id i = 1; i < proc_num; i++){
 			int rc = receive(&handle, i, &msg);
@@ -142,26 +165,41 @@ int main(int argc, char *const argv[]) {
 				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
 				return 1;
 			}
-			printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);
+			/*printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
 		}
+
+		snprintf(log_buff, MAX_PAYLOAD_LEN,
+				 log_received_all_started_fmt, current_pid);
+
+		rc = log_event(log_buff);
+		if( rc != 0 ) return 1;
 
 		snprintf(msg.s_payload, MAX_PAYLOAD_LEN, log_done_fmt, current_pid);
 		msg.s_header.s_payload_len = strlen(msg.s_payload);
 		msg.s_header.s_type = DONE;
+
+		rc = log_event(msg.s_payload);
+		if( rc != 0 ) return 1;
 		rc = send_multicast(&handle, &msg);
 		if( rc < 0 ){
 			fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
 			return 1;
 		}
+		memset(&msg, 0, sizeof msg);
 
 		for(local_id i = 1; i < proc_num; i++){
-			int rc = receive(&handle, i, &msg);
+			rc = receive(&handle, i, &msg);
 			if( rc != 0 ){
 				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
 				return 1;
 			}
-			printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);
+			/*printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
 		}
+
+		snprintf(log_buff, MAX_PAYLOAD_LEN,
+				 log_received_all_done_fmt, current_pid);
+		rc = log_event(log_buff);
+		if( rc != 0 ) return 1;
 
 
 	}
