@@ -12,9 +12,34 @@
 	caption=\lstname,
 	basicstyle=\ttfamily\selectfont\scriptsize
 }
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyvrb}
+
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput} {
+ fontsize=\scriptsize,
+ %
+ frame=lines,  % top and bottom rule only
+ framesep=2em, % separation between frame and text
+ rulecolor=\color{Gray},
+ %
+ label=\fbox{\color{Black}source},
+ labelposition=topline,
+ %
+}
 \begin{document}
 \input{title.tex}
-\section{Цель работы}
 \section{Задание}
+Организовать в С51 последовательный ввод чисел по прерыванию.
+
+Использовать индивидуальный вариант раскладки клавиатуры
+
+Интерпретировать прерывание чтением кода из массива кодов сканирования.
+Числа при вводе преобразуются в формате с естественной запятой в формат с
+плавающей и при выводе в формат с естественной запятой.
+\section{Выполнение}
+\VerbatimInput[label=main.c]{src/main.c}
 \section{Вывод}
+В ходе данной лабораторной работы были получены навыки работы с прерываниями
+для организации ввода с клавиатуры.
 \end{document}
