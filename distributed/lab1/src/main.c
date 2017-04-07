@@ -46,16 +46,16 @@ int receive_all(IOHandle *handle){
 }
 
 void close_pipes(IOHandle *handle){
-	Channel *out = &handle->channel_table[handle->src_pid * handle->proc_num];
-	close(out[handle->src_pid].readfd);
-	close(out[handle->src_pid].writefd);
-
 	for(int i = 0; i < handle->proc_num; i++){
-		close(out[i].readfd);
-	}
-
-	for(int i = 0; i < handle->proc_num; i++){
-		close(handle->channel_table[i * handle->proc_num + handle->src_pid].writefd);
+		for(int j = 0; j < handle->proc_num; j++){
+			if( i == j ) continue;
+			if( i != handle->src_pid ){
+				close(handle->channel_table[i * handle->proc_num + j].writefd);
+			}
+			if( j != handle->src_pid ){
+				close(handle->channel_table[i * handle->proc_num + j].readfd);
+			}
+		}
 	}
 }
 
@@ -150,7 +150,7 @@ int main(int argc, char *const argv[]) {
 	}
 	proc_num++; // include parent id
 
-	Channel *channel_table = malloc(proc_num * proc_num * sizeof *channel_table);
+	Channel *channel_table = calloc(1, proc_num * proc_num * sizeof *channel_table);
 	if( channel_table == NULL ) return 1;
 
 	IOHandle handle;
@@ -167,6 +167,7 @@ int main(int argc, char *const argv[]) {
 	char msg[64];
 	for(int32_t i = 0; i < proc_num; i++){
 		for(int32_t j = 0; j < proc_num; j++){
+			if( i == j ) continue;
 			int	rc = pipe2((int*)&channel_table[i * proc_num + j], O_NONBLOCK | O_DIRECT);
 			snprintf(msg, 64, "opened pipe(%d, %d)\n", i, j);
 			int n = write(pipes_log_fd, msg, strlen(msg));
