@@ -37,6 +37,89 @@ int log_event(char *msg){
 	return 0;
 }
 
+int receive_all(IOHandle *handle){
+	assert(handle != NULL);
+	Message msg;
+	for(local_id i = 1; i < handle->proc_num; i++){
+		int rc = receive(handle, i, &msg);
+		if( rc != 0 ){
+			fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int parent(IOHandle *handle){
+	int rc = 0;
+	rc = receive_all(handle);
+	if( rc != 0 ) return 1;
+
+	rc = receive_all(handle);
+	if( rc != 0 ) return 1;
+
+	for(local_id pid = 1; pid < handle->proc_num; pid++){
+		wait(NULL);
+	}
+	return 0;
+}
+
+int child(IOHandle *handle, int sys_pid, int ppid){
+	Channel loop = handle->channel_table[handle->src_pid * handle->proc_num
+														 + handle->src_pid];
+	close(loop.readfd);
+	close(loop.writefd);
+	char log_buff[MAX_PAYLOAD_LEN];
+	int rc = 0;
+	Message msg;
+	memset(&msg, 0, sizeof msg);
+	msg.s_header.s_magic = MESSAGE_MAGIC;
+	snprintf(msg.s_payload, MAX_PAYLOAD_LEN, log_started_fmt,
+			 handle->src_pid, sys_pid, ppid);
+	msg.s_header.s_payload_len = strlen(msg.s_payload);
+	msg.s_header.s_type = STARTED;
+
+	rc = log_event(msg.s_payload);
+	if( rc != 0 ) return 1;
+
+	rc = send_multicast(handle, &msg);
+	if( rc != 0 ){
+		fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
+		return 1;
+	}
+
+	rc = receive_all(handle);
+	if( rc != 0 ) return 1;
+
+	snprintf(log_buff, MAX_PAYLOAD_LEN, log_received_all_started_fmt,
+			 handle->src_pid);
+
+	rc = log_event(log_buff);
+	if( rc != 0 ) return 1;
+
+	snprintf(msg.s_payload, MAX_PAYLOAD_LEN, log_done_fmt, handle->src_pid);
+	msg.s_header.s_payload_len = strlen(msg.s_payload);
+	msg.s_header.s_type = DONE;
+
+	rc = log_event(msg.s_payload);
+	if( rc != 0 ) return 1;
+	rc = send_multicast(handle, &msg);
+	if( rc < 0 ){
+		fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
+		return 1;
+	}
+
+	rc = receive_all(handle);
+	if( rc != 0 ) return 1;
+
+	snprintf(log_buff, MAX_PAYLOAD_LEN, log_received_all_done_fmt,
+			 handle->src_pid);
+	rc = log_event(log_buff);
+	if( rc != 0 ) return 1;
+
+	return 0;
+}
+
 int main(int argc, char *const argv[]) {
 	if ( argc < 2 ) {
 		write(STDERR_FILENO, e_no_args, sizeof e_no_args);
@@ -114,95 +197,8 @@ int main(int argc, char *const argv[]) {
 	}
 
 	if( is_parent ){
-		Message msg;
-		for(local_id i = 1; i < proc_num; i++){
-			int rc = receive(&handle, i, &msg);
-			if( rc != 0 ){
-				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
-				return 1;
-			}
-			/*printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
-		}
-
-		for(local_id i = 1; i < proc_num; i++){
-			int rc = receive(&handle, i, &msg);
-			if( rc != 0 ){
-				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
-				return 1;
-			}
-			/*printf("parent got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
-		}
-
-		for(local_id pid = 1; pid < proc_num; pid++){
-			wait(NULL);
-		}
+		return parent(&handle);
 	}else{
-		close(channel_table[current_pid * proc_num + current_pid].readfd);
-		close(channel_table[current_pid * proc_num + current_pid].writefd);
-		char log_buff[MAX_PAYLOAD_LEN];
-		int rc = 0;
-		Message msg;
-		memset(&msg, 0, sizeof msg);
-		msg.s_header.s_magic = MESSAGE_MAGIC;
-		snprintf(msg.s_payload, MAX_PAYLOAD_LEN,
-				 log_started_fmt, current_pid, current_sys_pid, ppid);
-		msg.s_header.s_payload_len = strlen(msg.s_payload);
-		msg.s_header.s_type = STARTED;
-
-		rc = log_event(msg.s_payload);
-		if( rc != 0 ) return 1;
-
-		rc = send_multicast(&handle, &msg);
-		if( rc != 0 ){
-			fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
-			return 1;
-		}
-		memset(&msg, 0, sizeof msg);
-
-		for(local_id i = 1; i < proc_num; i++){
-			int rc = receive(&handle, i, &msg);
-			if( rc != 0 ){
-				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
-				return 1;
-			}
-			/*printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
-		}
-
-		snprintf(log_buff, MAX_PAYLOAD_LEN,
-				 log_received_all_started_fmt, current_pid);
-
-		rc = log_event(log_buff);
-		if( rc != 0 ) return 1;
-
-		snprintf(msg.s_payload, MAX_PAYLOAD_LEN, log_done_fmt, current_pid);
-		msg.s_header.s_payload_len = strlen(msg.s_payload);
-		msg.s_header.s_type = DONE;
-
-		rc = log_event(msg.s_payload);
-		if( rc != 0 ) return 1;
-		rc = send_multicast(&handle, &msg);
-		if( rc < 0 ){
-			fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
-			return 1;
-		}
-		memset(&msg, 0, sizeof msg);
-
-		for(local_id i = 1; i < proc_num; i++){
-			rc = receive(&handle, i, &msg);
-			if( rc != 0 ){
-				fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
-				return 1;
-			}
-			/*printf("child got: %.*s", msg.s_header.s_payload_len, msg.s_payload);*/
-		}
-
-		snprintf(log_buff, MAX_PAYLOAD_LEN,
-				 log_received_all_done_fmt, current_pid);
-		rc = log_event(log_buff);
-		if( rc != 0 ) return 1;
-
-
+		return child(&handle, current_sys_pid, ppid);
 	}
-
-	return 0;
 }
