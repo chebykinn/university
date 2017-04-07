@@ -3,11 +3,9 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <assert.h>
 
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 
@@ -19,13 +17,9 @@
 static const char e_no_args[]  = "Error: not enough arguments\n";
 static const char e_proc_num[] = "Error: number of processes should be from 1 to 10\n";
 static const char e_log_write[] = "Error: failed to write event to log\n";
+static const char e_log_multicast[] = "Error: failed to send multicast\n";
 
 static int events_log_fd = -1;
-
-int start_process(int pid){
-
-	return 0;
-}
 
 int log_event(char *msg){
 	assert(events_log_fd > 0 && "Called before opening log file");
@@ -43,7 +37,7 @@ int receive_all(IOHandle *handle){
 	for(local_id i = 1; i < handle->proc_num; i++){
 		int rc = receive(handle, i, &msg);
 		if( rc != 0 ){
-			fprintf(stderr, "Failed to receive: %s\n", strerror(errno));
+			write(STDERR_FILENO, e_log_multicast, sizeof e_log_multicast);
 			return 1;
 		}
 	}
@@ -84,7 +78,7 @@ int child(IOHandle *handle, int sys_pid, int ppid){
 
 	rc = send_multicast(handle, &msg);
 	if( rc != 0 ){
-		fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
+		write(STDERR_FILENO, e_log_multicast, sizeof e_log_multicast);
 		return 1;
 	}
 
@@ -103,9 +97,10 @@ int child(IOHandle *handle, int sys_pid, int ppid){
 
 	rc = log_event(msg.s_payload);
 	if( rc != 0 ) return 1;
+
 	rc = send_multicast(handle, &msg);
 	if( rc < 0 ){
-		fprintf(stderr, "Failed to send multicast: %s\n", strerror(errno));
+		write(STDERR_FILENO, e_log_multicast, sizeof e_log_multicast);
 		return 1;
 	}
 
@@ -164,27 +159,12 @@ int main(int argc, char *const argv[]) {
 			if( rc < 0 ) return 1;
 		}
 	}
-	printf("\t");
-	for(int j = 0; j < proc_num; j++){
-		printf("%d\t", j);
-	}
-	printf("\n");
-	for(int i = 0; i < proc_num; i++){
-		for(int j = 0; j < proc_num; j++){
-			int readfd = channel_table[i * proc_num + j].readfd;
-			int writefd = channel_table[i * proc_num + j].writefd;
-			if( j == 0 ) printf("%d\t", i);
-			printf("%d,%d\t", readfd, writefd);
-		}
-		printf("\n");
-	}
 
 	pid_t ppid = getpid(), current_sys_pid = 0;
 	int is_parent = 1;
 	local_id current_pid = 0;
 
 	for(local_id pid = 1; pid < proc_num; pid++){
-		/*int sys_pid = start_process(pid);*/
 		int sys_pid = fork();
 		if( sys_pid < 0 ) return 1;
 		if( sys_pid == 0 ){

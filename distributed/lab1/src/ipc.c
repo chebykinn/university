@@ -1,11 +1,7 @@
 #define _DEFAULT_SOURCE
 #include <assert.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "ipc.h"
 #include "io.h"
