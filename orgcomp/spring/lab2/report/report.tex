@@ -1,0 +1,38 @@
+\input{header_xe.tex}
+
+\isonefalse
+\def \labnum {5}
+\def \labsubj {Организация ЭВМ и систем}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б. \\ Губарев В. Ю. \\ Насыров К.}
+\def \labgroup {P3301}
+\def \labinsp {Скорубский В. И.}
+\def \labname {}
+\input{colored_code.tex}
+\isnametrue
+\lstset{
+	caption=\lstname,
+	basicstyle=\ttfamily\selectfont\scriptsize
+}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fancyvrb}
+
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput} {
+ fontsize=\scriptsize,
+ %
+ frame=lines,  % top and bottom rule only
+ framesep=2em, % separation between frame and text
+ rulecolor=\color{Gray},
+ %
+ label=\fbox{\color{Black}source},
+ labelposition=topline,
+ %
+}
+\begin{document}
+\input{title.tex}
+\section{Задание}
+Организовать измерение времени последовательно двумя таймерами, второй
+счетчик-таймер контролирует сигналы по входу Ti.
+\section{Выполнение}
+\VerbatimInput[label=main.c]{src/main.c}
+\end{document}
