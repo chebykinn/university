@@ -53,6 +53,9 @@ public abstract class AbstractFunction implements Calculation {
     public double getPrecision() {
         return precision;
     }
+    public void setPrecision(double precision) {
+        this.precision = precision;
+    }
 
     public void setFuncIsStub(boolean funcIsStub) {
         this.funcIsStub.put(function, funcIsStub);
