@@ -14,7 +14,7 @@ public class Secant extends AbstractFunction{
 
     Cosinus cos;
 
-    public Secant(Double precision) {
+    public Secant(double precision) {
         super(precision);
         cos = new Cosinus(precision);
     }

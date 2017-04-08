@@ -16,7 +16,7 @@ public abstract class AbstractFunction implements Calculation {
     private static Map<Functions, Boolean> funcIsStub = new HashMap<>();
     protected Functions function;
 
-    private Double precision;
+    private double precision;
 
     private Calculation calculation;
     protected Map<Double, Double> table = new HashMap<>();
@@ -25,12 +25,8 @@ public abstract class AbstractFunction implements Calculation {
         this.precision = DEFAULT_PRECISION;
     }
 
-    protected AbstractFunction(Double precision) {
-        if (precision == null) {
-            this.precision = DEFAULT_PRECISION;
-        } else {
-            this.precision = precision.doubleValue();
-        }
+    protected AbstractFunction(double precision) {
+            this.precision = precision;
 
         funcIsStub.put(function, DEFAULT_IS_STUB);
     }

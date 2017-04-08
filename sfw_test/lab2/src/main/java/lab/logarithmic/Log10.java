@@ -13,7 +13,7 @@ public class Log10 extends LogN {
         function = Functions.LOG_10;
     }
 
-    public Log10(Double precision) {
+    public Log10(double precision) {
         super(precision);
     }
 
