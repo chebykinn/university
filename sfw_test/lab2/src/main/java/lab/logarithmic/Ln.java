@@ -1,6 +1,7 @@
 package lab.logarithmic;
 
 import lab.AbstractFunction;
+import lab.Functions;
 
 import java.util.Map;
 
@@ -13,10 +14,11 @@ public class Ln extends AbstractFunction {
 
     {
         table.put(0.0, 0.0);
+        function = Functions.LN;
     }
 
-    public Ln(boolean isStub, double precision) {
-        super(isStub, precision);
+    public Ln(double precision) {
+        super(precision);
     }
 
     @Override

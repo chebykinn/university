@@ -1,6 +1,7 @@
 package lab.trigonometric;
 
 import lab.AbstractFunction;
+import lab.Functions;
 import lab.util.FactorialSeries;
 
 import java.math.BigDecimal;
@@ -16,10 +17,11 @@ public class Cosinus extends AbstractFunction{
 
     {
         table.put(0.0, 0.0);
+        function = Functions.COSINUS;
     }
 
-    public Cosinus(boolean isStub, double precision) {
-        super(isStub, precision);
+    public Cosinus(double precision) {
+        super(precision);
     }
 
     @Override
@@ -29,10 +31,7 @@ public class Cosinus extends AbstractFunction{
             return NaN;
         }
 
-        long periodCounter = (long) (arg / (2 * Math.PI));
-
-        if(arg > Math.PI || arg < -Math.PI)
-            arg -= periodCounter;
+        arg = subOverages(arg);
 
         int scale = 0;
         double d = DELTA;
@@ -58,5 +57,13 @@ public class Cosinus extends AbstractFunction{
         if(valueToDouble > 1) valueToDouble = 1;
         else if(valueToDouble < -1) valueToDouble = -1;
         return valueToDouble;
+    }
+
+    protected static double subOverages(double arg) {
+        long periodCounter = (long) (arg / (2 * Math.PI)) + 1;
+
+        if(arg > Math.PI || arg < -Math.PI)
+            arg -= periodCounter;
+        return arg;
     }
 }

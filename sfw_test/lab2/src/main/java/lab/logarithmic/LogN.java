@@ -1,6 +1,7 @@
 package lab.logarithmic;
 
 import lab.AbstractFunction;
+import lab.Functions;
 
 /**
  * Created by ivan on 08.04.17.
@@ -13,6 +14,7 @@ public class LogN extends AbstractFunction {
 
     {
         table.put(0.0, 0.0);
+        function = Functions.LOG_N;
     }
 
     public LogN() {
@@ -21,12 +23,12 @@ public class LogN extends AbstractFunction {
     }
 
     public LogN(boolean isStub, int base, double precision) {
-        super(isStub, precision);
+        super(precision);
         if (base < 0 || base == 1) {
             throw new IllegalArgumentException();
         }
         this.base = base;
-        ln = new Ln(isStub, precision);
+        ln = new Ln(precision);
     }
 
     @Override

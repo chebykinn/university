@@ -1,22 +1,27 @@
 package lab.trigonometric;
 
 import lab.AbstractFunction;
+import lab.Functions;
 
 /**
  * Created by ivan on 07.04.17.
  */
 public class Cotangent extends AbstractFunction {
-    Cosinus cos;
+    {
+        table.put(0.0, 0.0);
+        function = Functions.COTANGENT;
+    }
 
-    public Cotangent(boolean isStub, double precision) {
-        super(isStub, precision);
-        cos = new Cosinus(isStub, precision);
+    Tangent tan;
+
+    public Cotangent(double precision) {
+        super(precision);
+        tan = new Tangent(precision);
     }
 
 
     @Override
     protected double calculate(double arg) {
-
-        return 0;
+        return 1 / tan.calc(arg);
     }
 }
