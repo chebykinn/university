@@ -4,24 +4,26 @@ char digit;
 char xdata mas[8];
 char m = 1;
 char mm;
-int i = 0;
+int i = 0, j = 0;
+
+char codes[] = { 0xdd, 0x7b, 0x7d, 0xde, 0x7e, 0xb7, 0xe7 }; // -12,34
 
 void get_char(void) interrupt 0 {
-	char x = P3;
+	char x = codes[j++];
 	switch (x) {
+		case 0x77: digit = '0'; break;
 		case 0x7b: digit = '1'; break;
-		case 0x79: digit = '2'; break;
-		case 0x78: digit = '3'; break;
-		case 0xbb: digit = '4'; break;
-		case 0xb9: digit = '5'; break;
-		case 0xb8: digit = '6'; break;
-		case 0xdb: digit = '7'; break;
-		case 0xd9: digit = '8'; break;
-		case 0xd8: digit = '9'; break;
-		case 0xeb: digit = '0'; break;
-		case 0xe9: digit = ','; break;
-		case 0xe8: digit = 'e'; break;
-		case 0xc8: digit = '-'; break;
+		case 0x7d: digit = '2'; break;
+		case 0x7e: digit = '3'; break;
+		case 0xb7: digit = '4'; break;
+		case 0xbb: digit = '5'; break;
+		case 0xbd: digit = '6'; break;
+		case 0xbe: digit = '7'; break;
+		case 0xd7: digit = '8'; break;
+		case 0xdb: digit = '9'; break;
+		case 0xdd: digit = '-'; break;
+		case 0xde: digit = ','; break;
+		case 0xe7: digit = 'e'; break;
 		default: digit = 0xff;
 	}
 
@@ -48,7 +50,6 @@ void get_char(void) interrupt 0 {
 		if ( m ) m *= 10;
 		
 	}
-
 }
 
 void main() {
