@@ -1,25 +1,26 @@
 package lab;
 
-import lab.AbstractFunction;
+import lab.logarithmic.LogFunction;
+import lab.trigonometric.TrigFunction;
 
 /**
  * Created by ivan on 07.04.17.
  */
-public class FunctionSystem extends AbstractFunction {
-    public FunctionSystem(boolean isStub, double precision) {
-        super(isStub, precision);
+public class FunctionSystem implements Calculation{
+    private double precision;
+
+    FunctionSystem(double precision) {
+        this.precision = precision;
     }
 
-    @Override
-    public double calc(double value){
-        // TODO: add stub then function
-        // if x <= 0 -> trigonometric function
-        // else -> logarithmic function
-        return 0;
-    }
+    private TrigFunction trigFunction = new TrigFunction(precision);
+    private LogFunction logFunction = new LogFunction(precision);
 
     @Override
-    protected double calculate(double arg) {
-        return 0;
+    public double calc(double arg){
+        if(arg <= 0)
+            return trigFunction.calc(arg);
+        else
+            return logFunction.calc(arg);
     }
 }

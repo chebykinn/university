@@ -4,35 +4,23 @@ import lab.AbstractFunction;
 import lab.Functions;
 
 /**
- * Created by ivan on 08.04.17.
+ * Created by daituganov on 08.04.17.
  */
 public class LogN extends AbstractFunction {
-    private static final int DEFAULT_BASE = 2;
 
-    private final int base;
-    private Ln ln;
-
-    {
-        table.put(0.0, 0.0);
-        function = Functions.LOG_N;
-    }
-
-    public LogN() {
-        super();
-        this.base = DEFAULT_BASE;
-    }
-
-    public LogN(boolean isStub, int base, double precision) {
+    public LogN(double precision) {
         super(precision);
+    }
+    @Override
+    protected double calculate(double arg) {
+        return 0;
+    }
+
+    protected double log(double arg, int base) {
         if (base < 0 || base == 1) {
             throw new IllegalArgumentException();
         }
-        this.base = base;
-        ln = new Ln(precision);
-    }
-
-    @Override
-    protected double calculate(double arg) {
+        Ln ln = new Ln(getPrecision());
 
         if (Math.abs(arg - base) < DELTA) {
             return 1d;

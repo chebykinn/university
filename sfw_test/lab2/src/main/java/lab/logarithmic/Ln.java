@@ -17,7 +17,7 @@ public class Ln extends AbstractFunction {
         function = Functions.LN;
     }
 
-    public Ln(double precision) {
+    public Ln(Double precision) {
         super(precision);
     }
 

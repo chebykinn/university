@@ -1,7 +1,5 @@
 package lab;
 
-import lab.trigonometric.Function;
-
 import java.util.HashMap;
 import java.util.Map;
 
