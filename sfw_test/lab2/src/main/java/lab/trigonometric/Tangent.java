@@ -19,7 +19,7 @@ public class Tangent extends AbstractFunction {
     Cosinus cos;
     double tan;
 
-    public Tangent(double precision) {
+    public Tangent(Double precision) {
         super(precision);
         cos = new Cosinus(precision);
     }

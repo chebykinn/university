@@ -8,9 +8,9 @@ import static java.lang.Math.pow;
  * Created by ivan on 08.04.17.
  */
 public class TrigFunction implements Calculation {
-    private double precision;
+    private Double precision;
 
-    public TrigFunction(double precision) {
+    public TrigFunction(Double precision) {
         this.precision = precision;
     }
     Cosinus cos = new Cosinus(precision);

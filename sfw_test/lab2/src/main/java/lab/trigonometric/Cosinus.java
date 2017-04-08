@@ -20,7 +20,7 @@ public class Cosinus extends AbstractFunction{
         function = Functions.COSINUS;
     }
 
-    public Cosinus(double precision) {
+    public Cosinus(Double precision) {
         super(precision);
     }
 

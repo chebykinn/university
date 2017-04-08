@@ -16,7 +16,7 @@ public abstract class AbstractFunction implements Calculation {
     private static Map<Functions, Boolean> funcIsStub = new HashMap<>();
     protected Functions function;
 
-    private double precision;
+    private Double precision;
 
     private Calculation calculation;
     protected Map<Double, Double> table = new HashMap<>();

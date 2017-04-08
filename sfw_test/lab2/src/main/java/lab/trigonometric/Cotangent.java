@@ -14,7 +14,7 @@ public class Cotangent extends AbstractFunction {
 
     Tangent tan;
 
-    public Cotangent(double precision) {
+    public Cotangent(Double precision) {
         super(precision);
         tan = new Tangent(precision);
     }

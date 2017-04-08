@@ -7,9 +7,9 @@ import lab.trigonometric.TrigFunction;
  * Created by ivan on 07.04.17.
  */
 public class FunctionSystem implements Calculation{
-    private double precision;
+    private Double precision;
 
-    FunctionSystem(double precision) {
+    FunctionSystem(Double precision) {
         this.precision = precision;
     }
 

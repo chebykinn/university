@@ -8,9 +8,9 @@ import static java.lang.Math.pow;
  * Created by daituganov on 08.04.17.
  */
 public class LogFunction implements Calculation {
-    private double precision;
+    private Double precision;
 
-    public LogFunction(double precision) {
+    public LogFunction(Double precision) {
         this.precision = precision;
     }
     Ln ln = new Ln(precision);

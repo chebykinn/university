@@ -8,7 +8,7 @@ import lab.Functions;
  */
 public class LogN extends AbstractFunction {
 
-    public LogN(double precision) {
+    public LogN(Double precision) {
         super(precision);
     }
     @Override
