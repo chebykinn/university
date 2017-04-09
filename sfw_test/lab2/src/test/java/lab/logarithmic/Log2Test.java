@@ -14,6 +14,11 @@ public class Log2Test {
     private double precision = DELTA;
     private TestUtil util = new TestUtil(new Log2(precision));
 
+    {
+        Ln ln = new Ln(precision);
+        ln.setFuncIsStub(false);
+    }
+
     @Test
     public void negativeInfinity() {
         util.doCheck(Double.NEGATIVE_INFINITY, precision);

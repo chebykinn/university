@@ -31,9 +31,6 @@ public class LogN extends AbstractFunction {
             throw new IllegalArgumentException();
         }
         Ln ln = new Ln(getPrecision());
-        //---------------------------
-        ln.setFuncIsStub(isStub);
-        //--------------------------
 
         if (Math.abs(arg - base) < DELTA) {
             return 1d;
