@@ -1,6 +1,5 @@
 package lab.logarithmic;
 
-import lab.AbstractFunction;
 import lab.TestUtil;
 import org.junit.Test;
 
@@ -8,12 +7,12 @@ import static lab.AbstractFunction.DELTA;
 import static org.junit.Assert.*;
 
 /**
- * Created by ivan on 08.04.17.
+ * Created by ivan on 09.04.17.
  */
-public class LnTest {
-    private final double base = Math.E;
+public class Log10Test {
+    private final double base = 10;
     private double precision = DELTA;
-    private TestUtil util = new TestUtil(new Ln(precision));
+    private TestUtil util = new TestUtil(new Log10(precision));
 
     @Test
     public void negativeInfinity() {
@@ -74,4 +73,5 @@ public class LnTest {
     public void gtBase() {
         util.doCheck(base + 0.01, precision);
     }
+
 }

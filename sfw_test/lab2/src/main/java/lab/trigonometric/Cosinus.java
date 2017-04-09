@@ -24,8 +24,9 @@ public class Cosinus extends AbstractFunction{
         table.put(PI, -1.0);
 
         table.put(3 * PI / 4, -0.707106781);
+        table.put(-3 * PI / 4, -0.707106781);
         table.put( PI / 4, 0.707106781);
-        table.put(-PI / 4, -0.707106781);
+        table.put(-PI / 4, 0.707106781);
         function = Functions.COSINUS;
     }
 
