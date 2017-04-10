@@ -75,7 +75,7 @@ public class Cosinus extends AbstractFunction{
     }
 
     protected static double subOverages(double arg) {
-        long periodCounter = (long) (arg / (2 * PI)) + 1;
+        long periodCounter = (long) (arg / (2 * PI)) + ((arg > 0)? 1: -1);
 
         if(arg > PI || arg < -PI)
             arg -= periodCounter * 2 * PI;

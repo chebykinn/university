@@ -4,6 +4,7 @@ import lab.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.lang.Math.PI;
 import static lab.AbstractFunction.DELTA;
 import static org.junit.Assert.*;
 
@@ -73,55 +74,92 @@ public class FunctionTest {
 
     @Test
     public void gtFirstExtrema() {
-        double extrema = 1.5708 + 0.01;
+        double extrema = 1.570900018 + 0.01;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void firstExtrema() {
-        double extrema = 1.5708;
+        double extrema = 1.570900018;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void ltFirstExtrema() {
-        double extrema = 1.5708 - 0.01;
+        double extrema = 1.570900018 - 0.01;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void gtSecondExtrema() {
-        double extrema = -17.2788 + 0.01;
+        double extrema = -2.19038087 + 0.01;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void secondExtrema() {
-        double extrema = -17.2788;
+        double extrema = -2.19038087;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void ltSecondExtrema() {
-        double extrema = -17.2788 - 0.01;
+        double extrema = -2.19038087 - 0.01;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void gtThirdExtrema() {
-        double extrema = -10.9956 + 0.01;
+        double extrema = -2.31976664 + 0.01;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void thirdExtrema() {
-        double extrema = -10.9956;
+        double extrema = -2.31976664;
         util.doCheck(extrema, precision);
     }
 
     @Test
     public void ltThirdExtrema() {
-        double extrema = -10.9956 - 0.01;
+        double extrema = -2.31976664 - 0.01;
         util.doCheck(extrema, precision);
     }
+
+    @Test
+    public void gtFourthExtrema() {
+        double extrema = -4.713001 + 0.01;
+        util.doCheck(extrema, precision);
+    }
+
+    @Test
+    public void fourthExtrema() {
+        double extrema = -4.713001;
+        util.doCheck(extrema, precision);
+    }
+
+    @Test
+    public void ltFourthExtrema() {
+        double extrema = -4.713001 - 0.01;
+        util.doCheck(extrema, precision);
+    }
+
+    @Test
+    public void gtMinusPi() {
+        double extrema = -PI + 0.01;
+        util.doCheck(extrema, precision);
+    }
+
+    @Test
+    public void minusPi() {
+        double extrema = -PI;
+        util.doCheck(extrema, precision);
+    }
+
+    @Test
+    public void ltMinusPi() {
+        double extrema = -PI - 0.01;
+        util.doCheck(extrema, precision);
+    }
+
 }

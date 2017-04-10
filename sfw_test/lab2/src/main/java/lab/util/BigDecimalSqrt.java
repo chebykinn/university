@@ -3,6 +3,8 @@ package lab.util;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import static java.lang.Double.NaN;
+
 public class BigDecimalSqrt {
 
     private static final BigDecimal TWO = BigDecimal.valueOf(2L);

@@ -20,6 +20,11 @@ public class TangentTest {
     }
 
     @Test
+    public void ltMinusPi() throws Exception {
+        util.checkRange(-PI * 1.5, -PI * 1.5 + 2 * PI / 16, PI / 16);
+    }
+
+    @Test
     public void minusPi() throws Exception {
         util.checkPoint(-PI);
     }

@@ -1,23 +1,19 @@
 package lab;
 
-import lab.logarithmic.Ln;
-import lab.logarithmic.Log10;
-import lab.logarithmic.Log2;
-import lab.logarithmic.LogFunction;
-import lab.trigonometric.*;
+import lab.trigonometric.Cosinus;
+import lab.trigonometric.Secant;
+import lab.trigonometric.Tangent;
 import lab.util.CSVWriter;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static java.lang.Math.PI;
 import static lab.AbstractFunction.DELTA;
-import static org.junit.Assert.*;
 
 /**
  * Created by ivan on 08.04.17.
  */
-public class FunctionSystemTest {
+public class FunctionSystemThreeTest {
     private double precision = DELTA;
     private TestUtil util = new TestUtil(new FunctionSystem(precision));
 
@@ -29,20 +25,6 @@ public class FunctionSystemTest {
         sec.setFuncIsStub(false);
         Tangent tan = new Tangent(precision);
         tan.setFuncIsStub(false);
-        Cotangent cot = new Cotangent(precision);
-        cot.setFuncIsStub(false);
-        TrigFunction tFn = new TrigFunction(precision);
-        tFn.setFuncIsStub(false);
-
-        Ln ln = new Ln(DELTA);
-        ln.setFuncIsStub(false);
-        Log2 log2 = new Log2(DELTA);
-        log2.setFuncIsStub(false);
-        Log10 log10 = new Log10(DELTA);
-        log10.setFuncIsStub(false);
-
-        LogFunction lFn = new LogFunction(precision);
-        lFn.setFuncIsStub(false);
     }
 
     @Test

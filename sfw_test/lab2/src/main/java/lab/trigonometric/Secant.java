@@ -25,10 +25,10 @@ public class Secant extends AbstractFunction{
 //        table.put(PI, -1.0000001352604628);
         table.put(PI, -1.0);
 
-        table.put(3 * PI / 4, -1.4142172);
-        table.put(-3 * PI / 4, -1.4142172);
-        table.put( PI / 4, 1.4142135);
-        table.put(-PI / 4, 1.4142135);
+        table.put(3 * PI / 4, -1.41421356375);
+        table.put(-3 * PI / 4, -1.41421356375);
+        table.put( PI / 4, 1.41421356375);
+        table.put(-PI / 4, 1.41421356375);
         function = Functions.SECANT;
     }
 
@@ -37,6 +37,12 @@ public class Secant extends AbstractFunction{
     public Secant(double precision) {
         super(precision);
         cos = new Cosinus(precision);
+    }
+
+    @Override
+    public void setPrecision(double precision){
+        super.setPrecision(precision);
+        cos.setPrecision(precision);
     }
 
     @Override

@@ -37,6 +37,11 @@ public class Cotangent extends AbstractFunction {
         tan = new Tangent(precision);
     }
 
+    @Override
+    public void setPrecision(double precision){
+        super.setPrecision(precision);
+        tan.setPrecision(precision);
+    }
 
     @Override
     protected double calculate(double arg) {
@@ -68,6 +73,9 @@ public class Cotangent extends AbstractFunction {
         int n = scale;
 
         double tanVal = tan.calc(arg);
+        if( Math.abs(tanVal) < DELTA || isInfinite(tanVal) || isNaN(tanVal) ){
+            return NaN;
+        }
         do {
             last = value;
             value = new BigDecimal(1d, MathContext.UNLIMITED)

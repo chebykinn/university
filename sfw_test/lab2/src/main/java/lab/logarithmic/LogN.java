@@ -11,9 +11,11 @@ import static java.lang.Double.*;
 public class LogN extends AbstractFunction {
 
     private boolean isStub = true;
+    Ln ln;
 
     public LogN(double precision) {
         super(precision);
+        ln = new Ln(precision);
     }
     @Override
     protected double calculate(double arg) {
@@ -26,11 +28,16 @@ public class LogN extends AbstractFunction {
         this.isStub = funcIsStub;
     }
 
+    @Override
+    public void setPrecision(double precision){
+        super.setPrecision(precision);
+        ln.setPrecision(precision);
+    }
+
     protected double log(double arg, int base) {
         if (base < 0 || base == 1) {
             throw new IllegalArgumentException();
         }
-        Ln ln = new Ln(getPrecision());
 
         if (Math.abs(arg - base) < DELTA) {
             return 1d;

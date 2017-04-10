@@ -13,12 +13,12 @@ public class FunctionSystem extends AbstractFunction{
 
     {
         table.put(0.01, 7.032062786082151);
-        table.put(0.0, 1.0);
-        table.put(-0.01, -9.899639988666914E9);
+        table.put(0.0, Double.NaN);
+        table.put(-0.01, -9.899637632677807E9);
 
-        table.put(1.01, 7.032062786082151);
-        table.put(1.0, 1.0);
-        table.put(0.99, -9.899639988666914E9);
+        table.put(1.01, 1.5429930377249587E-10);
+        table.put(1.0, Double.NaN);
+        table.put(0.99, 1.6059643134973574E-10);
         function = Functions.SYS_FN;
     }
 
@@ -27,6 +27,13 @@ public class FunctionSystem extends AbstractFunction{
         this.precision = precision;
         trigFunction = new TrigFunction(precision);
         logFunction = new LogFunction(precision);
+    }
+
+    @Override
+    public void setPrecision(double precision){
+        super.setPrecision(precision);
+        trigFunction.setPrecision(precision);
+        logFunction.setPrecision(precision);
     }
 
     @Override

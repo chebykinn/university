@@ -32,6 +32,13 @@ public class LogFunction extends AbstractFunction {
         log10 = new Log10(precision);
     }
 
+    @Override
+    public void setPrecision(double precision){
+        super.setPrecision(precision);
+        ln.setPrecision(precision);
+        log2.setPrecision(precision);
+        log10.setPrecision(precision);
+    }
 
     @Override
     public double calculate(double arg) {
