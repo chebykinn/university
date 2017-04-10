@@ -27,6 +27,15 @@ public class Cosinus extends AbstractFunction{
         table.put(-3 * PI / 4, -0.707106781);
         table.put( PI / 4, 0.707106781);
         table.put(-PI / 4, 0.707106781);
+
+//        table.put(-0.01, 0.99995);
+//        table.put(0.01, 0.99995);
+//        table.put(1.01, 0.531860721);
+//        table.put(0.99, 0.548689861);
+//        table.put(0.99, 0.548689861);
+
+//        table.put(1.5708, -0.0000036738);
+
         function = Functions.COSINUS;
     }
 
@@ -44,7 +53,7 @@ public class Cosinus extends AbstractFunction{
         arg = subOverages(arg);
 
         int scale = 10;
-        double d = DELTA;
+        double d = getPrecision();
 
         BigDecimal last;
         BigDecimal value = new BigDecimal(0d, MathContext.UNLIMITED);

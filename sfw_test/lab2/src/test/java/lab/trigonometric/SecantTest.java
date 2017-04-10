@@ -1,6 +1,7 @@
 package lab.trigonometric;
 
 import lab.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import static java.lang.Math.PI;
@@ -12,6 +13,12 @@ import static org.junit.Assert.*;
  */
 public class SecantTest {
     TestUtil util = new TestUtil(new Secant(DELTA));
+    @Before
+    public void setUp() throws Exception {
+        Cosinus cos = new Cosinus(DELTA);
+        cos.setFuncIsStub(false);
+    }
+
     @Test
     public void minusPi() throws Exception {
         util.checkPoint(-PI);
@@ -71,4 +78,5 @@ public class SecantTest {
     public void nan() throws Exception {
         util.doCheck(Double.NaN, DELTA);
     }
+
 }

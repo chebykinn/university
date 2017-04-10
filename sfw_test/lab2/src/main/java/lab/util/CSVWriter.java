@@ -10,8 +10,17 @@ import java.util.Locale;
  * Created by ivan on 08.04.17.
  */
 public class CSVWriter {
+    public void setAppend(boolean append) {
+        this.append = append;
+    }
+
+    boolean append = false;
     public AbstractFunction getFunction() {
         return function;
+    }
+
+    public void setFunction(AbstractFunction function) {
+        this.function = function;
     }
 
     private AbstractFunction function;
@@ -24,7 +33,7 @@ public class CSVWriter {
 
     public void write(double from, double to, double step){
         function.setFuncIsStub(false);
-        try (FileWriter writer = new FileWriter(getFilename(), false)) {
+        try (FileWriter writer = new FileWriter(getFilename(), append)) {
             for (double x = from; x < to; x += step) {
                 double value = function.calc(x);
                 writer.append(String.format(Locale.US, "%f%s%f\n", x, SEPARATOR, value));

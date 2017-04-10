@@ -1,6 +1,7 @@
 package lab.trigonometric;
 
 import lab.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import static java.lang.Math.PI;
@@ -11,7 +12,16 @@ import static org.junit.Assert.*;
  * Created by ivan on 08.04.17.
  */
 public class CotangentTest {
+    double precision = DELTA;
     TestUtil util = new TestUtil(new Cotangent(DELTA));
+
+    @Before
+    public void setUp() throws Exception {
+        Cosinus cos = new Cosinus(precision);
+        cos.setFuncIsStub(false);
+        Tangent tan = new Tangent(precision);
+        tan.setFuncIsStub(false);
+    }
     @Test
     public void minusPi() throws Exception {
         util.checkPoint(-PI);

@@ -1,6 +1,7 @@
 package lab.logarithmic;
 
 import lab.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import static lab.AbstractFunction.DELTA;
@@ -13,6 +14,12 @@ public class Log10Test {
     private final double base = 10;
     private double precision = DELTA;
     private TestUtil util = new TestUtil(new Log10(precision));
+
+    @Before
+    public void setUp() throws Exception {
+        Ln ln = new Ln(precision);
+        ln.setFuncIsStub(false);
+    }
 
     @Test
     public void negativeInfinity() {

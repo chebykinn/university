@@ -1,6 +1,7 @@
 package lab.logarithmic;
 
 import lab.TestUtil;
+import org.junit.Before;
 import org.junit.Test;
 
 import static lab.AbstractFunction.DELTA;
@@ -14,7 +15,8 @@ public class Log2Test {
     private double precision = DELTA;
     private TestUtil util = new TestUtil(new Log2(precision));
 
-    {
+    @Before
+    public void setUp() throws Exception {
         Ln ln = new Ln(precision);
         ln.setFuncIsStub(false);
     }
@@ -78,5 +80,4 @@ public class Log2Test {
     public void gtBase() {
         util.doCheck(base + 0.01, precision);
     }
-
 }
