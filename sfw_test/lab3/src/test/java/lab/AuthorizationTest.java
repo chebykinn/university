@@ -24,8 +24,8 @@ public class AuthorizationTest {
         util.auth(driver, util.getCorrectLogin(), util.getCorrectPassword());
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//header[@id='l-top']/div/div/div/div/div[4]/div[3]/button")));
-        driver.findElement(By.xpath("//header[@id='l-top']/div/div/div/div/div[4]/div[3]/button")).click();
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class, 'js-top-nav-sub')]")));
+        util.tryClick(driver, By.xpath("//button[contains(@class, 'js-top-nav-sub')]"));
         driver.findElement(By.linkText("Выход")).click();
         driver.quit();
 

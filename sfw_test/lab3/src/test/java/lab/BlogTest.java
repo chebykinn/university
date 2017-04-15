@@ -55,7 +55,7 @@ public class BlogTest {
         util.auth(driver, util.getCorrectLogin(), util.getCorrectPassword());
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//header[@id='l-top']/div/div/div/div/div[4]/div[3]/button")));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(@class, 'js-top-nav-sub')]")));
 
         util.tryClick(driver, By.xpath("//a[@class='c-link'][1]"));
         util.tryClick(driver, By.cssSelector("button.r-button-unstyled.c-bookmarks-button"));
