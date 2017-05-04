@@ -2,7 +2,9 @@
 #define _IO_H_
 
 #include <assert.h>
+#include <sys/types.h>
 
+#include "ipc.h"
 
 typedef struct {
 	int readfd, writefd;
@@ -12,6 +14,7 @@ typedef struct {
 	local_id src_pid;
 	Channel *channel_table;
 	size_t proc_num;
+	pid_t parent_pid;
 } IOHandle;
 
 #endif
