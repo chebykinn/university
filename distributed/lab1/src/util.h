@@ -2,6 +2,9 @@
 #define _UTIL_H_
 
 #include "io.h"
+#include "ipc.h"
+
+void create_message(Message *msg, MessageType type, size_t length);
 
 int log_event(char *msg);
 int get_proc_num_from_args(int argc, char *const argv[]);
