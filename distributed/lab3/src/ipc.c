@@ -53,13 +53,16 @@ int receive(void * self, local_id from, Message * msg) {
 	Channel *c = get_channel(h, from, h->src_pid);
 	if( c == NULL ) return -1;
 
-	char buff[MAX_MESSAGE_LEN];
 	while( 1 ){
-		int rc = read(c->readfd, buff, sizeof buff);
-		if( rc > 0 ) {
-			memcpy(msg, buff, rc);
+		int rc = read(c->readfd, msg, sizeof msg->s_header);
+		if( rc <= 0 ) {
+			goto sleep;
+		}
+		rc = read(c->readfd, msg->s_payload, msg->s_header.s_payload_len);
+		if( rc >= 0 ) {
 			return 0;
 		}
+		sleep:
 		usleep(100000);
 	}
 }
@@ -69,7 +72,6 @@ int receive_any(void * self, Message * msg) {
 	assert(msg != NULL);
 
 	IOHandle *h = (IOHandle*)self;
-	char buff[MAX_MESSAGE_LEN];
 	while( 1 ){
 		for(local_id pid = 0; pid < h->proc_num; pid++){
 			if( pid == h->src_pid ) continue;
@@ -77,13 +79,16 @@ int receive_any(void * self, Message * msg) {
 			Channel *c = get_channel(h, pid, h->src_pid);
 			if( c == NULL ) return -1;
 
-			int rc = read(c->readfd, buff, sizeof buff);
-			if( rc > 0 ) {
-				memcpy(msg, buff, rc);
+			int rc = read(c->readfd, msg, sizeof msg->s_header);
+			if( rc <= 0 ) {
+				continue;
+			}
+			rc = read(c->readfd, msg->s_payload, msg->s_header.s_payload_len);
+			if( rc >= 0 ) {
 				return 0;
 			}
 		}
-		usleep(10000);
+		usleep(100000);
 	}
 	return 0;
 }

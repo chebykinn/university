@@ -24,6 +24,14 @@ static const char e_log_write[] = "Error: failed to write event read log\n";
 static const char e_log_multicast[] = "Error: failed to send multicast\n";
 static const char e_log_multicast_read[] = "Error: failed to read multicast\n";
 
+void create_message(Message *msg, MessageType type, size_t length){
+	memset(msg, 0, sizeof *msg);
+	msg->s_header.s_magic = MESSAGE_MAGIC;
+	msg->s_header.s_type = type;
+	msg->s_header.s_local_time = get_lamport_time();
+	msg->s_header.s_payload_len = length;
+}
+
 int log_event(char *msg){
 	assert(events_log_fd > 0 && "Called before opening log file");
 	int rc = write(events_log_fd, msg, strlen(msg));
@@ -51,12 +59,15 @@ static void close_pipes(IOHandle *handle){
 static int receive_all(IOHandle *handle){
 	assert(handle != NULL);
 	Message msg;
+	create_message(&msg, 0, 0);
 	for(local_id i = 1; i < handle->proc_num; i++){
 		int rc = receive(handle, i, &msg);
 		if( rc != 0 ){
 			(void)write(STDERR_FILENO, e_log_multicast_read, sizeof e_log_multicast);
 			return 1;
 		}
+		set_max_time(msg.s_header.s_local_time);
+		move_time();
 	}
 	return 0;
 }
@@ -103,7 +114,7 @@ int create_pipes(IOHandle *handle) {
 	for(int32_t i = 0; i < handle->proc_num; i++){
 		for(int32_t j = 0; j < handle->proc_num; j++){
 			if( i == j ) continue;
-			int	rc = pipe2((int*)&handle->channel_table[i * handle->proc_num + j], O_NONBLOCK | O_DIRECT);
+			int	rc = pipe2((int*)&handle->channel_table[i * handle->proc_num + j], O_NONBLOCK);
 			snprintf(msg, 64, "opened pipe(%d, %d)\n", i, j);
 			int n = write(pipes_log_fd, msg, strlen(msg));
 			if( n  < 0 ) return 1;
@@ -157,14 +168,12 @@ int child(IOHandle *handle, void *data) {
 	close_pipes(handle);
 	char log_buff[MAX_PAYLOAD_LEN];
 	int rc = 0;
+	move_time();
+
 	Message msg;
-	memset(&msg, 0, sizeof msg);
-	msg.s_header.s_magic = MESSAGE_MAGIC;
-
+	create_message(&msg, STARTED, 0);
 	child_set_started_msg(msg.s_payload, handle, data);
-
 	msg.s_header.s_payload_len = strlen(msg.s_payload);
-	msg.s_header.s_type = STARTED;
 
 	rc = log_event(msg.s_payload);
 	if( rc != 0 ) return 1;
@@ -188,6 +197,9 @@ int child(IOHandle *handle, void *data) {
 	if( rc != 0 ) return rc;
 
 	child_set_done_msg(msg.s_payload, handle, data);
+	move_time();
+	msg.s_header.s_local_time = get_lamport_time();
+
 	msg.s_header.s_payload_len = strlen(msg.s_payload);
 	msg.s_header.s_type = DONE;
 
