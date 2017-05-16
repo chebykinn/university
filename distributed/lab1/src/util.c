@@ -24,6 +24,14 @@ static const char e_log_write[] = "Error: failed to write event read log\n";
 static const char e_log_multicast[] = "Error: failed to send multicast\n";
 static const char e_log_multicast_read[] = "Error: failed to read multicast\n";
 
+void create_message(Message *msg, MessageType type, size_t length){
+	memset(msg, 0, sizeof *msg);
+	msg->s_header.s_magic = MESSAGE_MAGIC;
+	msg->s_header.s_type = type;
+	msg->s_header.s_local_time = get_lamport_time();
+	msg->s_header.s_payload_len = length;
+}
+
 int log_event(char *msg){
 	assert(events_log_fd > 0 && "Called before opening log file");
 	int rc = write(events_log_fd, msg, strlen(msg));
