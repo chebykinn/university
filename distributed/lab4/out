@@ -1,0 +1,108 @@
+gcc -std=c99 -pedantic -fstack-protector-all -fsanitize=address -g -O0 -Wall -D_VERSION=0.0.1 -Isrc/include   -c src/ipc.c -o target/release/obj/ipc.o
+src/ipc.c: В функции «send»:
+src/ipc.c:34:34: предупреждение: формат «%d» ожидает аргумент типа «int», но аргумент 6 имеет тип «size_t {aka long unsigned int}» [-Wformat=]
+  fprintf(stderr, "send %d %d %d %d\n", h->src_pid, c->writefd, dst, h->proc_num);
+                                  ^
+gcc target/release/obj/cs.o target/release/obj/pa4.o target/release/obj/msg.o target/release/obj/util.o target/release/obj/queue.o target/release/obj/ipc.o -o target/release/pa -std=c99 -pedantic -fstack-protector-all -fsanitize=address -g -O0 -Wall -D_VERSION=0.0.1 -Isrc/include   -Lsrc/lib64/ -lruntime  
+LD_LIBRARY_PATH=src/lib64/ ./target/release/pa --mutexl -p 3
+  0	1	2	3	
+0 0, 0	4, 5	6, 7	8, 9	
+1 10, 11	0, 0	12, 13	14, 15	
+2 16, 17	18, 19	0, 0	20, 21	
+3 22, 23	24, 25	26, 27	0, 0	
+send 2 17 0 4
+send 1 11 0 4
+send 3 23 0 4
+out 2 17
+send 2 19 1 4
+out 1 11
+send 1 13 2 4
+out 3 23
+send 3 25 1 4
+out 2 19
+send 2 21 3 4
+out 1 13
+send 1 15 3 4
+out 3 25
+send 3 27 2 4
+out 2 21
+out 1 15
+out 3 27
+send 1 11 0 4
+send 3 23 0 4
+out 1 11
+send 1 13 2 4
+out 3 23
+send 3 25 1 4
+out 1 13
+send 1 15 3 4
+out 3 25
+send 3 27 2 4
+out 1 15
+send 1 15 3 4
+out 3 27
+send 3 25 1 4
+out 1 15
+out 3 25
+send 2 17 0 4
+out 2 17
+send 2 19 1 4
+out 2 19
+send 2 21 3 4
+out 2 21
+send 2 19 1 4
+out 2 19
+send 2 21 3 4
+send 3 27 2 4
+send 1 13 2 4
+out 2 21
+out 3 27
+out 1 13
+process 1 is doing 1 iteration out of 5
+process 1 is doing 2 iteration out of 5
+process 1 is doing 3 iteration out of 5
+process 1 is doing 4 iteration out of 5
+process 1 is doing 5 iteration out of 5
+send 1 11 0 4
+out 1 11
+send 1 13 2 4
+out 1 13
+send 1 15 3 4
+out 1 15
+release 1
+	send done 1
+send 1 11 0 4
+out 1 11
+send 1 13 2 4
+out 1 13
+send 1 15 3 4
+out 1 15
+	recv done 1 0
+process 2 is doing 1 iteration out of 10
+process 2 is doing 2 iteration out of 10
+process 2 is doing 3 iteration out of 10
+process 2 is doing 4 iteration out of 10
+process 2 is doing 5 iteration out of 10
+process 2 is doing 6 iteration out of 10
+process 2 is doing 7 iteration out of 10
+process 2 is doing 8 iteration out of 10
+process 2 is doing 9 iteration out of 10
+process 2 is doing 10 iteration out of 10
+send 2 17 0 4
+out 2 17
+send 2 19 1 4
+out 2 19
+send 2 21 3 4
+out 2 21
+release 2
+	send done 2
+send 2 17 0 4
+out 2 17
+send 2 19 1 4
+out 2 19
+send 2 21 3 4
+out 2 21
+	recv done 2 0
+	recv done 2 1
+	recv done 1 1
+exit 1
