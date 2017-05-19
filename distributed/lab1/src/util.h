@@ -7,7 +7,7 @@
 void create_message(Message *msg, MessageType type, size_t length);
 
 int log_event(char *msg);
-int get_proc_num_from_args(int argc, char *const argv[]);
+int get_proc_num_from_args(int argc, char *const argv[], void *data);
 int create_handle(int proc_num, IOHandle *handle);
 int create_pipes(IOHandle *handle);
 int spawn_childs(IOHandle *handle);

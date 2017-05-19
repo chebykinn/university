@@ -15,6 +15,9 @@ typedef struct {
 	Channel *channel_table;
 	size_t proc_num;
 	pid_t parent_pid;
+	uint8_t mutex_enabled;
+	local_id last_msg_pid;
+	size_t done_cnt;
 } IOHandle;
 
 #endif
