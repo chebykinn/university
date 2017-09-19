@@ -1,0 +1,12 @@
+REPORT_FILE=report.tex
+
+TEXC=xelatex
+TEXFLAGS=--halt-on-error
+
+ASSETS_DIR=../../../assets
+LAB_ROOT_DIR=../
+
+TEXINPUTS:=$(TEXINPUTS):$(ASSETS_DIR):$(LAB_ROOT_DIR)
+
+all:
+	TEXINPUTS=$(TEXINPUTS) $(TEXC) $(REPORT_FILE) $(TEXFLAGS)

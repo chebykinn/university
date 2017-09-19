@@ -1,0 +1,50 @@
+\input{header_xe.tex}
+\isonefalse
+\isnametrue
+\def \labnum {1}
+\def \labsubj {Информационно-управляющие системы}
+\def \labauthor {Айтуганов Д. А. \\ Чебыкин И. Б.}
+\def \labgroup {P3401}
+\def \labinsp {Пинкевич В. Ю.}
+\def \labname {Вариант 4}
+
+\usepackage{graphicx,tabularx}
+
+\usepackage{caption}
+\usepackage{verbatim}
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{fancyvrb}
+
+\RecustomVerbatimCommand{\VerbatimInput}{VerbatimInput} {
+ fontsize=\scriptsize,
+ %
+ frame=lines,  % top and bottom rule only
+ framesep=2em, % separation between frame and text
+ rulecolor=\color{Gray},
+ %
+ label=\fbox{\color{Black}source},
+ labelposition=topline,
+ %
+}
+
+\captionsetup{labelsep=period}
+\pagestyle{fancy}
+\begin{document}
+\input{title.tex}
+\section{Задание}
+Разработать и реализовать драйверы светодиодных индикаторов и DIP-переключателей
+контроллера SDK-1.1. Написать тестовую программу с использованием разработанных
+драйверов по алгоритму, соответствующему варианту задания.
+
+В случае установки на DIP-переключателях кода 0x44 (шестнадцатеричное значение) на
+светодиодные индикаторы должна выводиться анимация, показанная ниже. Во всех
+остальных случаях светодиодные индикаторы отражают инвертированное значение,
+выставленное на DIP-переключателях.
+
+\section{Блок-схема программы}
+\section{Исходный код}
+\VerbatimInput[label=main.c]{src/src/lab.c}
+\section{Основные езультаты}
+
+\end{document}
