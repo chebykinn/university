@@ -15,29 +15,27 @@ unsigned char dip() {
 
 #define LAB_DIP_VALUE 0x44
 #define MAX_TICKS 6
+#define LEFT 0xC0
+#define RIGHT 0x07
 void main( void ) {
-	unsigned char animation_counter = 0x07;
 	unsigned char left = 0xC0;
 	unsigned char right = 0x07;
 	unsigned char cnt = 0;
-
 
 	while(1) {
 		unsigned char dip_value = dip();
 
 		if(dip_value == LAB_DIP_VALUE) {
 
-			leds(0x00);
-			if(cnt < 6){
-				leds((left >> cnt) | (right << cnt));
+			if(cnt < MAX_TICKS){
+				leds((LEFT >> cnt) | (RIGHT << cnt));
 			}else{
-				leds((left >> (12 - cnt)) | (right << (12 - cnt)));
+				leds((LEFT >> (MAX_TICKS * 2 - cnt)) | (RIGHT << (MAX_TICKS * 2 - cnt)));
 			}
 			cnt++;
-			if(cnt > 12) cnt = 0;
+			if(cnt > MAX_TICKS * 2) cnt = 0;
 		} else {
 			leds(~dip_value);
-			animation_counter = 0x07;
 		}
 
 		delay(100);
