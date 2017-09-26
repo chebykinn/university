@@ -1,0 +1,10 @@
+#!/bin/sh
+for file in $(echo report/r4*.csv); do
+    gnuplot <<EOF
+    set key autotitle columnhead
+    set terminal png enhanced
+    set output "output_$(basename $file).png"
+    set datafile separator ','  #csv file
+    plot "$file" u 1:2 with lines smooth acsplines
+EOF
+done
