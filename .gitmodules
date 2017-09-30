@@ -1,3 +1,6 @@
 [submodule "circuitry/lab3/compiler"]
 	path = circuitry/lab3/compiler
 	url = git@github.com:chebykinn/mips-toolchain
+[submodule "libreport"]
+	path = libreport
+	url = git@github.com:chebykinn/libreport.git
