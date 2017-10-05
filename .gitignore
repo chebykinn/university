@@ -202,3 +202,5 @@ TSWLatexianTemp*
 
 circuitry/*/ise/*
 !circuitry/*/ise/lab.xise
+
+.DS_Store
