@@ -4,18 +4,23 @@
 #include <max.h>
 #include <led.h>
 
+#define OCTAVE 2
+#define FREQ 11059000 // pulses per second
+#define CYCLE 12 // pulses
+#define INSTR_PER_SECOND (FREQ / CYCLE)
+#define INSTR2_PER_SECOND (FREQ / CYCLE / 2)
+
 const uint16_t notes[] = {
-	493,
-	440,
-	391,
-	349,
-	329,
-	293,
-	261,
+	493 * OCTAVE,
+	440 * OCTAVE,
+	391 * OCTAVE,
+	349 * OCTAVE,
+	329 * OCTAVE,
+	293 * OCTAVE,
+	261 * OCTAVE,
 };
 
 unsigned long ms_count;
-
 unsigned long last_note_swap;
 
 uint8_t current_ena;
@@ -52,12 +57,10 @@ void time_handler() interrupt(3) {
 
 	ms_count++;
 
-	if(DTimeMs(last_note_swap) >= 10)
-	{
+	if(DTimeMs(last_note_swap) >= 10) {
 		last_note_swap = GetMsCounter();
 		compute_note_delay(++current_note);
-		if(current_note == 6)
-		{
+		if(current_note == 6) {
 			current_note = 0;
 		}
 
@@ -112,14 +115,14 @@ void DelayMs(unsigned long t) {
 }
 
 void compute_note_delay(uint8_t index) {
-	uint16_t delay = 460791/notes[index];
+	uint16_t delay = INSTR2_PER_SECOND / notes[index];
 	uint8_t* ptr = (uint8_t*)&delay;
 	note_delay[0] = 0xFF - ptr[0];
 	note_delay[1] = 0xFF - ptr[1];
 }
 
 void compute_timer_delay() {
-	uint16_t delay = 921583/1000;
+	uint16_t delay = INSTR_PER_SECOND / 1000;
 	uint8_t* ptr = (uint8_t*)(&delay);
 
 	time_delay[0] =  0xFF - ptr[0];
