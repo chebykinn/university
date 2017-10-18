@@ -1,0 +1,3 @@
+#!/bin/sh
+export PATH=$ROPT/sdcc/bin:$PATH
+export PATH=$ROPT/gm3p:$PATH
