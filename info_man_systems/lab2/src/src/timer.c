@@ -5,10 +5,10 @@
 #include <led.h>
 
 #define OCTAVE 2
-#define FREQ 11059000 // pulses per second
+#define FREQ 11059000
 #define CYCLE 12 // pulses
-#define INSTR_PER_SECOND (FREQ / CYCLE)
-#define INSTR2_PER_SECOND (FREQ / CYCLE / 2)
+#define PERIOD (FREQ / CYCLE)
+#define PERIOD2 (FREQ / CYCLE / 2)
 
 const uint16_t notes[] = {
 	493 * OCTAVE,
@@ -51,29 +51,30 @@ void set_ena(uint8_t value) {
 	write_max(ENA, value);
 }
 
-void time_handler() interrupt(3) {
-	TH1 = time_delay[0];
-	TL1 = time_delay[1];
+void time2_handler() interrupt(5) {
+	TH2 = time_delay[1];
+	TL2 = time_delay[0];
 
 	ms_count++;
 
-	if(DTimeMs(last_note_swap) >= 10) {
+	if(DTimeMs(last_note_swap) >= 1000) {
 		last_note_swap = GetMsCounter();
-		compute_note_delay(++current_note);
-		if(current_note == 6) {
+		compute_note_delay(current_note++);
+		if(current_note == 7) {
 			current_note = 0;
 		}
 
-		leds(current_note);
 	}
+	TF2 = 0;
 }
 
 void note_handler() interrupt(1) {
 	TH0 = note_delay[1];
 	TL0 = note_delay[0];
-
 	current_ena = ~current_ena;
 	set_ena(current_ena);
+	leds(TL1);
+
 }
 
 void InitTimer() {
@@ -82,22 +83,31 @@ void InitTimer() {
 
 	compute_note_delay(0);
 	compute_timer_delay();
+
 	ms_count = 0;
 
-	TH0 = 0xFF;
-	TL0 = 0xFF;
 
-	TH1 = 0xFF;
-	TH0 = 0xFF;
+	TH0 = note_delay[1];
+	TL0 = note_delay[0];
 
 	TCON = 0x50;
-	TMOD = 0x11;
+	TMOD = 0x51;
+
+	TH1 = 0x0;
+	TL1 = 0x0;
+
+	TH2 = time_delay[1];
+	TL2 = time_delay[0];
+
+	RCAP2L = TL2;
+	RCAP2H = TH2;
+	T2CON = 0x84;
 
 	set_vector(0x200B, (void*)note_handler);
-	set_vector(0x201B, (void*)time_handler);
+	set_vector(0x202B, (void*)time2_handler);
 
 	ET0 = 1;
-	ET1 = 1;
+	ET2 = 1;
 	EA = 1;
 }
 
@@ -115,14 +125,14 @@ void DelayMs(unsigned long t) {
 }
 
 void compute_note_delay(uint8_t index) {
-	uint16_t delay = INSTR2_PER_SECOND / notes[index];
+	uint16_t delay = PERIOD2 / notes[index];
 	uint8_t* ptr = (uint8_t*)&delay;
 	note_delay[0] = 0xFF - ptr[0];
 	note_delay[1] = 0xFF - ptr[1];
 }
 
 void compute_timer_delay() {
-	uint16_t delay = INSTR_PER_SECOND / 1000;
+	uint16_t delay = PERIOD / 1000;
 	uint8_t* ptr = (uint8_t*)(&delay);
 
 	time_delay[0] =  0xFF - ptr[0];
