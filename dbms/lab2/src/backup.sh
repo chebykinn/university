@@ -1,3 +1,5 @@
+#!/bin/sh
+
 . ./env
 rman target / \ << EOF
 startup mount;

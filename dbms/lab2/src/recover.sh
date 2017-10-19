@@ -1,3 +1,5 @@
+#!/bin/sh
+
 rman target / << EOF
 startup mount;
 run {
