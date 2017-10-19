@@ -87,24 +87,15 @@ __NICE_ORANGE_MEAT__
 
 # Скрипты
 
+## env
+\begin{scriptsize}
+\verbatiminput{../src/env}
+\end{scriptsize}
+
 ## create db
 \begin{scriptsize}
 \verbatiminput{../src/create-db.sh}
 \end{scriptsize}
-
-## backup
-
-\begin{scriptsize}
-\verbatiminput{../src/backup.sh}
-\end{scriptsize}
-
-## recover
-
-\begin{scriptsize}
-\verbatiminput{../src/recover.sh}
-\end{scriptsize}
-
-\newpage
 
 ## sqlplus
 
@@ -117,5 +108,17 @@ __NICE_ORANGE_MEAT__
 
 \begin{scriptsize}
 \verbatiminput{../src/inits191954.ora}
+\end{scriptsize}
+
+## backup
+
+\begin{scriptsize}
+\verbatiminput{../src/backup.sh}
+\end{scriptsize}
+
+## recover
+
+\begin{scriptsize}
+\verbatiminput{../src/recover.sh}
 \end{scriptsize}
 
