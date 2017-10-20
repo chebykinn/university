@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 . ./env
 
 export RECDEST="$MP/flash_recovery_area"
