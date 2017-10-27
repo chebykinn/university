@@ -87,7 +87,6 @@ __NICE_ORANGE_MEAT__
 
 # Скрипты
 
-## env
 \begin{scriptsize}
 \verbatiminput{../src/env}
 \end{scriptsize}
@@ -103,22 +102,8 @@ __NICE_ORANGE_MEAT__
 \verbatiminput{../src/create-db.sql}
 \end{scriptsize}
 
-
 #### inits191954.ora
 
 \begin{scriptsize}
 \verbatiminput{../src/inits191954.ora}
 \end{scriptsize}
-
-## backup
-
-\begin{scriptsize}
-\verbatiminput{../src/backup.sh}
-\end{scriptsize}
-
-## recover
-
-\begin{scriptsize}
-\verbatiminput{../src/recover.sh}
-\end{scriptsize}
-
