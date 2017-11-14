@@ -50,8 +50,6 @@ header-includes:
 
 \begin{scriptsize}
 \verbatiminput{../src/lab3.c}
-\verbatiminput{../src/async.c}
-\verbatiminput{../src/sync.c}
 \end{scriptsize}
 
 # Вывод
