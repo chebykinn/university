@@ -1,0 +1,9 @@
+db_name="loudoven"
+sga_max_size=600M
+db_block_size=8192
+db_recovery_file_dest="/u01/bcu71/loudoven/flash_recovery_area"
+db_recovery_file_dest_size=2G
+control_files = (/u01/bcu71/loudoven/ora_control1.ctl, /u01/bcu71/loudoven/ora_control2.ctl)
+log_archive_dest_1='LOCATION=/u01/bcu71/loudoven/logs'
+log_archive_dest_state_1=ENABLE
+log_archive_format=%t_%s_%r.arc

@@ -1,0 +1,7 @@
+_asm_allow_only_raw_disks=false
+instance_type=asm
+asm_power_limit=4
+asm_diskstring=(
+	'/u01/cutegoat/*',
+	'/u01/cleverdog/*'
+)

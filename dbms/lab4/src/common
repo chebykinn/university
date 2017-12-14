@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+
+
+create_disk() {
+    local name="$1";
+    local disks="$2";
+    local size="$3";
+    mkdir -p "/u01/$name";
+    for((n = 0; n < disks; n++)) do
+        /usr/sbin/mkfile -n $size "/u01/$name/$name$n"
+    done;
+}
+
+add_diskgroup() {
+    local name="$1";
+    local disks="$2";
+    local au_size="$3";
+    list="$(for i in `asmcmd ls`; do echo "$i" | perl -nle 'print "/u01/" . (lc) . "*"'; done | tr '\n' ',')"
+    disk_list=$(for((n = 0; n < disks; n++)) do echo "'/u01/$name/$name$n',"; done)
+    disk_list="${disk_list%?} ATTRIBUTE 'AU_SIZE' = '$au_size';"
+    asmcmd dsset "$list/u01/$name/*"
+    cat << EOF | sqlplus / as sysasm
+    CREATE DISKGROUP "$name" EXTERNAL REDUNDANCY DISK
+    $disk_list
+
+EOF
+}
