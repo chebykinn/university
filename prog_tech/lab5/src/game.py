@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import http.server
 import socketserver
 import random
@@ -26,7 +24,7 @@ class GameHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
         if not links:
-            self.write_str("ERROR: Search limit was achieved, no images in cache.")
+            self.write_str("Error: search limit was achieved, no images in cache.")
         else:
             options = '\n'.join(["<option>{}</option>".format(n) for n in names])
             with open("index.html", "r") as template_html:
@@ -66,7 +64,7 @@ class GameHandler(http.server.SimpleHTTPRequestHandler):
             return can
 
     def read_names(self, level):
-        if level not in range(1, 3):
+        if level not in range(1, 4):
             raise ValueError("Incorrect level value")
 
         names_count = [10, 50, 100][level - 1]
