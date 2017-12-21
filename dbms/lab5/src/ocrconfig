@@ -1,0 +1,9 @@
+touch /share/happymedic/ocr
+chown root:oinstall /share/happymedic/ocr
+chmod 640 /share/happymedic/ocr
+ocrconfig -add /share/happymedic/ocr
+touch /share/jealousvulture/ocr
+chown root:oinstall /share/jealousvulture/ocr
+chmod 640 /share/jealousvulture/ocr
+ocrconfig -replace /share/happymedic/ocr -replacement /share/jealousvulture/ocr
+ocrconfig -delete /share/jealousvulture/ocr
