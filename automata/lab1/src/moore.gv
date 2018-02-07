@@ -1,0 +1,56 @@
+digraph finite_state_machine {
+	rankdir=TB;
+
+	node [label="b1"] b1;
+	node [label="b2"] b2;
+	node [label="b3"] b3;
+	node [label="b4"] b4;
+	node [label="b5"] b5;
+	node [label="b6"] b6;
+	node [label="b7"] b7;
+	node [label="b8"] b8;
+	node [label="b9"] b9;
+
+	b1 -> b2 [label=z1];
+	b1 -> b5 [label=z2];
+	b1 -> b6 [label=z3];
+
+	b2 -> b5 [label=z1];
+	b2 -> b9 [label=z2];
+	b2 -> b2 [label=z3];
+
+	b3 -> b5 [label=z1];
+	b3 -> b9 [label=z2];
+	b3 -> b2 [label=z3];
+
+	b4 -> b8 [label=z1];
+
+	b5 -> b8 [label=z1];
+
+	b6 -> b4 [label=z1];
+	b6 -> b7 [label=z2];
+
+	b7 -> b4 [label=z1];
+	b7 -> b7 [label=z2];
+
+	b8 -> b8 [label=z1];
+	b8 -> b3 [label=z2];
+
+	b9 -> b8 [label=z1];
+	b9 -> b3 [label=z2];
+
+	//E4 -> E5 -> E6 -> E7 [label=<&lambda;p<sub>2</sub>>];
+	//E7 -> E6 -> E5 -> E4 [label=<&mu;>];
+	//E0 -> E1 -> E2 -> E3 [label=<&lambda;p<sub>2</sub>>];
+	//E3 -> E2 -> E1 -> E0 [label=<&mu;>];
+
+	//{ rank=same E0 -> E4 [label=<&lambda;p<sub>1</sub>>]; }
+	//{ rank=same E1 -> E5 [label=<&lambda;p<sub>1</sub>>]; }
+	//{ rank=same E2 -> E6 [label=<&lambda;p<sub>1</sub>>]; }
+	//{ rank=same E3 -> E7 [label=<&lambda;p<sub>1</sub>>]; }
+
+	//{ rank=same E4 -> E0 [label=<&mu;>]; }
+	//{ rank=same E5 -> E1 [label=<&mu;>]; }
+	//{ rank=same E6 -> E2 [label=<&mu;>]; }
+	//{ rank=same E7 -> E3 [label=<&mu;>]; }
+}
