@@ -1,0 +1,19 @@
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\tikzstyle{capac}=[pattern=north east lines]
+\tikzstyle{backl}=[pattern=north west lines, preaction={fill, white}]
+\tikzstyle{resis}=[preaction={fill, white}, pattern=dots, pattern color=gray]
+\tikzstyle{iarea_tr_w}=[pattern=north west lines, preaction={fill, white},
+                   pattern color=black]
+\tikzstyle{iarea_tr}=[pattern=north east lines,
+                   pattern color=black]
+\tikzstyle{iarea_tr_r}=[pattern=north west lines,
+                   pattern color=black]
+\tikzstyle{iarea}=[pattern=north east lines, preaction={fill, white},
+                   pattern color=black]
+\tikzstyle{dielc}=[dotted, fill=white]
+\tikzstyle{exter}=[fill=white]
+\usepackage{rotating}
+\usetikzlibrary{positioning}
+
