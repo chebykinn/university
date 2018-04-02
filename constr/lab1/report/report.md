@@ -118,7 +118,7 @@ $$S = \dfrac{C}{C_0}$$
 
 $C_i$ $S(\text{см}^2)$ $a$, мм  $b$, мм
 ----- ---------------- -------- -------
-$C_1$ 0.03             3.0      1.0
+$C_1$ 0.03             1.0      3.0
 ----- ---------------- -------- -------
 
 ## Слои
@@ -136,156 +136,156 @@ $N$  Наименование     Материал
 
 \begin{center}
 \begin{tikzpicture}[pattern color=gray]
-\coordinate (paper0) at (0,0);
-\coordinate (paper1) at ($ (paper0) + (12,8) $);
+\coordinate (paper0) at (0.0,0.0);
+\coordinate (paper1) at ($ (paper0) + (12,10) $);
 
-\coordinate (res1p0) at (1.1,1.4);
+\coordinate (res1p0) at (1.1,2.4);
 \coordinate (res1p1) at ($ (res1p0) + (0.7,1.6) $);
 
 \coordinate (res1pad1p0) at ($ (res1p1)     - (0.9,0.2) $);
 \coordinate (res1pad1p1) at ($ (res1pad1p0) + (0.0,0.2) $);
 \coordinate (res1pad1p2) at ($ (res1pad1p1) + (0.4,0.0) $);
-\coordinate (res1pad1p3) at ($ (res1pad1p2) + (0.0,3.0) $);
+\coordinate (res1pad1p3) at ($ (res1pad1p2) + (0.0,4.0) $);
 \coordinate (res1pad1p4) at ($ (res1pad1p3) + (0.2,0.0) $);
-\coordinate (res1pad1p5) at ($ (res1pad1p4) - (0.0,3.0) $);
+\coordinate (res1pad1p5) at ($ (res1pad1p4) - (0.0,4.0) $);
 \coordinate (res1pad1p6) at ($ (res1pad1p5) + (0.5,0.0) $);
 \coordinate (res1pad1p7) at ($ (res1pad1p6) - (0.0,0.2) $);
 
-\coordinate (res1pad2p0) at ($ (res1p0)     - (0.2,0.0) $);
-\coordinate (res1pad2p1) at ($ (res1pad2p0) - (0.0,0.3) $);
-\coordinate (res1pad2p2) at ($ (res1pad2p1) + (0.3,0.0) $);
-\coordinate (res1pad2p3) at ($ (res1pad2p2) - (0.0,0.0) $);
-\coordinate (res1pad2p4) at ($ (res1pad2p3) + (7.8,0.0) $);
-\coordinate (res1pad2p5) at ($ (res1pad2p4) + (0.0,0.2) $);
-\coordinate (res1pad2p6) at ($ (res1pad2p5) - (3.7,0.0) $);
-\coordinate (res1pad2p7) at ($ (res1pad2p6) + (0.0,0.2) $);
-\coordinate (res1pad2p8) at ($ (res1pad2p7) - (0.7,0.0) $);
-\coordinate (res1pad2p9) at ($ (res1pad2p8) - (0.0,0.2) $);
-\coordinate (res1pad2p10) at ($ (res1pad2p9) - (2.6,0.0) $);
-\coordinate (res1pad2p11) at ($ (res1pad2p10) + (0.0,0.0) $);
-\coordinate (res1pad2p12) at ($ (res1pad2p11) + (0.0,0.0) $);
-\coordinate (res1pad2p13) at ($ (res1pad2p12) + (0.0,0.2) $);
+\coordinate (res1pad2p0) at ($ (res1p0)     - (0.2,0.3) $);
+\coordinate (res1pad2p1) at ($ (res1pad2p0) + (3.1,0.0) $);
+\coordinate (res1pad2p2) at ($ (res1pad2p1) - (0.0,1.0) $);
+\coordinate (res1pad2p3) at ($ (res1pad2p2) + (0.2,0.0) $);
+\coordinate (res1pad2p4) at ($ (res1pad2p3) + (0.0,1.0) $);
+\coordinate (res1pad2p5) at ($ (res1pad2p4) + (0.0,0.4) $);
+\coordinate (res1pad2p6) at ($ (res1pad2p5) - (0.7,0.0) $);
+\coordinate (res1pad2p7) at ($ (res1pad2p6) - (0.0,0.2) $);
+\coordinate (res1pad2p8) at ($ (res1pad2p7) - (1.3,0.0) $);
+\coordinate (res1pad2p9) at ($ (res1pad2p8) + (0.0,0.2) $);
+\coordinate (res1pad2p10) at ($ (res1pad2p9) - (0.0,0.0) $);
+\coordinate (res1pad2p11) at ($ (res1pad2p10) - (0.0,0.0) $);
+\coordinate (res1pad2p12) at ($ (res1pad2p11) - (0.0,0.0) $);
+\coordinate (res1pad2p13) at ($ (res1pad2p12) + (0.0,0.0) $);
 
-\coordinate (res1con0p0) at ($ (res1pad2p4) - (0.0,0.1) $);
+\coordinate (res1con0p0) at ($ (res1pad2p2) - (0.0,0.1) $);
 \coordinate (res1con0p1) at ($ (res1con0p0) + (0.4,0.4) $);
 
-\coordinate (res2p0) at (2.6,2.7);
-\coordinate (res2p1) at ($ (res2p0) + (0.2,2.4) $);
+\coordinate (res2p0) at (4.6,6.5);
+\coordinate (res2p1) at ($ (res2p0) + (2.4,0.2) $);
 
-\coordinate (res2pad1p0) at ($ (res2p1) - (0.4,0.0) $);
+\coordinate (res2pad1p0) at ($ (res2p0) - (0.2,0.0) + (0.0,0.2) $);
 \coordinate (res2pad1p1) at ($ (res2pad1p0) + (0.0,0.2) $);
-\coordinate (res2pad1p2) at ($ (res2pad1p1) + (0.2,0.0) $);
-\coordinate (res2pad1p3) at ($ (res2pad1p2) + (0.0,1.3) $);
+\coordinate (res2pad1p2) at ($ (res2pad1p1) + (0.4,0.0) $);
+\coordinate (res2pad1p3) at ($ (res2pad1p2) + (0.0,1.7) $);
 \coordinate (res2pad1p4) at ($ (res2pad1p3) + (0.2,0.0) $);
-\coordinate (res2pad1p5) at ($ (res2pad1p4) - (0.0,1.3) $);
-\coordinate (res2pad1p6) at ($ (res2pad1p5) + (0.2,0.0) $);
+\coordinate (res2pad1p5) at ($ (res2pad1p4) - (0.0,1.7) $);
+\coordinate (res2pad1p6) at ($ (res2p1) + (0.2,0.2) $);
 \coordinate (res2pad1p7) at ($ (res2pad1p6) - (0.0,0.2) $);
 
 \coordinate (res2con0p0) at ($ (res2pad1p3) - (0.1,0.0) $);
 \coordinate (res2con0p1) at ($ (res2con0p0) + (0.4,0.4) $);
 
-\coordinate (res3p0) at (4.8,1.4);
+\coordinate (res3p0) at (3.5,2.4);
 \coordinate (res3p1) at ($ (res3p0) + (0.3,0.8) $);
 
-\coordinate (res4p0) at (9.7,3.6);
-\coordinate (res4p1) at ($ (res4p0) + (0.3,2.0) $);
+\coordinate (res4p0) at (8.1,4.6);
+\coordinate (res4p1) at ($ (res4p0) + (2.0,0.3) $);
 
-\coordinate (res4pad1p0) at ($ (res4p0)        + (0.2,0.0) - (0.0,0.2) $);
+\coordinate (res4pad1p0) at ($ (res4p0)        + (0.1,0.0) + (0.0,0.5) $);
 \coordinate (res4pad1p1) at ($ (res4pad1p0)     - (0.2,0.0) $);
-\coordinate (res4pad1p2) at ($ (res4pad1p1)     + (0.0,1.6) $);
-\coordinate (res4pad1p3) at ($ (res4pad1p2)     - (0.5,0.0) $);
-\coordinate (res4pad1p4) at ($ (res4pad1p3)     + (0.0,0.2) $);
-\coordinate (res4pad1p5) at ($ (res4pad1p4)     + (0.5,0.0) $);
-\coordinate (res4pad1p6) at ($ (res4pad1p5)     + (0.0,0.6) $);
+\coordinate (res4pad1p2) at ($ (res4pad1p1)     + (0.0,0.0) $);
+\coordinate (res4pad1p3) at ($ (res4pad1p2)     - (0.0,4.1) $);
+\coordinate (res4pad1p4) at ($ (res4pad1p3)     + (0.0,0.0) $);
+\coordinate (res4pad1p5) at ($ (res4pad1p4)     + (0.0,0.0) $);
+\coordinate (res4pad1p6) at ($ (res4pad1p5)     + (0.0,0.0) $);
 \coordinate (res4pad1p7) at ($ (res4pad1p6)     + (0.2,0.0) $);
 
-\coordinate (res4con1p0) at ($ (res4pad1p3)    - (0.2,0.0) - (0.0,0.0) $);
+\coordinate (res4con1p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,1.4) $);
 \coordinate (res4con1p1) at ($ (res4con1p0)   + (0.4,0.4) $);
-\coordinate (res4con2p0) at ($ (res4pad1p3)    - (0.2,0.0) - (0.0,0.4) $);
+\coordinate (res4con2p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,1.0) $);
 \coordinate (res4con2p1) at ($ (res4con2p0)   + (0.4,0.4) $);
-\coordinate (res4con3p0) at ($ (res4pad1p3)    - (0.2,0.0) - (0.0,0.8) $);
+\coordinate (res4con3p0) at ($ (res4pad1p3)    - (0.2,0.0) - (0.0,0.0) $);
 \coordinate (res4con3p1) at ($ (res4con3p0)   + (0.4,0.4) $);
 
-\coordinate (res5p0) at (9.4,1.9);
+\coordinate (res5p0) at (9.4,2.9);
 \coordinate (res5p1) at ($ (res5p0) + (0.7,0.8) $);
 
-\coordinate (res5pad1p0) at ($ (res5p0)     + (0.2,0.0) - (0.0,0.2) $);
+\coordinate (res5pad1p0) at ($ (res5p0)     + (0.1,0.0) + (0.0,1.0) $);
 \coordinate (res5pad1p1) at ($ (res5pad1p0)     - (0.2,0.0) $);
-\coordinate (res5pad1p2) at ($ (res5pad1p1)     + (0.0,0.3) $);
-\coordinate (res5pad1p3) at ($ (res5pad1p2)     - (0.8,0.0) $);
-\coordinate (res5pad1p4) at ($ (res5pad1p3)     + (0.0,0.2) $);
-\coordinate (res5pad1p5) at ($ (res5pad1p4)     + (0.8,0.0) $);
-\coordinate (res5pad1p6) at ($ (res5pad1p5)     + (0.0,0.6) $);
+\coordinate (res5pad1p2) at ($ (res5pad1p1)     + (0.0,0.0) $);
+\coordinate (res5pad1p3) at ($ (res5pad1p2)     - (0.0,2.8) $);
+\coordinate (res5pad1p4) at ($ (res5pad1p3)     + (0.0,0.0) $);
+\coordinate (res5pad1p5) at ($ (res5pad1p4)     + (0.0,0.0) $);
+\coordinate (res5pad1p6) at ($ (res5pad1p5)     + (0.0,0.0) $);
 \coordinate (res5pad1p7) at ($ (res5pad1p6)     + (0.2,0.0) $);
 
-\coordinate (outpad1p0) at ($ (res5pad1p4)     + (0.4,0.0) + (0.0,0.2) $);
+\coordinate (outpad1p0) at ($ (res5pad1p4)     + (0.2,0.0) + (0.0,0.3) $);
 \coordinate (outpad1p1) at ($ (outpad1p0)     - (0.4,0.4) $);
 
-\coordinate (res5con1p0) at ($ (outpad1p1)    + (0.0,0.4) $);
+\coordinate (res5con1p0) at ($ (outpad1p1)    + (0.0,1.0) $);
 \coordinate (res5con1p1) at ($ (res5con1p0)   + (0.4,0.4) $);
 
-\coordinate (cap1p0) at (4.2,2.7);
+\coordinate (cap1p0) at (3.2,3.7);
 \coordinate (cap1p1) at ($ (cap1p0) + (1.0,3.0) $);
 
-\coordinate (cap1pad0p0) at ($ (res2p0) - (0.2,0.0) + (0.0,0.1) $);
-\coordinate (cap1pad0p1) at ($ (cap1pad0p0) - (0.0,0.2) $);
-\coordinate (cap1pad0p2) at ($ (cap1pad0p1) + (1.5,0.0) $);
-\coordinate (cap1pad0p3) at ($ (cap1pad0p2) + (0.0,0.2) $);
-\coordinate (cap1pad0p4) at ($ (cap1pad0p3) - (0.1,0.0) $);
-\coordinate (cap1pad0p5) at ($ (cap1pad0p4) + (0.0,0.2) $);
-\coordinate (cap1pad0p6) at ($ (cap1pad0p5) + (1.4,0.0) $);
-\coordinate (cap1pad0p7) at ($ (cap1pad0p6) + (0.0,2.3) $);
-\coordinate (cap1pad0p8) at ($ (cap1pad0p7) + (0.6,0.0) $);
-\coordinate (cap1pad0p9) at ($ (cap1pad0p8) - (0.0,0.4) $);
-\coordinate (cap1pad0p10) at ($ (cap1pad0p9) + (0.2,0.0) $);
+\coordinate (cap1pad0p0) at ($ (cap1p0) - (0.4,0.0) + (0.0,0.2) $);
+\coordinate (cap1pad0p1) at ($ (cap1pad0p0) + (0.0,4.7) $);
+\coordinate (cap1pad0p2) at ($ (cap1pad0p1) + (0.2,0.0) $);
+\coordinate (cap1pad0p3) at ($ (cap1pad0p2) - (0.0,2.2) $);
+\coordinate (cap1pad0p4) at ($ (res2p0) + (0.0,0.1) - (0.2,0.0) $);
+\coordinate (cap1pad0p5) at ($ (res2p1) - (0.0,0.1) + (0.2,0.0) $);
+\coordinate (cap1pad0p6) at ($ (res2p1) - (0.0,0.5) + (0.2,0.0) $);
+\coordinate (cap1pad0p7) at ($ (res2p0) - (0.0,0.5) - (0.2,0.0) $);
+\coordinate (cap1pad0p8) at ($ (cap1pad0p7) $);
+\coordinate (cap1pad0p9) at ($ (cap1pad0p8) - (0.0,1.2) $);
+\coordinate (cap1pad0p10) at ($ (cap1pad0p9) + (1.0,0.0) $);
 \coordinate (cap1pad0p11) at ($ (cap1pad0p10) + (0.0,0.4) $);
-\coordinate (cap1pad0p12) at ($ (cap1pad0p11) + (0.6,0.0) $);
-\coordinate (cap1pad0p13) at ($ (cap1pad0p12) + (0.0,0.2) $);
-\coordinate (cap1pad0p14) at ($ (cap1pad0p13) - (1.6,0.0) $);
-\coordinate (cap1pad0p15) at ($ (cap1pad0p14) + (0.0,0.0) $);
-\coordinate (cap1pad0p16) at ($ (cap1pad0p15) - (1.4,0.0) $);
-\coordinate (cap1pad0p17) at ($ (cap1pad0p16) + (0.0,1.1) $);
-\coordinate (cap1pad0p18) at ($ (cap1pad0p17) - (0.2,0.0) $);
-\coordinate (cap1pad0p19) at ($ (cap1pad0p18) - (0.0,3.8) $);
-\coordinate (cap1pad0p20) at ($ (cap1pad0p19) - (0.8,0.0) $);
+\coordinate (cap1pad0p12) at ($ (cap1pad0p11) + (0.2,0.0) $);
+\coordinate (cap1pad0p13) at ($ (cap1pad0p12) - (0.0,0.4) $);
+\coordinate (cap1pad0p14) at ($ (cap1pad0p13) + (1.0,0.0) $);
+\coordinate (cap1pad0p15) at ($ (cap1pad0p14) - (0.0,0.2) $);
+\coordinate (cap1pad0p16) at ($ (cap1pad0p15) - (2.2,0.0) $);
+\coordinate (cap1pad0p17) at ($ (cap1pad0p16) - (0.0,0.7) $);
+\coordinate (cap1pad0p18) at ($ (cap1pad0p17) - (0.0,0.0) $);
+\coordinate (cap1pad0p19) at ($ (cap1pad0p18) - (0.0,0.0) $);
+\coordinate (cap1pad0p20) at ($ (cap1pad0p19) - (0.0,0.0) $);
 
-\coordinate (cap1con0p0) at ($ (cap1pad0p18) - (0.1,0.0) $);
+\coordinate (cap1con0p0) at ($ (cap1pad0p1) - (0.1,0.0) $);
 \coordinate (cap1con0p1) at ($ (cap1con0p0) + (0.4,0.4) $);
 
-\coordinate (cap1con1p0) at ($ (cap1pad0p10) + (0.1,0.0) $);
-\coordinate (cap1con1p1) at ($ (cap1con1p0) - (0.4,0.4) $);
+\coordinate (cap1con1p0) at ($ (cap1pad0p11) - (0.1,0.0) $);
+\coordinate (cap1con1p1) at ($ (cap1con1p0) + (0.4,0.4) $);
 
-\coordinate (cap1con2p0) at ($ (cap1pad0p12) - (0.0,0.1) - (0.0,0.1) $);
+\coordinate (cap1con2p0) at ($ (cap1pad0p15) - (0.0,0.1) - (0.0,0.1) $);
 \coordinate (cap1con2p1) at ($ (cap1con2p0) + (0.4,0.4) $);
 
 \coordinate (cap1pad1p0) at ($ (cap1p0)    + (0.1,0.1) $);
-\coordinate (cap1pad1p1) at ($ (cap1pad1p0) + (0.0,2.8) $);
-\coordinate (cap1pad1p2) at ($ (cap1pad1p1) + (0.2,0.0) $);
+\coordinate (cap1pad1p1) at ($ (cap1pad1p0) + (0.0,3.1) $);
+\coordinate (cap1pad1p2) at ($ (cap1pad1p1) + (0.0,0.0) $);
 \coordinate (cap1pad1p3) at ($ (cap1pad1p2) - (0.0,0.0) $);
-\coordinate (cap1pad1p4) at ($ (cap1pad1p3) + (0.4,0.0) $);
-\coordinate (cap1pad1p5) at ($ (cap1pad1p4) + (0.0,1.0) $);
+\coordinate (cap1pad1p4) at ($ (cap1pad1p3) + (0.6,0.0) $);
+\coordinate (cap1pad1p5) at ($ (cap1pad1p4) + (0.0,1.7) $);
 \coordinate (cap1pad1p6) at ($ (cap1pad1p5) + (0.2,0.0) $);
-\coordinate (cap1pad1p7) at ($ (cap1pad1p6) - (0.0,4.3) $);
-\coordinate (cap1pad1p8) at ($ (cap1pad1p7) + (0.2,0.0) $);
-\coordinate (cap1pad1p9) at ($ (cap1pad1p8) - (0.0,0.2) $);
-\coordinate (cap1pad1p10) at ($ (cap1pad1p9) - (0.6,0.0) $);
-\coordinate (cap1pad1p11) at ($ (cap1pad1p10) + (0.0,0.2) $);
-\coordinate (cap1pad1p12) at ($ (cap1pad1p11) + (0.2,0.0) $);
-\coordinate (cap1pad1p13) at ($ (cap1pad1p12) + (0.0,0.5) $);
+\coordinate (cap1pad1p7) at ($ (cap1pad1p6) - (0.0,5.3) $);
+\coordinate (cap1pad1p8) at ($ (res3p1) + (0.2,0.0) $);
+\coordinate (cap1pad1p9) at ($ (res3p1) + (0.2,0.0) - (0.0,0.1) $);
+\coordinate (cap1pad1p10) at ($ (cap1pad1p0) - (0.0,0.7) $);
+\coordinate (cap1pad1p11) at ($ (cap1pad1p10) + (0.0,0.0) $);
+\coordinate (cap1pad1p12) at ($ (cap1pad1p11) + (0.0,0.0) $);
+\coordinate (cap1pad1p13) at ($ (cap1pad1p12) + (0.0,0.0) $);
 
 \coordinate (cap1con3p0) at ($ (cap1pad1p5) - (0.1,0.0) $);
 \coordinate (cap1con3p1) at ($ (cap1con3p0) + (0.4,0.4) $);
 
-\coordinate (vt1p0) at (5.7,6.0);
+\coordinate (vt1p0) at (6.0,8.0);
 \coordinate (vt1p1) at ($ (vt1p0) + (1.0,1.0) $);
 
-\coordinate (vt1con0p0) at ($ (vt1p0) + (1.9,0.0) + (0.0,0.6) $);
+\coordinate (vt1con0p0) at ($ (vt1p0) + (1.6,0.0) + (0.0,0.6) $);
 \coordinate (vt1con0p1) at ($ (vt1con0p0) + (0.4,0.4) $);
 
 \coordinate (toppad0p0) at ($ (10.4,1.5) $);
 \coordinate (toppad0p1) at ($ (toppad0p0)   - (0.0,0.1) $);
 \coordinate (toppad0p2) at ($ (toppad0p1)   - (0.2,0.0) $);
-\coordinate (toppad0p3) at ($ (toppad0p2)   + (0.0,0.3) $);
+\coordinate (toppad0p3) at ($ (toppad0p2)   + (0.0,1.3) $);
 \coordinate (toppad0p4) at ($ (toppad0p3)   - (0.2,0.0) $);
 \coordinate (toppad0p5) at ($ (toppad0p4)   + (0.0,1.1) $);
 \coordinate (toppad0p6) at ($ (toppad0p5)   + (0.2,0.0) $);
@@ -298,7 +298,7 @@ $N$  Наименование     Материал
 \coordinate (toppad0con0p0) at ($ (toppad0p9) + (0.0,0.8) $);
 \coordinate (toppad0con0p1) at ($ (toppad0con0p0) + (0.4,0.4) $);
 
-\coordinate (toppad0con1p0) at ($ (toppad0p0) - (0.4,0.5) $);
+\coordinate (toppad0con1p0) at ($ (toppad0p0) - (0.2,0.5) $);
 \coordinate (toppad0con1p1) at ($ (toppad0con1p0) + (0.4,0.4) $);
 
 
@@ -315,13 +315,13 @@ $N$  Наименование     Материал
 \coordinate (vt1wire3p1) at ($ (vt1con0p0) + (0.2,0.0) + (0.0,0.3) $);
 
 
-\coordinate (vd1p0) at (5.5,3.0);
+\coordinate (vd1p0) at (4.7,3.0);
 \coordinate (vd1p1) at ($ (vd1p0) + (1.0,1.0) $);
 
-\coordinate (vd1pad1p0) at ($ (vd1p0) - (0.0,0.9) + (0.5,0.0) $);
+\coordinate (vd1pad1p0) at ($ (vd1p0) - (0.0,1.9) + (0.3,0.0) $);
 \coordinate (vd1pad1p1) at ($ (vd1pad1p0) + (1.2,0.2) $);
 
-\coordinate (vd1con0p0) at ($ (vd1p0) - (0.0,1.0) + (0.5,0.0) $);
+\coordinate (vd1con0p0) at ($ (vd1pad1p0) - (0.0,0.1) $);
 \coordinate (vd1con0p1) at ($ (vd1con0p0) + (0.4,0.4) $);
 
 \coordinate (vd1con1p0) at ($ (vd1pad1p1) - (0.0,0.3) $);
@@ -331,12 +331,12 @@ $N$  Наименование     Материал
 \coordinate (vd1con2p1) at ($ (vd1con2p0) + (0.4,0.4) $);
 
 \coordinate (vd1wire1p0) at ($ (vd1p0) + (0.5, 0.8) $);
-\coordinate (vd1wire1p1) at ($ (cap1con1p0) - (0.2,0.0) - (0.0,0.2) $);
+\coordinate (vd1wire1p1) at ($ (cap1con1p0) + (0.2,0.0) + (0.0,0.2) $);
 
 \coordinate (vd1wire2p0) at ($ (vd1p0) + (0.5, 0.1) $);
 \coordinate (vd1wire2p1) at ($ (vd1con0p0) + (0.2,0.0) + (0.0,0.2) $);
 
-\coordinate (vd2p0) at (7.5,5.0);
+\coordinate (vd2p0) at (8.0,6.0);
 \coordinate (vd2p1) at ($ (vd2p0) + (1.0,1.0) $);
 
 \coordinate (vd2wire1p0) at ($ (vd2p0) + (0.25, 0.2) $);
@@ -345,7 +345,7 @@ $N$  Наименование     Материал
 \coordinate (vd2wire2p0) at ($ (vd2p0) + (0.7, 0.2) $);
 \coordinate (vd2wire2p1) at ($ (res4con1p0) + (0.2,0.0) + (0.0,0.2) $);
 
-\coordinate (vt2p0) at (7.0,3.0);
+\coordinate (vt2p0) at (6.3,2.0);
 \coordinate (vt2p1) at ($ (vt2p0) + (1.0,1.0) $);
 
 \coordinate (vt2wire1p0) at ($ (vt2p0) + (0.25, 0.2) $);
@@ -354,14 +354,22 @@ $N$  Наименование     Материал
 \coordinate (vt2wire2p0) at ($ (vt2p0) + (0.3, 0.8) $);
 \coordinate (vt2wire2p1) at ($ (res4con2p0) + (0.2,0.0) + (0.0,0.2) $);
 \coordinate (vt2wire3p0) at ($ (vt2p0) + (0.6, 0.2) $);
-\coordinate (vt2wire3p1) at ($ (outpad1p0) - (0.2,0.0) + (0.0,0.2) $);
+\coordinate (vt2wire3p1) at ($ (res5con1p0) + (0.2,0.0) + (0.0,0.2) $);
 
-\coordinate (protec0p0) at (0.9,1.3);
-\coordinate (protec0p1) at ($ (protec0p0) + (0.0,4.7) $);
-\coordinate (protec0p2) at ($ (protec0p1) + (4.5,0.0) $);
-\coordinate (protec0p3) at ($ (protec0p2) - (0.0,4.7) $);
+\coordinate (protec0p0) at ($ (res1p0) - (0.2,0.1) $);
+\coordinate (protec0p1) at ($ (vt1con1p0) - (0.7,0.0) $);
+\coordinate (protec0p2) at ($ (cap1con0p0) - (0.0,0.0) $);
+\coordinate (protec0p3) at ($ (cap1con0p0) - (0.0,0.0) $);
+\coordinate (protec0p4) at ($ (res2con0p0) - (0.0,0.0) $);
+\coordinate (protec0p5) at ($ (res2con0p1) - (0.0,1.0) $);
+\coordinate (protec0p6) at ($ (res2p1) + (0.2,0.0) $);
+\coordinate (protec0p7) at ($ (protec0p6) - (0.0,0.5) $);
+\coordinate (protec0p8) at ($ (cap1pad0p9) - (0.0,0.0) $);
+\coordinate (protec0p9) at ($ (cap1con1p0) + (0.0,0.0) $);
+\coordinate (protec0p10) at ($ (cap1con2p0) + (0.0,0.0) $);
+\coordinate (protec0p11) at ($ (res1con0p1) + (0.2,0.0) $);
 
-\coordinate (protec1p0) at (9.4,1.4);
+\coordinate (protec1p0) at (9.4,2.4);
 \coordinate (protec1p1) at ($ (protec1p0) + (0.0,4.6) $);
 \coordinate (protec1p2) at ($ (protec1p1) + (0.8,0.0) $);
 \coordinate (protec1p3) at ($ (protec1p2) - (0.0,4.6) $);
@@ -471,16 +479,18 @@ $N$  Наименование     Материал
 
 \draw (vt2wire1p0) to[bend right=15] (vt2wire1p1);
 \draw (vt2wire2p0) to[bend left=15] (vt2wire2p1);
-\draw (vt2wire3p0) to[bend left=15] (vt2wire3p1);
+\draw (vt2wire3p0) to[bend right=35] (vt2wire3p1);
 
 \draw (vd1wire1p0) to[bend right=15] (vd1wire1p1);
 \draw (vd1wire2p0) to[bend right=15] (vd1wire2p1);
 
 \draw (vd2wire1p0) to[bend right=15] (vd2wire1p1);
-\draw (vd2wire2p0) to[bend right=15] (vd2wire2p1);
+\draw (vd2wire2p0) to[bend left=15] (vd2wire2p1);
 
 \draw[dashed,thick] (protec0p0) -| (protec0p1) -| (protec0p2) -|
-                    (protec0p3) -| cycle;
+                    (protec0p3) -| (protec0p4) -| (protec0p5) -|
+                    (protec0p6) -| (protec0p7) -| (protec0p8) -|
+                    (protec0p9) -| (protec0p10) -| (protec0p11) -| cycle;
 \draw[dashed,thick] (protec1p0) -| (protec1p1) -| (protec1p2) -|
                     (protec1p3) -| cycle;
 
