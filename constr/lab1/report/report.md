@@ -184,7 +184,7 @@ $N$  Наименование     Материал
 \coordinate (res2con0p0) at ($ (res2pad1p3) - (0.1,0.0) $);
 \coordinate (res2con0p1) at ($ (res2con0p0) + (0.4,0.4) $);
 
-\coordinate (res3p0) at (3.5,2.4);
+\coordinate (res3p0) at (3.7,2.4);
 \coordinate (res3p1) at ($ (res3p0) + (0.3,0.8) $);
 
 \coordinate (res4p0) at (8.1,4.6);
@@ -258,11 +258,11 @@ $N$  Наименование     Материал
 \coordinate (cap1con2p0) at ($ (cap1pad0p15) - (0.0,0.1) - (0.0,0.1) $);
 \coordinate (cap1con2p1) at ($ (cap1con2p0) + (0.4,0.4) $);
 
-\coordinate (cap1pad1p0) at ($ (cap1p0)    + (0.1,0.1) $);
+\coordinate (cap1pad1p0) at ($ (cap1p0)    + (0.2,0.1) $);
 \coordinate (cap1pad1p1) at ($ (cap1pad1p0) + (0.0,3.1) $);
 \coordinate (cap1pad1p2) at ($ (cap1pad1p1) + (0.0,0.0) $);
 \coordinate (cap1pad1p3) at ($ (cap1pad1p2) - (0.0,0.0) $);
-\coordinate (cap1pad1p4) at ($ (cap1pad1p3) + (0.6,0.0) $);
+\coordinate (cap1pad1p4) at ($ (cap1pad1p3) + (0.4,0.0) $);
 \coordinate (cap1pad1p5) at ($ (cap1pad1p4) + (0.0,1.7) $);
 \coordinate (cap1pad1p6) at ($ (cap1pad1p5) + (0.2,0.0) $);
 \coordinate (cap1pad1p7) at ($ (cap1pad1p6) - (0.0,5.3) $);
@@ -287,15 +287,15 @@ $N$  Наименование     Материал
 \coordinate (toppad0p2) at ($ (toppad0p1)   - (0.2,0.0) $);
 \coordinate (toppad0p3) at ($ (toppad0p2)   + (0.0,1.3) $);
 \coordinate (toppad0p4) at ($ (toppad0p3)   - (0.2,0.0) $);
-\coordinate (toppad0p5) at ($ (toppad0p4)   + (0.0,1.1) $);
+\coordinate (toppad0p5) at ($ (toppad0p4)   + (0.0,1.2) $);
 \coordinate (toppad0p6) at ($ (toppad0p5)   + (0.2,0.0) $);
-\coordinate (toppad0p7) at ($ (toppad0p6)   + (0.0,0.6) $);
+\coordinate (toppad0p7) at ($ (toppad0p6)   + (0.0,0.5) $);
 \coordinate (toppad0p8) at ($ (toppad0p7)   - (0.2,0.0) $);
-\coordinate (toppad0p9) at ($ (toppad0p8)   + (0.0,2.4) $);
+\coordinate (toppad0p9) at ($ (toppad0p8)   + (0.0,0.7) $);
 \coordinate (toppad0p10) at ($ (toppad0p9)  + (0.2,0.0) $);
-\coordinate (toppad0p11) at ($ (toppad0p10) + (0.0,0.9) $);
+\coordinate (toppad0p11) at ($ (toppad0p10) + (0.0,3.5) $);
 
-\coordinate (toppad0con0p0) at ($ (toppad0p9) + (0.0,0.8) $);
+\coordinate (toppad0con0p0) at ($ (toppad0p11) - (0.1,0.0) $);
 \coordinate (toppad0con0p1) at ($ (toppad0con0p0) + (0.4,0.4) $);
 
 \coordinate (toppad0con1p0) at ($ (toppad0p0) - (0.2,0.5) $);
@@ -315,7 +315,7 @@ $N$  Наименование     Материал
 \coordinate (vt1wire3p1) at ($ (vt1con0p0) + (0.2,0.0) + (0.0,0.3) $);
 
 
-\coordinate (vd1p0) at (4.7,3.0);
+\coordinate (vd1p0) at (4.8,3.0);
 \coordinate (vd1p1) at ($ (vd1p0) + (1.0,1.0) $);
 
 \coordinate (vd1pad1p0) at ($ (vd1p0) - (0.0,1.9) + (0.3,0.0) $);
@@ -348,12 +348,12 @@ $N$  Наименование     Материал
 \coordinate (vt2p0) at (6.3,2.0);
 \coordinate (vt2p1) at ($ (vt2p0) + (1.0,1.0) $);
 
-\coordinate (vt2wire1p0) at ($ (vt2p0) + (0.25, 0.2) $);
+\coordinate (vt2wire1p0) at ($ (vt2p0) + (0.25, 0.1) $);
 \coordinate (vt2wire1p1) at ($ (vd1con1p0) + (0.2,0.0) + (0.0,0.2) $);
 
-\coordinate (vt2wire2p0) at ($ (vt2p0) + (0.3, 0.8) $);
+\coordinate (vt2wire2p0) at ($ (vt2p0) + (0.5, 0.8) $);
 \coordinate (vt2wire2p1) at ($ (res4con2p0) + (0.2,0.0) + (0.0,0.2) $);
-\coordinate (vt2wire3p0) at ($ (vt2p0) + (0.6, 0.2) $);
+\coordinate (vt2wire3p0) at ($ (vt2p0) + (0.7, 0.1) $);
 \coordinate (vt2wire3p1) at ($ (res5con1p0) + (0.2,0.0) + (0.0,0.2) $);
 
 \coordinate (protec0p0) at ($ (res1p0) - (0.2,0.1) $);
@@ -369,10 +369,19 @@ $N$  Наименование     Материал
 \coordinate (protec0p10) at ($ (cap1con2p0) + (0.0,0.0) $);
 \coordinate (protec0p11) at ($ (res1con0p1) + (0.2,0.0) $);
 
-\coordinate (protec1p0) at (9.4,2.4);
-\coordinate (protec1p1) at ($ (protec1p0) + (0.0,4.6) $);
-\coordinate (protec1p2) at ($ (protec1p1) + (0.8,0.0) $);
-\coordinate (protec1p3) at ($ (protec1p2) - (0.0,4.6) $);
+\coordinate (protec1p0) at ($ (res4con1p0) - (0.2,0.0) + (0.0,0.4) $);
+\coordinate (protec1p1) at ($ (res5con1p0) - (0.2,0.0) $);
+\coordinate (protec1p2) at ($ (protec1p1) + (1.0,0.0) $);
+\coordinate (protec1p3) at ($ (toppad0con0p0) + (0.5,0.0) $);
+\coordinate (protec1p4) at ($ (toppad0con0p0) - (0.2,0.0) $);
+\coordinate (protec1p5) at ($ (res4p1) - (0.2,0.0) + (0.0,0.2) $);
+\coordinate (protec1p6) at ($ (res4p0) + (0.0,0.5) $);
+
+\coordinate (protec2p0) at ($ (res4con3p0) - (0.2,0.0) + (0.0,0.4) $);
+\coordinate (protec2p1) at ($ (res4con2p1) + (0.2,0.0) - (0.0,0.4) $);
+
+\coordinate (protec3p0) at ($ (vd1con0p1) - (0.0,0.0) + (0.0,0.2) $);
+\coordinate (protec3p1) at ($ (vd1con1p0) + (0.0,0.0) - (0.0,0.2) $);
 
 
 \draw[very thin, lightgray, step=0.1] (paper0) grid (paper1);
@@ -419,7 +428,7 @@ $N$  Наименование     Материал
 \draw[iarea_tr_w] (vt1con0p0) rectangle (vt1con0p1);
 \draw[iarea_tr_w] (vt1con1p0) rectangle (vt1con1p1);
 
-\draw[iarea_tr] (res1pad2p0) -| (res1pad2p1) -| (res1pad2p2) -|
+\draw[iarea_tr_w] (res1pad2p0) -| (res1pad2p1) -| (res1pad2p2) -|
                 (res1pad2p3) -| (res1pad2p4) -| (res1pad2p5) -|
                 (res1pad2p6) -| (res1pad2p7) -| (res1pad2p8) -|
                 (res1pad2p9) -| (res1pad2p10) -| (res1pad2p11) -|
@@ -492,7 +501,10 @@ $N$  Наименование     Материал
                     (protec0p6) -| (protec0p7) -| (protec0p8) -|
                     (protec0p9) -| (protec0p10) -| (protec0p11) -| cycle;
 \draw[dashed,thick] (protec1p0) -| (protec1p1) -| (protec1p2) -|
-                    (protec1p3) -| cycle;
+                    (protec1p3) -| (protec1p4) -| (protec1p5) -|
+                    (protec1p6) -| cycle;
+\draw[dashed,thick] (protec2p0) rectangle (protec2p1);
+\draw[dashed,thick] (protec3p0) rectangle (protec3p1);
 
 \end{tikzpicture}
 \end{center}
