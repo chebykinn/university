@@ -199,9 +199,9 @@ $N$  Наименование     Материал
 \coordinate (res4pad1p6) at ($ (res4pad1p5)     + (0.0,0.0) $);
 \coordinate (res4pad1p7) at ($ (res4pad1p6)     + (0.2,0.0) $);
 
-\coordinate (res4con1p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,1.4) $);
+\coordinate (res4con1p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,2.6) $);
 \coordinate (res4con1p1) at ($ (res4con1p0)   + (0.4,0.4) $);
-\coordinate (res4con2p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,1.0) $);
+\coordinate (res4con2p0) at ($ (res4pad1p3)    - (0.2,0.0) + (0.0,2.2) $);
 \coordinate (res4con2p1) at ($ (res4con2p0)   + (0.4,0.4) $);
 \coordinate (res4con3p0) at ($ (res4pad1p3)    - (0.2,0.0) - (0.0,0.0) $);
 \coordinate (res4con3p1) at ($ (res4con3p0)   + (0.4,0.4) $);
@@ -304,6 +304,8 @@ $N$  Наименование     Материал
 
 \coordinate (vt1con1p0) at ($ (res1pad1p4) + (0.1,0.0) $);
 \coordinate (vt1con1p1) at ($ (vt1con1p0) + (0.0,0.4) - (0.4,0.0) $);
+\coordinate (vt1con2p0) at ($ (vt1con0p1) + (0.0,0.0) - (0.0,0.4) $);
+\coordinate (vt1con2p1) at ($ (vt1con2p0) + (0.4,0.4) $);
 
 \coordinate (vt1wire1p0) at ($ (vt1p0) + (0.25, 0.1) $);
 \coordinate (vt1wire1p1) at ($ (vt1con1p0) - (0.2,0.0) + (0.0,0.2) $);
@@ -367,22 +369,18 @@ $N$  Наименование     Материал
 \coordinate (protec0p8) at ($ (cap1pad0p9) - (0.0,0.0) $);
 \coordinate (protec0p9) at ($ (cap1con1p0) + (0.0,0.0) $);
 \coordinate (protec0p10) at ($ (cap1con2p0) + (0.0,0.0) $);
-\coordinate (protec0p11) at ($ (res1con0p1) + (0.2,0.0) $);
+\coordinate (protec0p11) at ($ (res1con0p1) + (0.2,0.9) $);
 
 \coordinate (protec1p0) at ($ (res4con1p0) - (0.2,0.0) + (0.0,0.4) $);
-\coordinate (protec1p1) at ($ (res5con1p0) - (0.2,0.0) $);
+\coordinate (protec1p1) at ($ (res5con1p0) - (0.2,0.0) + (0.0,0.4) $);
 \coordinate (protec1p2) at ($ (protec1p1) + (1.0,0.0) $);
-\coordinate (protec1p3) at ($ (toppad0con0p0) + (0.5,0.0) $);
-\coordinate (protec1p4) at ($ (toppad0con0p0) - (0.2,0.0) $);
+\coordinate (protec1p3) at ($ (res4p1) + (0.5,0.2) $);
+\coordinate (protec1p4) at ($ (res4p1) - (0.2,0.0) + (0.0,0.2) $);
 \coordinate (protec1p5) at ($ (res4p1) - (0.2,0.0) + (0.0,0.2) $);
 \coordinate (protec1p6) at ($ (res4p0) + (0.0,0.5) $);
 
 \coordinate (protec2p0) at ($ (res4con3p0) - (0.2,0.0) + (0.0,0.4) $);
 \coordinate (protec2p1) at ($ (res4con2p1) + (0.2,0.0) - (0.0,0.4) $);
-
-\coordinate (protec3p0) at ($ (vd1con0p1) - (0.0,0.0) + (0.0,0.2) $);
-\coordinate (protec3p1) at ($ (vd1con1p0) + (0.0,0.0) - (0.0,0.2) $);
-
 
 \draw[very thin, lightgray, step=0.1] (paper0) grid (paper1);
 \draw[thin, gray, step=1] (paper0) grid (paper1);
@@ -427,6 +425,7 @@ $N$  Наименование     Материал
 
 \draw[iarea_tr_w] (vt1con0p0) rectangle (vt1con0p1);
 \draw[iarea_tr_w] (vt1con1p0) rectangle (vt1con1p1);
+\draw[iarea_tr_w] (vt1con2p0) rectangle (vt1con2p1);
 
 \draw[iarea_tr_w] (res1pad2p0) -| (res1pad2p1) -| (res1pad2p2) -|
                 (res1pad2p3) -| (res1pad2p4) -| (res1pad2p5) -|
@@ -482,19 +481,19 @@ $N$  Наименование     Материал
 
 \draw[exter] (vt2p0) rectangle (vt2p1) node[pos=.5] {$VT_2$};
 
-\draw (vt1wire1p0) to[bend right=10] (vt1wire1p1);
-\draw (vt1wire2p0) to[bend right=10] (vt1wire2p1);
-\draw (vt1wire3p0) to[bend left=15] (vt1wire3p1);
+\draw (vt1wire1p0) to (vt1wire1p1);
+\draw (vt1wire2p0) to (vt1wire2p1);
+\draw (vt1wire3p0) to (vt1wire3p1);
 
-\draw (vt2wire1p0) to[bend right=15] (vt2wire1p1);
-\draw (vt2wire2p0) to[bend left=15] (vt2wire2p1);
-\draw (vt2wire3p0) to[bend right=35] (vt2wire3p1);
+\draw (vt2wire1p0) to (vt2wire1p1);
+\draw (vt2wire2p0) to (vt2wire2p1);
+\draw (vt2wire3p0) to (vt2wire3p1);
 
-\draw (vd1wire1p0) to[bend right=15] (vd1wire1p1);
-\draw (vd1wire2p0) to[bend right=15] (vd1wire2p1);
+\draw (vd1wire1p0) to (vd1wire1p1);
+\draw (vd1wire2p0) to (vd1wire2p1);
 
-\draw (vd2wire1p0) to[bend right=15] (vd2wire1p1);
-\draw (vd2wire2p0) to[bend left=15] (vd2wire2p1);
+\draw (vd2wire1p0) to (vd2wire1p1);
+\draw (vd2wire2p0) to (vd2wire2p1);
 
 \draw[dashed,thick] (protec0p0) -| (protec0p1) -| (protec0p2) -|
                     (protec0p3) -| (protec0p4) -| (protec0p5) -|
@@ -504,7 +503,6 @@ $N$  Наименование     Материал
                     (protec1p3) -| (protec1p4) -| (protec1p5) -|
                     (protec1p6) -| cycle;
 \draw[dashed,thick] (protec2p0) rectangle (protec2p1);
-\draw[dashed,thick] (protec3p0) rectangle (protec3p1);
 
 \end{tikzpicture}
 \end{center}
