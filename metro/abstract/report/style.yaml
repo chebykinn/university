@@ -1,0 +1,15 @@
+---
+documentclass: extreport
+fontsize: 14pt
+mainfont: "Times New Roman"
+sansfont: "Liberation Sans"
+monofont: "DejaVu Sans Mono"
+subparagraph: yes
+geometry:
+    - left=2.5cm
+    - right=1.0cm
+    - top=2.0cm
+    - bottom=2.0cm
+toc: yes
+link-citations: yes
+---

@@ -1,0 +1,63 @@
+\usepackage{caption}
+\usepackage{verbatim}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{pdfpages} % \includepdf
+\usepackage{fancyhdr} % \fancy*
+\usepackage{tocloft}  % \cft*
+\usepackage{titlesec}
+\usepackage{etoolbox} % \patchcmd
+
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{indentfirst}
+\setlength{\parindent}{1em}
+
+% Center titles and make them uppercase
+\titleformat{\chapter}{\normalsize\bfseries}{\thechapter.}{8pt}{\centering\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\pagestyle{fancy}
+
+% Remove header horizontal line
+\renewcommand{\headrulewidth}{0pt}
+
+% Hide all page titles
+\fancyhead{}
+
+% Disable page numbering
+\fancyfoot{}
+
+% Disable page numbering for chapters
+\fancypagestyle{plain}{%
+  \renewcommand{\headrulewidth}{0pt}%
+  \fancyhf{}%
+}
+
+% Fix for russian fonts
+\newfontfamily{\cyrillicfonttt}{$monofont$}
+\newfontfamily{\cyrillicfont}{$mainfont$}
+
+% Uppercase font in table of contents
+\makeatletter
+\patchcmd{\l@chapter}{#1}{\MakeUppercase{#1}}{}{}
+\makeatother
+
+% Fix chapter without number appearing twice
+\makeatletter
+\let\l@chapternonum\l@chapter
+\newcommand{\@chapternonum}[2][]{\addcontentsline{toc}{chapter}{#1}}
+\newcounter{chapternonum}
+\renewcommand{\thechapternonum}{}
+\makeatother
+
+
+% Add dots for chapters
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+
+\renewcommand{\cfttoctitlefont}{\hfill\normalsize\bfseries\MakeUppercase}
+\renewcommand{\cftaftertoctitle}{\hfill}
+
