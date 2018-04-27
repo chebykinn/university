@@ -1,0 +1,8 @@
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+\usetikzlibrary{calc}
+\usepackage{rotating}
+\usetikzlibrary{positioning}
+\tikzstyle{p} = [draw, thick, minimum width=3em, minimum height=3em,
+  node distance=4em]
+
