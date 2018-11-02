@@ -93,6 +93,36 @@ software indicated network of small oil pockets.
 
 8. dealing with
 
+## Exercise 10
+
+2. carried out
+
+3. develop
+
+4. noticed
+
+5. was passing
+
+6. commonly utilised
+
+7. making
+
+8. don't have
+
+9. powered
+
+10. weren't invented
+
+11. were first designed
+
+12. then manufactured
+
+13. used
+
+14. extracting
+
+15. be found
+
 ## Exercise 11
 
 2. Laser beam is an optical device, which produces intense beam of coherent light with same wavelength
@@ -131,5 +161,32 @@ cells around it.
 
 - Purpose of air dryer:
 
-The machine has to be able to dry hands faster than other competitors.
+The machine has to be able to dry hands faster and more conveniently than other competitors.
 
+- Description:
+
+It should be able to use process of scraping water off hands like windscreen wiper to dry hands in 10-12 seconds by forcing cold air out at high speed.
+
+- Performance
+
+The airstream should be forced though apertures at 650 kph.
+
+- Aesthetics
+
+The machine should have long ultra-thin apertures that have to run along two blades.
+
+- Ergonomics
+
+Dryer has to be capable of consuming 80% less energy than conventional dryer
+
+Dryer should be able to turn on automatically when user inserts hands
+
+- Health
+
+The dryer's filter should be capable of removing over 99.9% of bacteria from air.
+
+Filtered air have to stay within the machine, not around the room.
+
+- Safety
+
+User's hands have to be completely dry after use.
