@@ -30,15 +30,15 @@ public class PersonWebService {
         if(fieldsAndValues.parameters.isEmpty()) {
             return persons;
         }
-        List<Person> outPersons = new ArrayList<>();
+        List<Person> outPersons = new ArrayList<>(persons);
         for(Person p : persons) {
             for (Map.Entry<String, String> entry : fieldsAndValues.parameters.entrySet()) {
                 try {
                     String val = p.getFieldValue(entry.getKey());
-                    if(!val.equals(entry.getValue())) {
+                    if(val.equals(entry.getValue())) {
                         continue;
                     }
-                    outPersons.add(p);
+                    outPersons.remove(p);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     PersonServiceFault fault = new PersonServiceFault();
                     fault.setMessage(e.getMessage());
