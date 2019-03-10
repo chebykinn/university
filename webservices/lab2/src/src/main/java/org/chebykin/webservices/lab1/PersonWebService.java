@@ -1,33 +1,31 @@
 package org.chebykin.webservices.lab1;
 
-import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @WebService(serviceName = "PersonService")
 public class PersonWebService {
-    private boolean isStandalone = false;
-    public void setStandalone() {
-        isStandalone = true;
-    }
-    @Resource(lookup = "jdbc/ifmo-ws")
-    private DataSource dataSource;
-
-    @WebMethod(operationName = "getPersons")
-    public List<Person> getPersons(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException {
-        PostgreSQLDAO dao = new PostgreSQLDAO(getConnection());
-        List<Person> persons = dao.getPersons();
-        if(fieldsAndValues.parameters == null) {
-            return persons;
+    PostgreSQLDAO getDAO() throws SqlException {
+        PostgreSQLDAO dao;
+        try {
+            dao = new PostgreSQLDAO(getConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            PersonServiceFault fault = new PersonServiceFault();
+            fault.setMessage("SQL Error: " + e.getMessage());
+            throw new SqlException("SQL Error occurred", fault);
         }
-        if(fieldsAndValues.parameters.isEmpty()) {
+        return dao;
+    }
+    @WebMethod(operationName = "getPersons")
+    public List<Person> getPersons(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
+        PostgreSQLDAO dao = getDAO();
+        List<Person> persons = dao.getPersons();
+        if(fieldsAndValues.parameters == null || fieldsAndValues.parameters.isEmpty()) {
             return persons;
         }
         List<Person> outPersons = new ArrayList<>(persons);
@@ -49,13 +47,36 @@ public class PersonWebService {
         }
         return outPersons;
     }
-    private Connection getConnection() {
-        Connection result = null;
-        try {
-            result = isStandalone ? ConnectionUtil.getConnection() : dataSource.getConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(PersonWebService.class.getName()).log(Level.SEVERE, null, ex);
+
+    @WebMethod(operationName = "addPerson")
+    public long addPerson(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
+        PostgreSQLDAO dao = getDAO();
+        checkParams(fieldsAndValues);
+        return dao.addPerson(fieldsAndValues.parameters);
+    }
+
+    @WebMethod(operationName = "updatePerson")
+    public boolean updatePerson(@WebParam(name="id") int id, @WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
+        PostgreSQLDAO dao = getDAO();
+        checkParams(fieldsAndValues);
+        return dao.updatePerson(id, fieldsAndValues.parameters);
+    }
+
+    @WebMethod(operationName = "deletePerson")
+    public boolean deletePerson(@WebParam(name="id") int id) throws SqlException {
+        PostgreSQLDAO dao = getDAO();
+        return dao.deletePerson(id);
+    }
+
+    private void checkParams(@WebParam(name = "fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException {
+        if(fieldsAndValues.parameters == null || fieldsAndValues.parameters.isEmpty()) {
+            PersonServiceFault fault = new PersonServiceFault();
+            fault.setMessage("field parameters are null or empty");
+            throw new InvalidFilterException("Failed to add person", fault);
         }
-        return result;
+    }
+
+    private Connection getConnection() {
+        return ConnectionUtil.getConnection();
     }
 }

@@ -14,7 +14,6 @@ public class App {
         handler.setFormatter(new SimpleFormatter());
         Logger.getGlobal().addHandler(handler);
         PersonWebService ws = new PersonWebService();
-        ws.setStandalone();
         Endpoint.publish(url, ws);
     }
 }

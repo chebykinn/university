@@ -10,10 +10,53 @@
 <message name="getPersonsResponse">
 <part name="parameters" element="tns:getPersonsResponse" />
 </message>
+<message name="InvalidFilterException">
+<part name="fault" element="tns:InvalidFilterException" />
+</message>
+<message name="SqlException">
+<part name="fault" element="tns:SqlException" />
+</message>
+<message name="addPerson">
+<part name="parameters" element="tns:addPerson" />
+</message>
+<message name="addPersonResponse">
+<part name="parameters" element="tns:addPersonResponse" />
+</message>
+<message name="updatePerson">
+<part name="parameters" element="tns:updatePerson" />
+</message>
+<message name="updatePersonResponse">
+<part name="parameters" element="tns:updatePersonResponse" />
+</message>
+<message name="deletePerson">
+<part name="parameters" element="tns:deletePerson" />
+</message>
+<message name="deletePersonResponse">
+<part name="parameters" element="tns:deletePersonResponse" />
+</message>
 <portType name="PersonWebService">
 <operation name="getPersons">
 <input message="tns:getPersons" />
 <output message="tns:getPersonsResponse" />
+<fault message="tns:InvalidFilterException" name="InvalidFilterException" />
+<fault message="tns:SqlException" name="SqlException" />
+</operation>
+<operation name="addPerson">
+<input message="tns:addPerson" />
+<output message="tns:addPersonResponse" />
+<fault message="tns:InvalidFilterException" name="InvalidFilterException" />
+<fault message="tns:SqlException" name="SqlException" />
+</operation>
+<operation name="updatePerson">
+<input message="tns:updatePerson" />
+<output message="tns:updatePersonResponse" />
+<fault message="tns:InvalidFilterException" name="InvalidFilterException" />
+<fault message="tns:SqlException" name="SqlException" />
+</operation>
+<operation name="deletePerson">
+<input message="tns:deletePerson" />
+<output message="tns:deletePersonResponse" />
+<fault message="tns:SqlException" name="SqlException" />
 </operation>
 </portType>
 <binding name="PersonWebServicePortBinding" type="tns:PersonWebService">
@@ -26,6 +69,54 @@
 <output>
 <soap:body use="literal" />
 </output>
+<fault name="InvalidFilterException">
+<soap:fault name="InvalidFilterException" use="literal" />
+</fault>
+<fault name="SqlException">
+<soap:fault name="SqlException" use="literal" />
+</fault>
+</operation>
+<operation name="addPerson">
+<soap:operation soapAction="" />
+<input>
+<soap:body use="literal" />
+</input>
+<output>
+<soap:body use="literal" />
+</output>
+<fault name="InvalidFilterException">
+<soap:fault name="InvalidFilterException" use="literal" />
+</fault>
+<fault name="SqlException">
+<soap:fault name="SqlException" use="literal" />
+</fault>
+</operation>
+<operation name="updatePerson">
+<soap:operation soapAction="" />
+<input>
+<soap:body use="literal" />
+</input>
+<output>
+<soap:body use="literal" />
+</output>
+<fault name="InvalidFilterException">
+<soap:fault name="InvalidFilterException" use="literal" />
+</fault>
+<fault name="SqlException">
+<soap:fault name="SqlException" use="literal" />
+</fault>
+</operation>
+<operation name="deletePerson">
+<soap:operation soapAction="" />
+<input>
+<soap:body use="literal" />
+</input>
+<output>
+<soap:body use="literal" />
+</output>
+<fault name="SqlException">
+<soap:fault name="SqlException" use="literal" />
+</fault>
 </operation>
 </binding>
 <service name="PersonService">

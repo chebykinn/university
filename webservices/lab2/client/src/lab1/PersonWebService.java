@@ -30,6 +30,7 @@ public interface PersonWebService {
      * @return
      *     returns java.util.List<lab1.Person>
      * @throws InvalidFilterException
+     * @throws SqlException
      */
     @WebMethod
     @WebResult(targetNamespace = "")
@@ -38,7 +39,63 @@ public interface PersonWebService {
     public List<Person> getPersons(
         @WebParam(name = "fieldsAndValues", targetNamespace = "")
         PersonFilter fieldsAndValues)
-        throws InvalidFilterException
+        throws InvalidFilterException, SqlException
+    ;
+
+    /**
+     * 
+     * @param fieldsAndValues
+     * @return
+     *     returns long
+     * @throws SqlException
+     * @throws InvalidFilterException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "addPerson", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.AddPerson")
+    @ResponseWrapper(localName = "addPersonResponse", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.AddPersonResponse")
+    public long addPerson(
+        @WebParam(name = "fieldsAndValues", targetNamespace = "")
+        PersonFilter fieldsAndValues)
+        throws InvalidFilterException, SqlException
+    ;
+
+    /**
+     * 
+     * @param fieldsAndValues
+     * @param id
+     * @return
+     *     returns boolean
+     * @throws InvalidFilterException
+     * @throws SqlException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "updatePerson", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.UpdatePerson")
+    @ResponseWrapper(localName = "updatePersonResponse", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.UpdatePersonResponse")
+    public boolean updatePerson(
+        @WebParam(name = "id", targetNamespace = "")
+        int id,
+        @WebParam(name = "fieldsAndValues", targetNamespace = "")
+        PersonFilter fieldsAndValues)
+        throws InvalidFilterException, SqlException
+    ;
+
+    /**
+     * 
+     * @param id
+     * @return
+     *     returns boolean
+     * @throws SqlException
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "deletePerson", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.DeletePerson")
+    @ResponseWrapper(localName = "deletePersonResponse", targetNamespace = "http://lab1.webservices.chebykin.org/", className = "lab1.DeletePersonResponse")
+    public boolean deletePerson(
+        @WebParam(name = "id", targetNamespace = "")
+        int id)
+        throws SqlException
     ;
 
 }
