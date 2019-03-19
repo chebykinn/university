@@ -12,6 +12,7 @@ public class Person {
     private String job;
     private String city;
     private int age;
+    private byte[] avatar;
     public Person() {
     }
     public Person(String name, String surname, String job, String city, int age) {
@@ -39,6 +40,7 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
+    public void setAvatar(byte[] avatar) { this.avatar = avatar; }
     @Override
     public String toString() {
         return "Person{" + "name=" + name + ", surname=" + surname + ", job=" + job + ", city=" + city + ", age=" + age + '}';
@@ -59,6 +61,8 @@ public class Person {
     public void setCity(String city) {
         this.city = city;
     }
+
+    public byte[] getAvatar() { return avatar; }
 
     public String getFieldValue(String field) throws NoSuchFieldException, IllegalAccessException {
         Field f = this.getClass().getDeclaredField(field);

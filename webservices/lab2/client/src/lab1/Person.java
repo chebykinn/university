@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="age" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="avatar" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="city" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="job" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "person", propOrder = {
     "age",
+    "avatar",
     "city",
     "job",
     "name",
@@ -40,6 +42,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Person {
 
     protected int age;
+    protected byte[] avatar;
     protected String city;
     protected String job;
     protected String name;
@@ -59,6 +62,28 @@ public class Person {
      */
     public void setAge(int value) {
         this.age = value;
+    }
+
+    /**
+     * Gets the value of the avatar property.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * Sets the value of the avatar property.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setAvatar(byte[] value) {
+        this.avatar = value;
     }
 
     /**

@@ -3,11 +3,13 @@ package org.chebykin.webservices.lab1;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.ws.soap.MTOM;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
 @WebService(serviceName = "PersonService")
+@MTOM
 public class PersonWebService {
     PostgreSQLDAO getDAO() throws SqlException {
         PostgreSQLDAO dao;
@@ -66,6 +68,12 @@ public class PersonWebService {
     public boolean deletePerson(@WebParam(name="id") int id) throws SqlException {
         PostgreSQLDAO dao = getDAO();
         return dao.deletePerson(id);
+    }
+
+    @WebMethod(operationName = "uploadAvatar")
+    public boolean uploadAvatar(@WebParam(name="id") int id, @WebParam(name="image") byte[] image) throws SqlException {
+        PostgreSQLDAO dao = getDAO();
+        return dao.uploadAvatar(id, image);
     }
 
     private void checkParams(@WebParam(name = "fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException {

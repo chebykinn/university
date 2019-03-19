@@ -1,9 +1,8 @@
 package lab1;
 
 import javax.xml.ws.WebServiceException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.xml.ws.soap.MTOMFeature;
+import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -73,6 +72,7 @@ public class WebServiceClient {
                 System.out.println("quit");
                 System.out.println("get");
                 System.out.println("update");
+                System.out.println("upload");
                 System.out.println("add");
                 System.out.println("delete");
                 continue;
@@ -121,6 +121,36 @@ public class WebServiceClient {
                 } catch (SqlException e) {
                     System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 }
+                continue;
+            }
+            if(cmd.equals("upload")) {
+                if(personService == null) {
+                    System.out.println("run connect first");
+                    continue;
+                }
+                int id = readId("Enter id for avatar:", prompt);
+                if(id < 0) {
+                    continue;
+                }
+                final String avatarPath = "avatar.png";
+                File file = new File(avatarPath);
+
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    BufferedInputStream inputStream = new BufferedInputStream(fis);
+                    byte[] imageBytes = new byte[(int) file.length()];
+                    inputStream.read(imageBytes);
+
+                    personService.getPersonWebServicePort(new MTOMFeature()).uploadAvatar(id, imageBytes);
+
+                    inputStream.close();
+                    System.out.println("Avatar uploaded");
+                } catch (IOException ex) {
+                    System.out.println("error: " + ex.getMessage());
+                } catch (SqlException ex) {
+                    System.out.println("error: " + ex.getMessage() + ", info: " + ex.getFaultInfo().getMessage());
+                }
+
                 continue;
             }
             if(cmd.equals("delete")) {

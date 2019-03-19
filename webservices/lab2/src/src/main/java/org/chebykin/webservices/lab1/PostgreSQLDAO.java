@@ -1,6 +1,9 @@
 package org.chebykin.webservices.lab1;
 
 import javax.swing.plaf.nimbus.State;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -153,6 +156,26 @@ public class PostgreSQLDAO {
         return false;
 
     }
+
+    public boolean uploadAvatar(int id, byte[] image) {
+        if(id < 0) return false;
+        try {
+            String queryStr = "UPDATE persons SET avatar = ? WHERE id = ?";
+            PreparedStatement stmt = connection.prepareStatement(queryStr);
+            ByteArrayInputStream bs = new ByteArrayInputStream(image);
+            stmt.setBinaryStream(1, bs, image.length);
+            stmt.setInt(2, id);
+            bs.close();
+
+            Logger.getLogger(PostgreSQLDAO.class.getName()).log(Level.SEVERE, "sql: " + stmt);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(PostgreSQLDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
 
     public Connection getConnection() {
         return connection;

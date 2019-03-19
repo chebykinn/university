@@ -27,8 +27,10 @@ public class ObjectFactory {
     private final static QName _AddPerson_QNAME = new QName("http://lab1.webservices.chebykin.org/", "addPerson");
     private final static QName _UpdatePerson_QNAME = new QName("http://lab1.webservices.chebykin.org/", "updatePerson");
     private final static QName _SqlException_QNAME = new QName("http://lab1.webservices.chebykin.org/", "SqlException");
+    private final static QName _UploadAvatarResponse_QNAME = new QName("http://lab1.webservices.chebykin.org/", "uploadAvatarResponse");
     private final static QName _GetPersonsResponse_QNAME = new QName("http://lab1.webservices.chebykin.org/", "getPersonsResponse");
     private final static QName _GetPersons_QNAME = new QName("http://lab1.webservices.chebykin.org/", "getPersons");
+    private final static QName _UploadAvatar_QNAME = new QName("http://lab1.webservices.chebykin.org/", "uploadAvatar");
     private final static QName _InvalidFilterException_QNAME = new QName("http://lab1.webservices.chebykin.org/", "InvalidFilterException");
     private final static QName _DeletePersonResponse_QNAME = new QName("http://lab1.webservices.chebykin.org/", "deletePersonResponse");
     private final static QName _UpdatePersonResponse_QNAME = new QName("http://lab1.webservices.chebykin.org/", "updatePersonResponse");
@@ -107,11 +109,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link UploadAvatar }
+     * 
+     */
+    public UploadAvatar createUploadAvatar() {
+        return new UploadAvatar();
+    }
+
+    /**
      * Create an instance of {@link GetPersonsResponse }
      * 
      */
     public GetPersonsResponse createGetPersonsResponse() {
         return new GetPersonsResponse();
+    }
+
+    /**
+     * Create an instance of {@link UploadAvatarResponse }
+     * 
+     */
+    public UploadAvatarResponse createUploadAvatarResponse() {
+        return new UploadAvatarResponse();
     }
 
     /**
@@ -174,6 +192,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UploadAvatarResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://lab1.webservices.chebykin.org/", name = "uploadAvatarResponse")
+    public JAXBElement<UploadAvatarResponse> createUploadAvatarResponse(UploadAvatarResponse value) {
+        return new JAXBElement<UploadAvatarResponse>(_UploadAvatarResponse_QNAME, UploadAvatarResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPersonsResponse }{@code >}}
      * 
      */
@@ -189,6 +216,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://lab1.webservices.chebykin.org/", name = "getPersons")
     public JAXBElement<GetPersons> createGetPersons(GetPersons value) {
         return new JAXBElement<GetPersons>(_GetPersons_QNAME, GetPersons.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UploadAvatar }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://lab1.webservices.chebykin.org/", name = "uploadAvatar")
+    public JAXBElement<UploadAvatar> createUploadAvatar(UploadAvatar value) {
+        return new JAXBElement<UploadAvatar>(_UploadAvatar_QNAME, UploadAvatar.class, null, value);
     }
 
     /**
