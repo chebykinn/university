@@ -1,11 +1,13 @@
 package org.chebykin.webservices.lab1;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static sun.util.logging.LoggingSupport.log;
 
+@XmlRootElement
 public class Person {
     private String name;
     private String surname;
