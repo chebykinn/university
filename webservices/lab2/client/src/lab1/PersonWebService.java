@@ -47,6 +47,7 @@ public interface PersonWebService {
      * @param fieldsAndValues
      * @return
      *     returns long
+     * @throws AuthException
      * @throws InvalidFilterException
      * @throws SqlException
      */
@@ -57,7 +58,7 @@ public interface PersonWebService {
     public long addPerson(
         @WebParam(name = "fieldsAndValues", targetNamespace = "")
         PersonFilter fieldsAndValues)
-        throws InvalidFilterException, SqlException
+        throws AuthException, InvalidFilterException, SqlException
     ;
 
     /**
@@ -66,6 +67,7 @@ public interface PersonWebService {
      * @param id
      * @return
      *     returns boolean
+     * @throws AuthException
      * @throws InvalidFilterException
      * @throws SqlException
      */
@@ -78,7 +80,7 @@ public interface PersonWebService {
         int id,
         @WebParam(name = "fieldsAndValues", targetNamespace = "")
         PersonFilter fieldsAndValues)
-        throws InvalidFilterException, SqlException
+        throws AuthException, InvalidFilterException, SqlException
     ;
 
     /**
@@ -86,6 +88,7 @@ public interface PersonWebService {
      * @param id
      * @return
      *     returns boolean
+     * @throws AuthException
      * @throws SqlException
      */
     @WebMethod
@@ -95,7 +98,7 @@ public interface PersonWebService {
     public boolean deletePerson(
         @WebParam(name = "id", targetNamespace = "")
         int id)
-        throws SqlException
+        throws AuthException, SqlException
     ;
 
     /**
@@ -104,6 +107,7 @@ public interface PersonWebService {
      * @param id
      * @return
      *     returns boolean
+     * @throws AuthException
      * @throws SqlException
      */
     @WebMethod
@@ -115,7 +119,7 @@ public interface PersonWebService {
         int id,
         @WebParam(name = "image", targetNamespace = "")
         byte[] image)
-        throws SqlException
+        throws AuthException, SqlException
     ;
 
 }

@@ -4,6 +4,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.util.Base64;
 
 import javax.ws.rs.core.MediaType;
 import java.io.*;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class WebServiceClient {
+    private static String AUTH_ENTRY = "Basic " + new String(Base64.encode("test:test"));
     private static String readLine() throws IOException {
         BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine().trim();
@@ -108,7 +110,7 @@ public class WebServiceClient {
                 );
                 WebResource webResource = client.resource(URL);
                 ClientResponse response = webResource.type(MediaType.APPLICATION_JSON)
-                        .post(ClientResponse.class, p);
+                        .header("authorization", AUTH_ENTRY).post(ClientResponse.class, p);
                 if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
                     System.out.println("Request failed with code: " + response.getStatus());
                 }
@@ -131,7 +133,7 @@ public class WebServiceClient {
                 );
                 WebResource webResource = client.resource(URL + "/" + id);
                 ClientResponse response = webResource.type(MediaType.APPLICATION_JSON)
-                        .put(ClientResponse.class, p);
+                        .header("authorization", AUTH_ENTRY).put(ClientResponse.class, p);
                 if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
                     System.out.println("Request failed with code: " + response.getStatus());
                 }
@@ -144,7 +146,7 @@ public class WebServiceClient {
             if(cmd.equals("delete")) {
                 int id = readId("Enter person id to delete: ", prompt);
                 WebResource webResource = client.resource(URL + "/" + id);
-                ClientResponse response = webResource.delete(ClientResponse.class);
+                ClientResponse response = webResource.header("authorization", AUTH_ENTRY).delete(ClientResponse.class);
                 if (response.getStatus() != ClientResponse.Status.OK.getStatusCode()) {
                     System.out.println("Request failed with code: " + response.getStatus());
                 }

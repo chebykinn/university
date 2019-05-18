@@ -1,8 +1,11 @@
 package org.chebykin.webservices.lab1;
 
+import javax.annotation.Resource;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOM;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,6 +14,8 @@ import java.util.*;
 @WebService(serviceName = "PersonService")
 @MTOM
 public class PersonWebService {
+    @Resource
+    private WebServiceContext context;
     PostgreSQLDAO getDAO() throws SqlException {
         PostgreSQLDAO dao;
         try {
@@ -23,6 +28,21 @@ public class PersonWebService {
         }
         return dao;
     }
+
+    private void doAuthentication() throws AuthException {
+        MessageContext mctx = context.getMessageContext();
+
+        //get detail from request headers
+        Map<String, Object> http_headers = (Map<String, Object>) mctx.get(MessageContext.HTTP_REQUEST_HEADERS);
+        List<String> credentials = (List<String>) http_headers.get("Authorization");
+
+        if (credentials == null ||
+                credentials.isEmpty() ||
+                !(new String(Base64.getDecoder().decode(credentials.get(0)))).equals("test:test")) {
+            throw new AuthException("Invalid credentials", PersonServiceFault.defaultInstance());
+        }
+    }
+
     @WebMethod(operationName = "getPersons")
     public List<Person> getPersons(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
         PostgreSQLDAO dao = getDAO();
@@ -51,27 +71,31 @@ public class PersonWebService {
     }
 
     @WebMethod(operationName = "addPerson")
-    public long addPerson(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
+    public long addPerson(@WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException, AuthException {
+        doAuthentication();
         PostgreSQLDAO dao = getDAO();
         checkParams(fieldsAndValues);
         return dao.addPerson(fieldsAndValues.parameters);
     }
 
     @WebMethod(operationName = "updatePerson")
-    public boolean updatePerson(@WebParam(name="id") int id, @WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException {
+    public boolean updatePerson(@WebParam(name="id") int id, @WebParam(name="fieldsAndValues") PersonFilter fieldsAndValues) throws InvalidFilterException, SqlException, AuthException {
+        doAuthentication();
         PostgreSQLDAO dao = getDAO();
         checkParams(fieldsAndValues);
         return dao.updatePerson(id, fieldsAndValues.parameters);
     }
 
     @WebMethod(operationName = "deletePerson")
-    public boolean deletePerson(@WebParam(name="id") int id) throws SqlException {
+    public boolean deletePerson(@WebParam(name="id") int id) throws SqlException, AuthException {
+        doAuthentication();
         PostgreSQLDAO dao = getDAO();
         return dao.deletePerson(id);
     }
 
     @WebMethod(operationName = "uploadAvatar")
-    public boolean uploadAvatar(@WebParam(name="id") int id, @WebParam(name="image") byte[] image) throws SqlException {
+    public boolean uploadAvatar(@WebParam(name="id") int id, @WebParam(name="image") byte[] image) throws SqlException, AuthException {
+        doAuthentication();
         PostgreSQLDAO dao = getDAO();
         return dao.uploadAvatar(id, image);
     }

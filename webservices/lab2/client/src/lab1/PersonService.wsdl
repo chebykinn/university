@@ -29,6 +29,9 @@
 <message name="addPersonResponse">
 <part name="parameters" element="tns:addPersonResponse" />
 </message>
+<message name="AuthException">
+<part name="fault" element="tns:AuthException" />
+</message>
 <message name="updatePerson">
 <part name="parameters" element="tns:updatePerson" />
 </message>
@@ -59,22 +62,26 @@
 <output message="tns:addPersonResponse" />
 <fault message="tns:InvalidFilterException" name="InvalidFilterException" />
 <fault message="tns:SqlException" name="SqlException" />
+<fault message="tns:AuthException" name="AuthException" />
 </operation>
 <operation name="updatePerson">
 <input message="tns:updatePerson" />
 <output message="tns:updatePersonResponse" />
 <fault message="tns:InvalidFilterException" name="InvalidFilterException" />
 <fault message="tns:SqlException" name="SqlException" />
+<fault message="tns:AuthException" name="AuthException" />
 </operation>
 <operation name="deletePerson">
 <input message="tns:deletePerson" />
 <output message="tns:deletePersonResponse" />
 <fault message="tns:SqlException" name="SqlException" />
+<fault message="tns:AuthException" name="AuthException" />
 </operation>
 <operation name="uploadAvatar">
 <input message="tns:uploadAvatar" />
 <output message="tns:uploadAvatarResponse" />
 <fault message="tns:SqlException" name="SqlException" />
+<fault message="tns:AuthException" name="AuthException" />
 </operation>
 </portType>
 <binding name="PersonWebServicePortBinding" type="tns:PersonWebService">
@@ -109,6 +116,9 @@
 <fault name="SqlException">
 <soap:fault name="SqlException" use="literal" />
 </fault>
+<fault name="AuthException">
+<soap:fault name="AuthException" use="literal" />
+</fault>
 </operation>
 <operation name="updatePerson">
 <soap:operation soapAction="" />
@@ -124,6 +134,9 @@
 <fault name="SqlException">
 <soap:fault name="SqlException" use="literal" />
 </fault>
+<fault name="AuthException">
+<soap:fault name="AuthException" use="literal" />
+</fault>
 </operation>
 <operation name="deletePerson">
 <soap:operation soapAction="" />
@@ -136,6 +149,9 @@
 <fault name="SqlException">
 <soap:fault name="SqlException" use="literal" />
 </fault>
+<fault name="AuthException">
+<soap:fault name="AuthException" use="literal" />
+</fault>
 </operation>
 <operation name="uploadAvatar">
 <soap:operation soapAction="" />
@@ -147,6 +163,9 @@
 </output>
 <fault name="SqlException">
 <soap:fault name="SqlException" use="literal" />
+</fault>
+<fault name="AuthException">
+<soap:fault name="AuthException" use="literal" />
 </fault>
 </operation>
 </binding>

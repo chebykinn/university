@@ -1,12 +1,13 @@
 package lab1;
 
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
+import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.MTOMFeature;
 import java.io.*;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class WebServiceClient {
     private static String readLine() throws IOException {
@@ -53,6 +54,17 @@ public class WebServiceClient {
         return id;
     }
 
+    public static PersonWebService getAuthPort(PersonService personService) {
+        PersonWebService port = personService.getPersonWebServicePort();
+        Map<String, Object> ctx = ((BindingProvider)port).getRequestContext();
+        Map<String, List<String>> headers = new HashMap<>();
+        List<String> creds = new ArrayList<>();
+        creds.add(new String(Base64.getEncoder().encode("test:test".getBytes())));
+        headers.put("Authorization", creds);
+        ctx.put(MessageContext.HTTP_REQUEST_HEADERS, headers);
+        return port;
+    }
+
     public static void main(String[] args) throws IOException {
         URL url = new URL("http://localhost:8080/PersonService?wsdl");
 
@@ -96,7 +108,10 @@ public class WebServiceClient {
                 }
                 PersonFilter filter = readFilter("Enter field name to set:", prompt);
                 try {
-                    System.out.println(personService.getPersonWebServicePort().addPerson(filter));
+                    PersonWebService port = getAuthPort(personService);
+                    System.out.println(port.addPerson(filter));
+                } catch (AuthException e) {
+                    System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (InvalidFilterException e) {
                     System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (SqlException e) {
@@ -115,7 +130,10 @@ public class WebServiceClient {
                 }
                 PersonFilter filter = readFilter("Enter field name to update:", prompt);
                 try {
-                    System.out.println(personService.getPersonWebServicePort().updatePerson(id, filter));
+                    PersonWebService port = getAuthPort(personService);
+                    System.out.println(port.updatePerson(id, filter));
+                } catch (AuthException e) {
+                    System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (InvalidFilterException e) {
                     System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (SqlException e) {
@@ -145,6 +163,8 @@ public class WebServiceClient {
 
                     inputStream.close();
                     System.out.println("Avatar uploaded");
+                } catch (AuthException e) {
+                    System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (IOException ex) {
                     System.out.println("error: " + ex.getMessage());
                 } catch (SqlException ex) {
@@ -163,7 +183,10 @@ public class WebServiceClient {
                     continue;
                 }
                 try {
-                    System.out.println(personService.getPersonWebServicePort().deletePerson(id));
+                    PersonWebService port = getAuthPort(personService);
+                    System.out.println(port.deletePerson(id));
+                } catch (AuthException e) {
+                    System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 } catch (SqlException e) {
                     System.out.println("error: " + e.getMessage() + ", info: " + e.getFaultInfo().getMessage());
                 }
