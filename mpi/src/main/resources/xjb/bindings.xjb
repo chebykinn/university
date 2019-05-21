@@ -1,0 +1,11 @@
+<jaxb:bindings version="2.0" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:dtns="http://www.w3.org/2001/XMLSchema">
+    <jaxb:bindings>
+        <jaxb:globalBindings>
+            <jaxb:javaType
+                    name="javax.xml.datatype.XMLGregorianCalendar" xmlType="dtns:dateTime"
+                    parseMethod="com.ghostflow.datasource.pegas.XmlGregorianCalendarAdapter.marshal" printMethod="com.ghostflow.datasource.pegas.XmlGregorianCalendarAdapter.unmarshal"
+            />
+            <xjc:generateElementProperty>false</xjc:generateElementProperty>
+        </jaxb:globalBindings>
+    </jaxb:bindings>
+</jaxb:bindings>

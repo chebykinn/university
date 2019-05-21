@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ghostflow
+    username: ghostflow
+    driver-class-name: org.postgresql.Driver
+
+  config:
+    location: ~/
+
+  main:
+    banner-mode: "off"
+
+constants:
+  security:
+    secret: LJNL67KCFB92L642j7h
+    expirationTime: 864000000
+    tokenPrefix: 'Bearer '
+    header: 'Authorization'
