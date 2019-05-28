@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from mysql_pump import *
 
-source_oracle_conn = "merged/merged@chebykin.org:10200/plaza"
-target_oracle_conn = "plaza/plaza@chebykin.org:10200/plaza"
+source_oracle_conn = "plaza/plaza@chebykin.org:10200/plaza"
+target_oracle_conn = "merged/merged@chebykin.org:10200/plaza"
 
 
-def simple_merge_tables(src, tgt, table_name, columns=None):
+def simple_merge_tables(src, tgt, table_name, target_table_name=None, columns=None):
+    target_table_name = target_table_name if target_table_name else table_name;
     src_rows = src.get_rows(table_name)
-    tgt_rows = tgt.get_rows(table_name)
+    tgt_rows = tgt.get_rows(target_table_name)
     tgt_dict = {}
     merged_tables = {}
     for tgtr in tgt_rows:
@@ -29,6 +30,33 @@ def simple_merge_tables(src, tgt, table_name, columns=None):
         src_row["id"] = int(new_id)
         merged_tables[src_row["id"]] = src_row
         print(src_row)
+    tgt.commit()
+    return merged_tables
+
+def merge_discipline(src, tgt):
+    src_rows = src.get_rows("class")
+    tgt_rows = tgt.get_rows("discipline")
+    tgt_dict = {}
+    merged_tables = {}
+    columns = ["id", "discipline"];
+    for tgtr in tgt_rows:
+        tgt_dict[tgtr["discipline"]] = tgtr
+    for src_row in src_rows:
+        srow = dict(src_row)
+        for c in srow.keys():
+            if c not in columns:
+                del(srow[c])
+        srow["name"] = srow["discipline"]
+        srow["discipline"] = None
+        srow["id"] = tgt_dict[srow["name"]]["id"] if srow["name"] in tgt_dict else 0
+        merged_tables[srow["id"]] = srow
+        if srow["name"] in tgt_dict:
+            continue
+        srow["id"] = None
+        new_id = tgt.insert("person", srow)
+        srow["id"] = int(new_id)
+        merged_tables[srow["id"]] = srow
+        print(srow)
     tgt.commit()
     return merged_tables
 
@@ -58,16 +86,19 @@ def copy_department(src, tgt):
     return simple_merge_tables(src, tgt, "department")
 
 def copy_job(src, tgt):
-    return copy_simple("job", tgt, src)
+    return copy_simple("job", src, tgt)
 
 def copy_ac_group(src, tgt):
-    return copy_simple("academic_group", tgt, src, idColumn='id')
+    return copy_simple("academic_group", src, tgt, idColumn='id')
 
 def copy_program(src, tgt):
-    return copy_simple("program", tgt, src)
+    return copy_simple("program", src, tgt)
 
 def copy_specialty(src, tgt):
     return simple_merge_tables(src, tgt, "specialty", ["id", "name"])
+
+def copy_discipline(src, tgt):
+    return merge_discipline(src, tgt)
 
 def copy_class():
     convert_table_with_person_foreign("class", "class", )
@@ -81,7 +112,8 @@ def main():
     # copy_job(source, target)
     # copy_ac_group(source, target)
     # copy_program(source, target)
-    copy_specialty(source, target)
+    discipline = copy_discipline(source, target)
+    # copy_specialty(source, target)
     copy_class()
     # insert all new persons and match mysql ids to oracle ids
     # my_orcl_persons = merge_persons(source, target)
