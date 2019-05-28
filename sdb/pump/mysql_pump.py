@@ -46,7 +46,7 @@ class Oracle:
         cursor.close()
         return table
 
-    def insert(self, table_name, row, return_id=True):
+    def insert(self, table_name, row, return_id=True, id_names=["id"]):
         cursor = self.conn.cursor()
         out_columns = []
         for c in row.keys():
@@ -56,19 +56,26 @@ class Oracle:
         for i in range(0, len(row)):
             placeholders.append(":{}".format(i + 2))
         placeholders_str = ", ".join(placeholders)
+        onDuplicate = []
+        for c in row.keys():
+            if c not in id_names:
+                onDuplicate.append('"{}" = src."{}"'.format(c.upper(), c.upper()))
+        onDuplicateStr = ",".join(onDuplicate)
 
         vals = None
         out_id = None
         if return_id:
             out_id = cursor.var(cx_Oracle.NUMBER)
-            stmt = "insert into \"{}\" ({}) values({}) returning id into :{}".format(
+            stmt = "insert into \"{}\" ({}) values({}) returning id into :{} ".format(
                     table_name.upper(), columns,
-                    placeholders_str, len(row) + 2)
+                    placeholders_str, len(row) + 2,
+                    onDuplicateStr)
             vals = tuple(row.values()) + (out_id,);
         else:
-            stmt = "insert into \"{}\" ({}) values({})".format(
+            stmt = "insert into \"{}\" ({}) values({}) on duplicate key update set {}".format(
                     table_name.upper(), columns,
-                    placeholders_str)
+                    placeholders_str,
+                    onDuplicateStr)
             vals = tuple(row.values());
         print(stmt)
         print(row.values())
@@ -81,17 +88,21 @@ class Oracle:
             return new_id
 
     def commit(self):
-        self.conn.commit()
+        pass
+# self.conn.commit()
 
 
-def copy_simple(table_name, my, orcl, remap):
+def copy_simple(table_name, my, orcl, remap=None, columns=None, idColumn='name'):
     rows = my.get_rows(table_name)
     orcl_rows = orcl.get_rows(table_name)
     orcl_dict = {}
     for olr in orcl_rows:
-        orcl_dict[olr["name"]] = olr;
+        orcl_dict[olr[idColumn]] = olr
     for my_row in rows:
-        if my_row["name"] in orcl_dict:
+        for c in my_row.keys():
+            if columns and c not in columns:
+                my_row[c] = None
+        if my_row[idColumn] in orcl_dict:
             continue
         if remap:
             for column in remap:
