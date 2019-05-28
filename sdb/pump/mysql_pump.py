@@ -5,7 +5,7 @@ import cx_Oracle
 oracle_conn = "merged/merged@chebykin.org:10200/plaza"
 mysql_user = "root"
 mysql_password = "myitmolab"
-mysql_host = "localhost"
+mysql_host = "chebykin.org"
 mysql_port = "10101"
 mysql_db = "hibd"
 
@@ -32,8 +32,8 @@ def makeDictFactory(cursor):
     return createRow
 
 class Oracle:
-    def __init__(self):
-        self.conn = cx_Oracle.connect(oracle_conn, encoding='utf-8')
+    def __init__(self, conn=oracle_conn):
+        self.conn = cx_Oracle.connect(conn, encoding='utf-8')
 
     def get_rows(self, table_name):
         cursor = self.conn.cursor()
@@ -144,8 +144,8 @@ def convert_conference(my, orcl):
 def convert_science_project(my, orcl):
     copy_simple("science_project", my, orcl, [])
 
-def merge_persons(my, orcl):
-    my_rows = my.get_rows("participant")
+def merge_persons(my, orcl, source_table_name='person'):
+    my_rows = my.get_rows(source_table_name)
     orcl_rows = orcl.get_rows("person")
     orcl_dict = {}
     merged_persons = {}
@@ -188,7 +188,7 @@ def main():
     convert_conference(my, orcl)
     convert_science_project(my, orcl)
     # insert all new persons and match mysql ids to oracle ids
-    my_orcl_persons = merge_persons(my, orcl)
+    my_orcl_persons = merge_persons(my, orcl, source_table_name="participant")
     # using this id to id table convert all tables with foreign keys
     convert_person_conference(my_orcl_persons, my, orcl)
     convert_person_science_project(my_orcl_persons, my, orcl)
