@@ -10,8 +10,8 @@ public class ExtendedBidEntity<T extends BidEntity.Description> extends BidEntit
     private final String customerName;
     private final String employeeName;
 
-    public ExtendedBidEntity(ObjectMapper objectMapper, Long bidId, Long customerId, Long employeeId, String stateStr, long updateTime, String descriptionStr, String customerName, String employeeName) {
-        super(objectMapper, bidId, customerId, employeeId, stateStr, updateTime, descriptionStr);
+    public ExtendedBidEntity(ObjectMapper objectMapper, Long bidId, Long customerId, Long employeeId, String stateStr, long updateTime, String descriptionStr, Long createTime, String customerName, String employeeName) {
+        super(objectMapper, bidId, customerId, employeeId, stateStr, updateTime, descriptionStr, createTime);
         this.customerName = customerName;
         this.employeeName = employeeName;
     }

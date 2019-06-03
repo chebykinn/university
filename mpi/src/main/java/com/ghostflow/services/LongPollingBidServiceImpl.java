@@ -120,7 +120,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
         Pair<BidEntity.Type, BidEntity.State> key = new Pair<>(type, BidEntity.State.PENDING);
 
         long id = updateAndNotify(updateTime -> {
-            BidEntity bid = new BidEntity<>(null, user.getUserId(), null, BidEntity.State.PENDING, updateTime, description);
+            BidEntity bid = new BidEntity<>(null, user.getUserId(), null, BidEntity.State.PENDING, updateTime, description, null);
             return bidRepository.create(bid);
         }, key);
         return bidRepository.extended().findExtended(id).get();
@@ -142,7 +142,8 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                     oldValue.getEmployeeId(),
                     oldValue.getState(),
                     oldValue.getUpdateTime(),
-                    oldValue.getDescription()
+                    oldValue.getDescription(),
+                    null
                 );
             }
             checkArgument(oldValue.getEmployeeId() == null || Objects.equals(oldValue.getEmployeeId(), user.getUserId()), new GhostFlowAccessDeniedException());
@@ -232,7 +233,8 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                 newEmployeeId,
                 newState,
                 lastUpdateTime,
-                description
+                description,
+                null
             );
         });
         if (oldSemaphore[0] != null) {

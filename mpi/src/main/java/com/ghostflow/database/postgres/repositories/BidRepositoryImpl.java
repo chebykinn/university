@@ -47,6 +47,7 @@ public class BidRepositoryImpl implements BidRepository {
     private static final Column COLUMN_STATE        = columnsBuilder.newColumn("state");
     private static final Column COLUMN_UPDATE_TIME  = columnsBuilder.newColumn("update_time");
     private static final Column COLUMN_DESCRIPTION  = columnsBuilder.newColumn("description", "jsonb");
+    private static final Column COLUMN_CREATE_TIME  = columnsBuilder.newColumn("create_time", true);
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -64,7 +65,7 @@ public class BidRepositoryImpl implements BidRepository {
         this.ghostFlowJdbcCrud = SimpleGhostFlowJdbcCrud.<BidEntity>builder()
             .withTableName(TABLE_NAME)
             .withIdColumn(COLUMN_BID_ID)
-            .withColumns(COLUMN_CUSTOMER_ID, COLUMN_EMPLOYEE_ID, COLUMN_STATE, COLUMN_UPDATE_TIME, COLUMN_DESCRIPTION)
+            .withColumns(COLUMN_CUSTOMER_ID, COLUMN_EMPLOYEE_ID, COLUMN_STATE, COLUMN_UPDATE_TIME, COLUMN_DESCRIPTION, COLUMN_CREATE_TIME)
             .build(jdbcTemplate);
         this.rowMapper = (rs, rowNum) -> new BidEntity(
             objectMapper,
@@ -73,8 +74,9 @@ public class BidRepositoryImpl implements BidRepository {
                 getNullable(rs, rs.getLong(COLUMN_EMPLOYEE_ID.getIndex())),
                 rs.getString(COLUMN_STATE.getIndex()),
                 rs.getTimestamp(COLUMN_UPDATE_TIME.getIndex()).getTime(),
-                rs.getString(COLUMN_DESCRIPTION.getIndex())
-        );
+                rs.getString(COLUMN_DESCRIPTION.getIndex()),
+                rs.getTimestamp(COLUMN_CREATE_TIME.getIndex()).getTime()
+            );
     }
 
     @Override
@@ -127,6 +129,7 @@ public class BidRepositoryImpl implements BidRepository {
                 rs.getString(COLUMN_STATE.getIndex()),
                 rs.getTimestamp(COLUMN_UPDATE_TIME.getIndex()).getTime(),
                 rs.getString(COLUMN_DESCRIPTION.getIndex()),
+                rs.getTimestamp(COLUMN_CREATE_TIME.getIndex()).getTime(),
                 rs.getString(COLUMN_DESCRIPTION.getIndex() + 1),
                 rs.getString(COLUMN_DESCRIPTION.getIndex() + 2)
             );
@@ -179,7 +182,7 @@ public class BidRepositoryImpl implements BidRepository {
                 "   " + EXTENDED_SELECT +
                 "   WHERE b." + COLUMN_EMPLOYEE_ID + " = ? \n" +
                 ") \n" +
-                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::text, null::text \n" +
+                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::timestamp, null::text, null::text \n" +
                 "FROM selected_bids \n" +
                 "UNION ALL \n" +
                 "(SELECT * \n" +
@@ -197,7 +200,7 @@ public class BidRepositoryImpl implements BidRepository {
                 "   " + EXTENDED_SELECT +
                 "   WHERE " + whereClause + " \n" +
                 ") \n" +
-                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, coalesce(max(" + COLUMN_UPDATE_TIME + "), to_timestamp(0)), null::jsonb, null::text, null::text \n" +
+                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, coalesce(max(" + COLUMN_UPDATE_TIME + "), to_timestamp(0)), null::jsonb, null::timestamp, null::text, null::text \n" +
                 "FROM selected_bids \n" +
                 "UNION ALL \n" +
                 "(SELECT * \n" +

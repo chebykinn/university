@@ -27,8 +27,9 @@ public class BidEntity<T extends BidEntity.Description> {
     private final State state;
     private final long  updateTime;
     private final T     description;
+    private final Long  createTime;
 
-    public BidEntity(ObjectMapper objectMapper, Long bidId, Long customerId, Long employeeId, String stateStr, long updateTime, String descriptionStr) {
+    public BidEntity(ObjectMapper objectMapper, Long bidId, Long customerId, Long employeeId, String stateStr, long updateTime, String descriptionStr, Long createTime) {
         this.bidId = bidId;
         this.customerId = customerId;
         this.employeeId = employeeId;
@@ -39,6 +40,7 @@ public class BidEntity<T extends BidEntity.Description> {
         } catch (Exception e) {
             throw new GhostFlowException("Unable to parse description", e);
         }
+        this.createTime = createTime;
     }
 
     @AllArgsConstructor
@@ -106,6 +108,9 @@ public class BidEntity<T extends BidEntity.Description> {
     @Getter
     public static class RepairDescription extends Description {
         private final String title;
+        private final String phoneNumber;
+        private final String comment;
+        private final String address;
         private final String body;
         private final String status;
     }

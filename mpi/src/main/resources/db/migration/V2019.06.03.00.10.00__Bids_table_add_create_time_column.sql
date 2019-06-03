@@ -1,0 +1,1 @@
+ALTER TABLE bids ADD COLUMN create_time timestamp DEFAULT now() NOT NULL;

@@ -27,7 +27,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     private final String deleteSql;
 
     private final int idColumnsSize;
-    private final int columnsSize;
+    private final long columnsSize;
 
     private SimpleGhostFlowJdbcCrud(JdbcTemplate jdbcTemplate, String tableName, List<Column> allColumns, List<Column> idColumns, List<Column> columns, List<Column> generatedColumns) {
         this.jdbcTemplate = jdbcTemplate;
@@ -40,7 +40,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
         this.deleteSql = buildDeleteSql(tableName, idColumns);
 
         this.idColumnsSize = idColumns.size();
-        this.columnsSize = columns.size();
+        this.columnsSize = columns.stream().filter(Column::isInsert).count();
     }
 
     private static String buildWhereClause(List<Column> idColumns) {
@@ -48,8 +48,8 @@ public class SimpleGhostFlowJdbcCrud<T> {
     }
 
     private static String buildInsertSQL(String tableName, List<Column> columns) {
-        String intoClause = COMMA_JOINER.join(columns.stream().map(Column::getName).collect(Collectors.toList()));
-        String valuesClause = COMMA_JOINER.join(columns.stream().map(Column::typed).collect(Collectors.toList()));
+        String intoClause = COMMA_JOINER.join(columns.stream().filter(Column::isInsert).map(Column::getName).collect(Collectors.toList()));
+        String valuesClause = COMMA_JOINER.join(columns.stream().filter(Column::isInsert).map(Column::typed).collect(Collectors.toList()));
         return "INSERT INTO " + tableName + " ( " + intoClause + " ) VALUES ( " + valuesClause + " )";
     }
 
@@ -69,7 +69,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     }
 
     private static String buildUpdateSQL(String tableName, List<Column> idColumns, List<Column> columns) {
-        String setClause = COMMA_JOINER.join(Streams.concat(columns.stream().map(c -> c.getName() + " = " + c.typed())).collect(Collectors.toList()));
+        String setClause = COMMA_JOINER.join(Streams.concat(columns.stream().filter(Column::isInsert).map(c -> c.getName() + " = " + c.typed())).collect(Collectors.toList()));
         return "UPDATE " + tableName + " SET " + setClause + buildWhereClause(idColumns);
     }
 

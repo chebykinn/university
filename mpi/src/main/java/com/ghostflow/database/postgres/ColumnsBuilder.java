@@ -1,6 +1,8 @@
 package com.ghostflow.database.postgres;
 
 import com.google.common.base.Joiner;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -19,7 +21,13 @@ public class ColumnsBuilder {
     }
 
     public Column newColumn(String name, String type) {
-        Column column = new Column(++index, name, type);
+        Column column = new Column(++index, name, type, true);
+        columns.add(column);
+        return column;
+    }
+
+    public Column newColumn(String name, boolean doNotInsert) {
+        Column column = new Column(++index, name, null, !doNotInsert);
         columns.add(column);
         return column;
     }
@@ -44,39 +52,24 @@ public class ColumnsBuilder {
         return columns.size();
     }
 
+    @AllArgsConstructor
+    @Getter
     public class Column {
         private final int index;
         private final String name;
         private final String typeName;
-
-        public Column(int index, String name, String typeName) {
-            this.index = index;
-            this.name = name;
-            this.typeName = typeName;
-        }
+        private final boolean insert;
 
         private Column(int index, String name) {
-            this(index, name, null);
+            this(index, name, null, true);
         }
 
         private Column() {
             this(0, null);
         }
 
-        public int getIndex() {
-            return index;
-        }
-
         public String typed() {
             return "?" + (typeName == null ? "" : "::" + typeName);
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getTypeName() {
-            return typeName;
         }
 
         @Override
