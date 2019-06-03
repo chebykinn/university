@@ -55,6 +55,20 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
     }
 
     @Override
+    public BidEntity getBid(String email, long id) {
+        UserEntity user = userService.get(email);
+        ExtendedBidEntity bid = bidRepository.extended().findExtended(id).orElseThrow(() -> new IllegalArgumentException("unknown bid id"));
+
+        if(Objects.equals(user.getUserId(), bid.getCustomerId())
+            || Objects.equals(user.getUserId(), bid.getEmployeeId())
+            || user.getRole().getWaitingFor().stream().anyMatch(r -> bid.getType() == r.getFst() || bid.getState() == r.getSnd())) {
+            return bid;
+        } else {
+            throw new GhostFlowAccessDeniedException();
+        }
+    }
+
+    @Override
     public Bids getBidsByRole(String email, long limit, long offset) {
         UserEntity user = userService.get(email);
         checkArgument(user.isApproved(), new GhostFlowAccessDeniedException());

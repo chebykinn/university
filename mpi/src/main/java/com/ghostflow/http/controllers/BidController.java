@@ -35,6 +35,11 @@ public class BidController {
         this.longPollingBidService = longPollingBidService;
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<BidEntity> get(Principal principal, @PathVariable("id") long id) {
+        return ResponseEntity.ok(longPollingBidService.getBid(principal.getName(), id));
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Bids> get(Principal principal,
                                     @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
