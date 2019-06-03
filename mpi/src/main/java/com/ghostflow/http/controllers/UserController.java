@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity create(Principal principal) {
+    public ResponseEntity get(Principal principal) {
         return ResponseEntity.ok(userService.get(principal.getName()));
     }
 

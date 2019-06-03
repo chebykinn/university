@@ -101,7 +101,13 @@ public class BidEntity<T extends BidEntity.Description> {
         private final String ghostDescription;
     }
 
+    @NoArgsConstructor(force = true)
+    @AllArgsConstructor
+    @Getter
     public static class RepairDescription extends Description {
+        private final String title;
+        private final String body;
+        private final String status;
     }
 
     @JsonIgnore
