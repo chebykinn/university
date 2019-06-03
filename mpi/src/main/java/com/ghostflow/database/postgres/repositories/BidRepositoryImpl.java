@@ -184,7 +184,7 @@ public class BidRepositoryImpl implements BidRepository {
                 "UNION ALL \n" +
                 "(SELECT * \n" +
                 "FROM selected_bids \n" +
-                "ORDER BY b." + COLUMN_UPDATE_TIME + " ASC \n" +
+                "ORDER BY " + COLUMN_UPDATE_TIME + " ASC \n" +
                 "LIMIT ? OFFSET ?)";
             return jdbcTemplate.query(sql, rs -> { return rsToBids(rs, limit); }, employeeId, limit, offset);
         }
