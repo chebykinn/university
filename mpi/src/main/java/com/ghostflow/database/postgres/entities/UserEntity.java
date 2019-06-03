@@ -43,8 +43,8 @@ public class UserEntity {
         ADMIN,
         CLIENT,
         INVESTIGATION(new Pair<>(BidEntity.Type.COMMON, BidEntity.State.PENDING)),
-        RESEARCH_AND_DEVELOPMENT(new Pair<>(BidEntity.Type.COMMON, BidEntity.State.APPROVED)),
-        CHIEF_OPERATIVE(new Pair<>(BidEntity.Type.COMMON, BidEntity.State.CAUGHT), new Pair<>(BidEntity.Type.REPAIR, BidEntity.State.PENDING)),
+        RESEARCH_AND_DEVELOPMENT(new Pair<>(BidEntity.Type.COMMON, BidEntity.State.APPROVED), new Pair<>(BidEntity.Type.REPAIR, BidEntity.State.PENDING)),
+        CHIEF_OPERATIVE(new Pair<>(BidEntity.Type.COMMON, BidEntity.State.CAUGHT)),
         OPERATIVE;
 
         private final List<Pair<BidEntity.Type, BidEntity.State>> waitingFor;
