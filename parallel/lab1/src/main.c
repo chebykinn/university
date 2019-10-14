@@ -21,14 +21,25 @@ void lab_swap(double * lhs, double * rhs) {
     *rhs = tmp;
 }
 
-void gnome_sort(double *arr, int n) {
-    int i;
-    for (i = 0; i + 1 < n; i++) {
-        if (arr[i] > arr[i + 1]) {
-            lab_swap(&arr[i], &arr[i + 1]);
-            if (i != 0) i -= 2;
+int correct(double *arr, int n) {
+    while (n-- > 0) {
+        if (arr[n - 1] > arr[n]) {
+            return 0;
         }
     }
+    return 1;
+}
+
+void shuffle(double *arr, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        lab_swap(&arr[i], &arr[(rand() % n)]);
+    }
+}
+
+void bogo_sort(double *arr, int n) {
+    while (!correct(arr, n))
+        shuffle(arr, n);
 }
 
 double lab_abs(double v) {
@@ -82,50 +93,50 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < c_experiments; i++) {
         // 1. Generate: M1 of N elements, M2 of N/2 elements
         generate(i, m1, N, 1, c_a);
-            //puts("M1");
-            //print_array(m1, N);
+        //puts("M1");
+        //print_array(m1, N);
         generate(i, m2, N / 2, c_a, 10 * c_a);
-            //puts("M2");
-            //print_array(m2, N / 2);
+        //puts("M2");
+        //print_array(m2, N / 2);
         // 2. Map: coth(sqrt(M1[j])) ; M2[j] = abs(cot(M2[j]))
         unsigned int j;
         for (j = 0; j < N; j++) {
             m1[j] = lab_coth(sqrt(m1[j]));
         }
-            //puts("M1 coth");
-            //print_array(m1, N);
+        //puts("M1 coth");
+        //print_array(m1, N);
         //m2[0] = lab_abs(cot(m2[0] [> + 0.0 <]));
         for (j = 0; j < N / 2; j++) {
             m2[j] = lab_abs(lab_cot(m2[j]));
         }
-            //puts("M2 abs cot");
-            //print_array(m2, N / 2);
+        //puts("M2 abs cot");
+        //print_array(m2, N / 2);
         // 3. Merge: M2[j] = max(M1[j], M2[j]) , j e N/2
         for (j = 0; j < N / 2; j++) {
             m2[j] = lab_max(m1[j], m2[j]);
         }
-            //puts("max of M1 M2");
-            //print_array(m2, N / 2);
+        //puts("max of M1 M2");
+        //print_array(m2, N / 2);
         // 4. Sort: gnome_sort(M2, N/2)
-        gnome_sort(m2, N/2);
-            //puts("sorted");
-            //print_array(m2, N / 2);
+        bogo_sort(m2, N/2);
+        //puts("sorted");
+        //print_array(m2, N / 2);
         // 5. Reduce: 1. min_non_zero(M2)
-        //            2. if (((long)(M2[i] / min_non_zero)) & ~(1))
-        //                   sum += sin(M2[i])
+        //            2. if (((long)(M2[j] / min_non_zero)) & ~(1))
+        //                   sum += sin(M2[j])
         double min_non_zero = DBL_MAX;
         for (j = 0; j < N / 2; j++) {
             if (m2[j] != 0) {
                 min_non_zero = lab_min(min_non_zero, m2[j]);
             }
         }
-            //printf("Min non zero: %f\n", min_non_zero);
+        //printf("Min non zero: %f\n", min_non_zero);
         for (j = 0; j < N / 2; j++) {
             if (((long)(m2[j] / min_non_zero)) & ~(1)) {
                 reduced_sum += sin(m2[j]);
             }
         }
-            //printf("Sum: %e\n", reduced_sum);
+        //printf("Sum: %e\n", reduced_sum);
     }
     gettimeofday(&end, NULL);
     long delta_ms = 1000 * (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) / 1000;
