@@ -83,6 +83,7 @@ int main(int argc, char *argv[]) {
     }
 
     struct timeval begin, end;
+    struct timeval par_begin, par_end;
     const int N = atoi(argv[1]);
     if (N < 0) {
         return -2;
@@ -116,6 +117,7 @@ int main(int argc, char *argv[]) {
         //puts("M2");
         //print_array(m2, N / 2);
         // 2. Map: coth(sqrt(M1[j])) ; M2[j] = abs(cot(M2[j]))
+        gettimeofday(&par_begin, NULL);
         unsigned int j;
         fwsSqrt_64f_A53(m1, m1_sqrt_dst, N);
         fwsCosh_64f_A53(m1_sqrt_dst, m1_cosh_dst, N);
@@ -133,6 +135,9 @@ int main(int argc, char *argv[]) {
         for (j = 0; j < N / 2; j++) {
             m2[j] = lab_abs(m2_dst[j]);
         }
+        gettimeofday(&par_end, NULL);
+        double par_delta_ms = 1000.0 * (par_end.tv_sec - par_begin.tv_sec) + (par_end.tv_usec - par_begin.tv_usec) / 1000.0;
+        printf("parallel milliseconds passed: %lf\n", par_delta_ms);
         //puts("M2 abs cot");
         //print_array(m2, N / 2);
         // 3. Merge: M2[j] = max(M1[j], M2[j]) , j e N/2
