@@ -6,7 +6,7 @@ import com.ghostflow.database.postgres.entities.BidEntity;
 import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
 import com.ghostflow.database.postgres.entities.UserEntity;
 import com.ghostflow.http.security.GhostFlowAccessDeniedException;
-import com.ghostflow.utils.Pair;
+import com.ghostflow.utils.TypeStatePair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
     private final UserService userService;
     private final BidRepository bidRepository;
 
-    private final Map<Pair<BidEntity.Type, BidEntity.State>, RoleLock> locks = new HashMap<>();
+    private final Map<TypeStatePair, RoleLock> locks = new HashMap<>();
 
 
     @Autowired
@@ -51,6 +51,13 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
     @Override
     public Bids getCreatedBids(String email, long limit, long offset) {
         UserEntity user = userService.get(email);
+        return bidRepository.extended().findByCustomerExtended(user.getUserId(), limit, offset);
+    }
+
+
+    @Override
+    public Bids getAcceptedBids(String email, long limit, long offset) {
+        UserEntity user = userService.get(email);
         return bidRepository.extended().findByEmployeeExtended(user.getUserId(), limit, offset);
     }
 
@@ -61,7 +68,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
 
         if(Objects.equals(user.getUserId(), bid.getCustomerId())
             || Objects.equals(user.getUserId(), bid.getEmployeeId())
-            || user.getRole().getWaitingFor().stream().anyMatch(r -> bid.getType() == r.getFst() || bid.getState() == r.getSnd())) {
+            || user.getRole().getWaitingFor().stream().anyMatch(r -> bid.getType() == r.getType() || bid.getState() == r.getState())) {
             return bid;
         } else {
             throw new GhostFlowAccessDeniedException();
@@ -69,33 +76,43 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
     }
 
     @Override
-    public Bids getBidsByRole(String email, long limit, long offset) {
+    public Bids getBidsByRole(String email, BidEntity.Type typeFilter, long limit, long offset) {
         UserEntity user = userService.get(email);
         checkArgument(user.isApproved(), new GhostFlowAccessDeniedException());
-        return bidRepository.extended().findExtended(limit, offset, getTypesStatesByRole(user.getRole()));
+        return bidRepository.extended().findExtended(limit, offset, getTypesStatesByRole(user.getRole(), typeFilter));
     }
 
     @Override
-    public Bids waitForNewBidsByRole(String email, long lastUpdateTime) {
+    public Bids waitForNewBidsByRole(String email, Long lastUpdateTime) {
+        if (lastUpdateTime == null) {
+            return new Bids((Long) null, System.currentTimeMillis());
+        }
         UserEntity user = userService.get(email);
         checkArgument(user.isApproved(), new GhostFlowAccessDeniedException());
-        String[] typesStates = getTypesStatesByRole(user.getRole());
+        String[] typesStates = getTypesStatesByRole(user.getRole(), null);
         RoleLock lock = locks.get(user.getRole().getWaitingFor().get(0));
         Semaphore semaphore = lock.getSemaphore();
+        boolean acquired = false;
         try {
-            if (lastUpdateTime >= lock.getLastUpdateTime().get() && !semaphore.tryAcquire(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
-                return new Bids((Long) null, lastUpdateTime);
+            if (lastUpdateTime > lock.getLastUpdateTime().get()) {
+                acquired = semaphore.tryAcquire(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                if (!acquired) {
+                    return new Bids((Long) null, lastUpdateTime);
+                }
             }
         } catch (InterruptedException e) {
             log.error("TryLock interrupted", e);
             return new Bids((Long) null, lastUpdateTime);
+        } finally {
+            if (acquired) {
+                semaphore.release();
+            }
         }
-        semaphore.release();
         return bidRepository.extended().findGtThanUpdateTimeExtended(lastUpdateTime, typesStates);
     }
 
-    private static final String[] getTypesStatesByRole(UserEntity.Role role) {
-        String[] typesStates = role.getWaitingForStr();
+    private static final String[] getTypesStatesByRole(UserEntity.Role role, BidEntity.Type type) {
+        String[] typesStates = UserEntity.Role.waitingForToStr(role.getWaitingFor().stream().filter(tsp -> type == null || type == tsp.getType()));
         checkArgument(typesStates.length > 0, "Unable to get bids for role ");
         return typesStates;
     }
@@ -117,7 +134,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                 throw new IllegalArgumentException("Unknown description type");
             }
         }
-        Pair<BidEntity.Type, BidEntity.State> key = new Pair<>(type, BidEntity.State.PENDING);
+        TypeStatePair key = new TypeStatePair(type, BidEntity.State.PENDING);
 
         long id = updateAndNotify(updateTime -> {
             BidEntity bid = new BidEntity<>(null, user.getUserId(), null, BidEntity.State.PENDING, updateTime, description, null);
@@ -151,7 +168,9 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
             BidEntity.State newState;
             BidEntity.Type type;
             Long newEmployeeId;
-            if (description instanceof BidEntity.CommonDescription) {
+            BidEntity.Description newDescription = description;
+
+            if (newDescription instanceof BidEntity.CommonDescription) {
                 type = BidEntity.Type.COMMON;
                 switch (oldValue.getState()) {
                     case PENDING: {
@@ -195,6 +214,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                     }
                 }
             } else {
+                newDescription = oldValue.getDescription();
                 type = BidEntity.Type.REPAIR;
                 switch (oldValue.getState()) {
                     case PENDING: {
@@ -215,16 +235,16 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                 }
             }
             checkArgument(roleRequired == user.getRole(), new GhostFlowAccessDeniedException());
-            Pair<BidEntity.Type, BidEntity.State> key = new Pair<>(type, newState);
+            TypeStatePair key = new TypeStatePair(type, newState);
 
             RoleLock lock = locks.get(key);
-            long lastUpdateTime;
+            long newLastUpdateTime;
             if (lock != null) {
                 oldSemaphore[0] = lock.getSemaphore();
                 lock.setSemaphore(new Semaphore(0));
-                lastUpdateTime = lock.getNewUpdateTime();
+                newLastUpdateTime = lock.getNewUpdateTime();
             } else {
-                lastUpdateTime = Instant.now().toEpochMilli();
+                newLastUpdateTime = Instant.now().toEpochMilli();
             }
 
             return new BidEntity<>(
@@ -232,8 +252,8 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                 oldValue.getCustomerId(),
                 newEmployeeId,
                 newState,
-                lastUpdateTime,
-                description,
+                newLastUpdateTime,
+                newDescription,
                 null
             );
         });
@@ -243,7 +263,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
         return bidRepository.extended().findExtended(bidId).get();
     }
 
-    private <T> T updateAndNotify(Function<Long, T> updater, Pair<BidEntity.Type, BidEntity.State> key) {
+    private <T> T updateAndNotify(Function<Long, T> updater, TypeStatePair key) {
         RoleLock lock = locks.get(key);
 
         T t = updater.apply(lock.getNewUpdateTime());

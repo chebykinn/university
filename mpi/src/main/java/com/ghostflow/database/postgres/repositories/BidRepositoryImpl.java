@@ -93,7 +93,7 @@ public class BidRepositoryImpl implements BidRepository {
     public Optional<BidEntity> updateSafely(long id, Function<BidEntity, BidEntity> updater) {
         return find(id).map(e -> {
             BidEntity updated = updater.apply(e);
-            ghostFlowJdbcCrud.update(updated.getBidId(), updated.getCustomerId(), updated.getEmployeeId(), updated.getUpdateTimestamp(), updated.getStateStr(), updated.getDescriptionStr(objectMapper));
+            ghostFlowJdbcCrud.update(updated.getBidId(), updated.getCustomerId(), updated.getEmployeeId(), updated.getStateStr(), updated.getUpdateTimestamp(), updated.getDescriptionStr(objectMapper));
             return updated;
         });
     }
@@ -130,8 +130,8 @@ public class BidRepositoryImpl implements BidRepository {
                 rs.getTimestamp(COLUMN_UPDATE_TIME.getIndex()).getTime(),
                 rs.getString(COLUMN_DESCRIPTION.getIndex()),
                 rs.getTimestamp(COLUMN_CREATE_TIME.getIndex()).getTime(),
-                rs.getString(COLUMN_DESCRIPTION.getIndex() + 1),
-                rs.getString(COLUMN_DESCRIPTION.getIndex() + 2)
+                rs.getString(COLUMN_CREATE_TIME.getIndex() + 1),
+                rs.getString(COLUMN_CREATE_TIME.getIndex() + 2)
             );
         }
 
@@ -166,30 +166,29 @@ public class BidRepositoryImpl implements BidRepository {
         }
 
         @Override
-        public List<ExtendedBidEntity> findExtended(long ownerId, long limit, long offset) {
-            String sql =
-                EXTENDED_SELECT +
-                "WHERE b." + COLUMN_CUSTOMER_ID + " = ? \n" +
-                "ORDER BY b." + COLUMN_UPDATE_TIME + " ASC \n" +
-                "LIMIT ? OFFSET ?";
-            return jdbcTemplate.query(sql, rowMapper, ownerId, limit, offset);
+        public Bids findByCustomerExtended(long ownerId, long limit, long offset) {
+            return findBy(COLUMN_CUSTOMER_ID, ownerId, limit, offset);
         }
 
         @Override
         public Bids findByEmployeeExtended(long employeeId, long limit, long offset) {
+            return findBy(COLUMN_EMPLOYEE_ID, employeeId, limit, offset);
+        }
+
+        public Bids findBy(Column column, long id, long limit, long offset) {
             String sql =
                 "WITH selected_bids AS ( \n" +
-                "   " + EXTENDED_SELECT +
-                "   WHERE b." + COLUMN_EMPLOYEE_ID + " = ? \n" +
-                ") \n" +
-                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::timestamp, null::text, null::text \n" +
-                "FROM selected_bids \n" +
-                "UNION ALL \n" +
-                "(SELECT * \n" +
-                "FROM selected_bids \n" +
-                "ORDER BY " + COLUMN_UPDATE_TIME + " ASC \n" +
-                "LIMIT ? OFFSET ?)";
-            return jdbcTemplate.query(sql, rs -> { return rsToBids(rs, limit); }, employeeId, limit, offset);
+                    "   " + EXTENDED_SELECT +
+                    "   WHERE b." + column + " = ? \n" +
+                    ") \n" +
+                    "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::timestamp, null::text, null::text \n" +
+                    "FROM selected_bids \n" +
+                    "UNION ALL \n" +
+                    "(SELECT * \n" +
+                    "FROM selected_bids \n" +
+                    "ORDER BY " + COLUMN_UPDATE_TIME + " ASC \n" +
+                    "LIMIT ? OFFSET ?)";
+            return jdbcTemplate.query(sql, rs -> { return rsToBids(rs, limit); }, id, limit, offset);
         }
 
         @Override

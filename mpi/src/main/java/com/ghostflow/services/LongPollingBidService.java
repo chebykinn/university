@@ -7,11 +7,13 @@ import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
 public interface LongPollingBidService {
     Bids getCreatedBids(String email, long limit, long offset);
 
+    Bids getAcceptedBids(String email, long limit, long offset);
+
     BidEntity getBid(String email, long id);
 
-    Bids getBidsByRole(String email, long limit, long offset);
+    Bids getBidsByRole(String email, BidEntity.Type typeFilter, long limit, long offset);
 
-    Bids waitForNewBidsByRole(String email, long lastUpdateTime);
+    Bids waitForNewBidsByRole(String email, Long lastUpdateTime);
 
     ExtendedBidEntity createBid(String email, BidEntity.Description description);
 

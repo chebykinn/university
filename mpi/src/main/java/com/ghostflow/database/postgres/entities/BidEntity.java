@@ -94,25 +94,39 @@ public class BidEntity<T extends BidEntity.Description> {
         @JsonSubTypes.Type(value = CommonDescription.class, name = "COMMON"),
         @JsonSubTypes.Type(value = RepairDescription.class, name = "REPAIR")
     })
-    public static abstract class Description {}
 
     @NoArgsConstructor(force = true)
     @AllArgsConstructor
     @Getter
-    public static class CommonDescription extends Description {
-        private final String ghostDescription;
+    public static abstract class Description {
+        private final String title;
+        private final String phoneNumber;
+        private final String address;
+        private final String body;
     }
 
     @NoArgsConstructor(force = true)
-    @AllArgsConstructor
+    @Getter
+    public static class CommonDescription extends Description {
+        private final String ghostDescription;
+
+        public CommonDescription(String title, String phoneNumber, String address, String body, String ghostDescription) {
+            super(title, phoneNumber, address, body);
+            this.ghostDescription = ghostDescription;
+        }
+    }
+
+    @NoArgsConstructor(force = true)
     @Getter
     public static class RepairDescription extends Description {
-        private final String title;
-        private final String phoneNumber;
         private final String comment;
-        private final String address;
-        private final String body;
         private final String status;
+
+        public RepairDescription(String title, String phoneNumber, String address, String body, String comment, String status) {
+            super(title, phoneNumber, address, body);
+            this.comment = comment;
+            this.status = status;
+        }
     }
 
     @JsonIgnore

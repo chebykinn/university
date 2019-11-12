@@ -4,7 +4,6 @@ import com.ghostflow.database.postgres.entities.BidEntity;
 import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,7 +26,7 @@ public interface BidRepository {
 
         Bids findGtThanUpdateTimeExtended(long updateTime, String... typesStates);
 
-        List<ExtendedBidEntity> findExtended(long ownerId, long limit, long offset);
+        Bids findByCustomerExtended(long ownerId, long limit, long offset);
 
         Bids findByEmployeeExtended(long employeeId, long limit, long offset);
     }
