@@ -11,8 +11,9 @@
 #ifdef _OPENMP
    #include "omp.h"
 
-   void printResults(int N, double delta_s, double X) {
-      printf("\nN=%d. Milliseconds passed: %f. X=%f\n", N, 1000.0 * delta_s, X);
+   void printResults(int N, double delta_ms, double X) {
+      printf("N = %d. milliseconds passed: %lf\n", N, 1000 * delta_ms);
+      printf("N = %d. X=%e\n", N, X);
    }
 #else
    int omp_get_wtime(){
@@ -21,8 +22,9 @@
       return T11.tv_sec * 1000 + T11.tv_usec/1000;
    }
 
-   void printResults(int N, double delta_s, double X) {
-      printf("\nN=%d. Milliseconds passed: %f. X=%f\n", N, delta_s, X);
+   void printResults(int N, double delta_ms, double X) {
+      printf("N = %d. milliseconds passed: %lf\n", N, delta_ms);
+      printf("N = %d. X=%e\n", N, X);
    }
 
    int omp_get_thread_num() {
@@ -264,8 +266,7 @@ int main(int argc, char *argv[]) {
             delta_ms = end - begin;
         }
     }
-    printf("N = %d. milliseconds passed: %lf\n", N, 1000 * delta_ms);
-    printf("N = %d. X=%e\n", N, reduced_sum / c_experiments);
+    printResults(N, delta_ms, reduced_sum / c_experiments);
 
     return 0;
 }
