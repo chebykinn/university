@@ -36,12 +36,12 @@ public class BidController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<BidEntity> get(Principal principal, @PathVariable("id") long id) {
+    public ResponseEntity<BidEntity<?>> get(Principal principal, @PathVariable("id") long id) {
         return ResponseEntity.ok(longPollingBidService.getBid(principal.getName(), id));
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Bids> get(Principal principal,
+    public ResponseEntity<Bids<?>> get(Principal principal,
                                     @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
                                     @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset,
                                     @RequestParam(value = "type", required = false) String type) {
@@ -49,50 +49,50 @@ public class BidController {
     }
 
     @RequestMapping(value = "/repair", method = RequestMethod.GET)
-    public ResponseEntity<Bids> getRepair(Principal principal,
+    public ResponseEntity<Bids<?>> getRepair(Principal principal,
                                           @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
                                           @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
         return ResponseEntity.ok(longPollingBidService.getBidsByRole(principal.getName(), BidEntity.Type.REPAIR, limit, offset));
     }
 
     @RequestMapping(value = "/common", method = RequestMethod.GET)
-    public ResponseEntity<Bids> getCommon(Principal principal,
+    public ResponseEntity<Bids<?>> getCommon(Principal principal,
                                           @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
                                           @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
         return ResponseEntity.ok(longPollingBidService.getBidsByRole(principal.getName(), BidEntity.Type.COMMON, limit, offset));
     }
 
     @RequestMapping(value = "/created", method = RequestMethod.GET)
-    public ResponseEntity<Bids> getCreated(Principal principal,
+    public ResponseEntity<Bids<?>> getCreated(Principal principal,
                                            @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
                                            @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
         return ResponseEntity.ok(longPollingBidService.getCreatedBids(principal.getName(), limit, offset));
     }
 
     @RequestMapping(value = "/accepted", method = RequestMethod.GET)
-    public ResponseEntity<Bids> getAccepted(Principal principal,
+    public ResponseEntity<Bids<?>> getAccepted(Principal principal,
                                            @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
                                            @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
         return ResponseEntity.ok(longPollingBidService.getAcceptedBids(principal.getName(), limit, offset));
     }
 
     @RequestMapping(value = "/wait", method = RequestMethod.GET)
-    public ResponseEntity<Bids> getCreated(Principal principal, @RequestParam(value = "last_update_time") Long lastUpdateTime) {
+    public ResponseEntity<Bids<?>> getCreated(Principal principal, @RequestParam(value = "last_update_time") Long lastUpdateTime) {
         return ResponseEntity.ok(longPollingBidService.waitForNewBidsByRole(principal.getName(), lastUpdateTime));
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<BidEntity> create(Principal principal, @RequestBody BidEntity.Description description) {
+    public ResponseEntity<BidEntity<?>> create(Principal principal, @RequestBody BidEntity.Description description) {
         return ResponseEntity.ok(longPollingBidService.createBid(principal.getName(), description));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<BidEntity> update(Principal principal, @PathVariable("id") long id, UpdateRequest updateRequest) {
+    public ResponseEntity<BidEntity<?>> update(Principal principal, @PathVariable("id") long id, UpdateRequest updateRequest) {
         return ResponseEntity.ok(longPollingBidService.updateBid(principal.getName(), id, updateRequest.getDescription(), updateRequest.getAction()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<BidEntity> delete(Principal principal, @PathVariable("id") long id) {
+    public ResponseEntity<?> delete(Principal principal, @PathVariable("id") long id) {
         longPollingBidService.delete(principal.getName(), id);
         return ResponseEntity.ok().build();
     }

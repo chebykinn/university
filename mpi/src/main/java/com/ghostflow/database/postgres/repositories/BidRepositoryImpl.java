@@ -39,21 +39,21 @@ public class BidRepositoryImpl implements BidRepository {
 
     private static final int RETRIEVED_BIDS_LIMIT = 100;
 
-    private static final String TABLE_NAME = "bids";
+    public static final String TABLE_NAME = "bids";
 
-    private static final Column COLUMN_BID_ID       = columnsBuilder.newColumn("bid_id");
-    private static final Column COLUMN_CUSTOMER_ID  = columnsBuilder.newColumn("customer_id");
-    private static final Column COLUMN_EMPLOYEE_ID  = columnsBuilder.newColumn("employee_id");
-    private static final Column COLUMN_STATE        = columnsBuilder.newColumn("state");
-    private static final Column COLUMN_UPDATE_TIME  = columnsBuilder.newColumn("update_time");
-    private static final Column COLUMN_DESCRIPTION  = columnsBuilder.newColumn("description", "jsonb");
-    private static final Column COLUMN_CREATE_TIME  = columnsBuilder.newColumn("create_time", true);
+    public static final Column COLUMN_BID_ID       = columnsBuilder.newColumn("bid_id");
+    public static final Column COLUMN_CUSTOMER_ID  = columnsBuilder.newColumn("customer_id");
+    public static final Column COLUMN_EMPLOYEE_ID  = columnsBuilder.newColumn("employee_id");
+    public static final Column COLUMN_STATE        = columnsBuilder.newColumn("state");
+    public static final Column COLUMN_UPDATE_TIME  = columnsBuilder.newColumn("update_time");
+    public static final Column COLUMN_DESCRIPTION  = columnsBuilder.newColumn("description", "jsonb");
+    public static final Column COLUMN_CREATE_TIME  = columnsBuilder.newColumn("create_time", true);
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final ObjectMapper objectMapper;
-    private final SimpleGhostFlowJdbcCrud<BidEntity> ghostFlowJdbcCrud;
-    private final RowMapper<BidEntity> rowMapper;
+    private final SimpleGhostFlowJdbcCrud<BidEntity<?>> ghostFlowJdbcCrud;
+    private final RowMapper<BidEntity<?>> rowMapper;
 
     private final Extended EXTENDED = new Extended();
 
@@ -62,12 +62,12 @@ public class BidRepositoryImpl implements BidRepository {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.objectMapper = objectMapper;
-        this.ghostFlowJdbcCrud = SimpleGhostFlowJdbcCrud.<BidEntity>builder()
+        this.ghostFlowJdbcCrud = SimpleGhostFlowJdbcCrud.<BidEntity<?>>builder()
             .withTableName(TABLE_NAME)
             .withIdColumn(COLUMN_BID_ID)
             .withColumns(COLUMN_CUSTOMER_ID, COLUMN_EMPLOYEE_ID, COLUMN_STATE, COLUMN_UPDATE_TIME, COLUMN_DESCRIPTION, COLUMN_CREATE_TIME)
             .build(jdbcTemplate);
-        this.rowMapper = (rs, rowNum) -> new BidEntity(
+        this.rowMapper = (rs, rowNum) -> new BidEntity<>(
             objectMapper,
                 rs.getLong(COLUMN_BID_ID.getIndex()),
                 getNullable(rs, rs.getLong(COLUMN_CUSTOMER_ID.getIndex())),
@@ -80,19 +80,19 @@ public class BidRepositoryImpl implements BidRepository {
     }
 
     @Override
-    public long create(BidEntity entity) {
+    public long create(BidEntity<?> entity) {
         return ghostFlowJdbcCrud.insertAndReturnKey(entity.getCustomerId(), entity.getEmployeeId(), entity.getStateStr(), entity.getUpdateTimestamp(), entity.getDescriptionStr(objectMapper));
     }
 
-    public Optional<BidEntity> find(long id) {
+    public Optional<BidEntity<?>> find(long id) {
         return ghostFlowJdbcCrud.selectById(rowMapper, id).stream().findAny();
     }
 
     @Override
     @Transactional
-    public Optional<BidEntity> updateSafely(long id, Function<BidEntity, BidEntity> updater) {
+    public Optional<BidEntity<?>> updateSafely(long id, Function<BidEntity<?>, BidEntity<?>> updater) {
         return find(id).map(e -> {
-            BidEntity updated = updater.apply(e);
+            BidEntity<?> updated = updater.apply(e);
             ghostFlowJdbcCrud.update(updated.getBidId(), updated.getCustomerId(), updated.getEmployeeId(), updated.getStateStr(), updated.getUpdateTimestamp(), updated.getDescriptionStr(objectMapper));
             return updated;
         });
@@ -100,7 +100,7 @@ public class BidRepositoryImpl implements BidRepository {
 
     @Override
     @Transactional
-    public boolean delete(long id, Predicate<BidEntity> checker) {
+    public boolean delete(long id, Predicate<BidEntity<?>> checker) {
         return find(id).map(e -> {
             if (checker.test(e)) {
                 ghostFlowJdbcCrud.delete(id);
@@ -117,11 +117,11 @@ public class BidRepositoryImpl implements BidRepository {
     }
 
     private class Extended extends UserRepositoryImpl implements BidRepository.Extended {
-        private final RowMapper<ExtendedBidEntity> rowMapper;
+        private final RowMapper<ExtendedBidEntity<?>> rowMapper;
 
         public Extended() {
             super(jdbcTemplate, namedParameterJdbcTemplate);
-            this.rowMapper = (rs, rowNum) -> new ExtendedBidEntity(
+            this.rowMapper = (rs, rowNum) -> new ExtendedBidEntity<>(
                 objectMapper,
                 rs.getLong(COLUMN_BID_ID.getIndex()),
                 getNullable(rs, rs.getLong(COLUMN_CUSTOMER_ID.getIndex())),
@@ -142,7 +142,7 @@ public class BidRepositoryImpl implements BidRepository {
             "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS e ON(b." + COLUMN_EMPLOYEE_ID + " = e." + COLUMN_USER_ID + ") \n";
 
         @Override
-        public Optional<ExtendedBidEntity> findExtended(long id) {
+        public Optional<ExtendedBidEntity<?>> findExtended(long id) {
             String sql =
                 EXTENDED_SELECT +
                 "WHERE b." + COLUMN_BID_ID + " = ?";

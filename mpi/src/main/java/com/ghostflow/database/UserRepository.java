@@ -13,9 +13,9 @@ public interface UserRepository {
 
     boolean authorize(String email, String password);
 
-    void create(UserEntity entity);
+    UserEntity create(String email, String name, String password, UserEntity.Role role);
 
-    Optional<UserEntity> update(long id, boolean approved);
+    Optional<UserEntity> approve(long id, UserEntity.Role role);
 
     void delete(long id);
 }

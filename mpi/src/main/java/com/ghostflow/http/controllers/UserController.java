@@ -2,6 +2,9 @@ package com.ghostflow.http.controllers;
 
 import com.ghostflow.database.postgres.entities.UserEntity;
 import com.ghostflow.services.UserService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +33,20 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity get(Principal principal) {
-        return ResponseEntity.ok(userService.get(principal.getName()));
+    public ResponseEntity<?> get(Principal principal) {
+        return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
     }
 
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public ResponseEntity create(@RequestBody UserEntity userEntity) {
-        userService.create(userEntity.getEmail(), userEntity.getName(), userEntity.getPassword(), userEntity.getRole());
+    public ResponseEntity<?> createUser(@RequestBody UserEntity userEntity) {
+        userService.createUser(userEntity.getEmail(), userEntity.getName(), userEntity.getPassword());
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/employees/signup", method = RequestMethod.POST)
+    public ResponseEntity<?> createEmployee(@RequestBody UserEntity userEntity) {
+        userService.createEmployee(userEntity.getEmail(), userEntity.getName(), userEntity.getPassword());
         return ResponseEntity.ok().build();
     }
 
@@ -48,8 +57,21 @@ public class UserController {
         return ResponseEntity.ok(userService.getEmployees(principal.getName(), limit, offset));
     }
 
-    @RequestMapping(value = "/{id}/approve", method = RequestMethod.POST)
-    public ResponseEntity<UserEntity> approve(Principal principal, @PathVariable("id") long id) {
-        return ResponseEntity.ok(userService.update(principal.getName(), id, true));
+    @AllArgsConstructor
+    @NoArgsConstructor(force = true)
+    @Getter
+    private static class UserRole {
+        private final UserEntity.Role role;
+    }
+
+    @RequestMapping(value = "/{id}/role", method = RequestMethod.POST)
+    public ResponseEntity<UserEntity> approve(Principal principal, @PathVariable("id") long id, @RequestBody UserRole role) {
+        return ResponseEntity.ok(userService.approve(principal.getName(), id, role.getRole()));
+    }
+
+    @RequestMapping(value = "/{id}/role", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(Principal principal, @PathVariable("id") long id) {
+        userService.delete(principal.getName(), id);
+        return ResponseEntity.ok().build();
     }
 }

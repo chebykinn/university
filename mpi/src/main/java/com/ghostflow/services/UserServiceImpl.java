@@ -1,6 +1,5 @@
 package com.ghostflow.services;
 
-import com.ghostflow.GhostFlowException;
 import com.ghostflow.database.Employees;
 import com.ghostflow.database.UserRepository;
 import com.ghostflow.database.postgres.entities.UserEntity;
@@ -21,7 +20,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 @Slf4j
 @Service("userService")
@@ -46,18 +44,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(String email, String name, String password, UserEntity.Role role) {
+    public UserInfo createUser(String email, String name, String password) {
+        return create(email, name, password, UserEntity.Role.CLIENT);
+    }
+
+    @Override
+    public UserInfo createEmployee(String email, String name, String password) {
+        return create(email, name, password, null);
+    }
+
+    private UserInfo create(String email, String name, String password, UserEntity.Role role) {
         checkArgument(!(email == null || email.trim().isEmpty()), "email is empty");
         checkArgument(!(name == null || name.trim().isEmpty()), "name is empty");
         checkArgument(!(password == null || password.trim().isEmpty()), "password is empty");
-        checkNotNull(role, "role is null");
-        checkArgument(role != UserEntity.Role.ADMIN, "unable to create admin account");
 
         checkArgument(!userRepository.find(email).isPresent(), "user already exists");
 
-        userRepository.create(new UserEntity(email, name, bCryptPasswordEncoder.encode(password), role));
-
         USER_CACHE.invalidate(email);
+        return new UserInfo(userRepository.create(email, name, bCryptPasswordEncoder.encode(password), role));
     }
 
     @Override
@@ -71,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity get(String email) {
-        return USER_CACHE.getUnchecked(email).orElseThrow(() -> new GhostFlowException("unknown user id"));
+        return USER_CACHE.getUnchecked(email).orElseThrow(() -> new IllegalArgumentException("unknown email"));
     }
 
     @Override
@@ -81,10 +85,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity update(String email, long userId, boolean approved) {
+    public UserEntity approve(String email, long userId, UserEntity.Role role) {
         checkArgument(get(email).getRole() == UserEntity.Role.ADMIN, new GhostFlowAccessDeniedException());
-        UserEntity result = userRepository.update(userId, approved).orElseThrow(() -> new IllegalArgumentException("Unknown user id"));
+        UserEntity result = userRepository.approve(userId, role).orElseThrow(() -> new IllegalArgumentException("Unknown user id"));
         USER_CACHE.invalidate(email);
         return result;
+    }
+
+    @Override
+    public void delete(String email, long id) {
+        checkArgument(get(email).getRole() == UserEntity.Role.ADMIN, new GhostFlowAccessDeniedException());
+        userRepository.delete(id);
     }
 }

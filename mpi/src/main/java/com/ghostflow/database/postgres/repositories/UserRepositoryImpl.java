@@ -32,7 +32,6 @@ public class UserRepositoryImpl implements UserRepository {
     protected static final Column COLUMN_PASSWORD   = columnsBuilder.newColumn("password");
     protected static final Column COLUMN_NAME       = columnsBuilder.newColumn("name");
     protected static final Column COLUMN_ROLE       = columnsBuilder.newColumn("role");
-    protected static final Column COLUMN_APPROVED   = columnsBuilder.newColumn("approved");
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -47,21 +46,20 @@ public class UserRepositoryImpl implements UserRepository {
             .withTableName(TABLE_NAME)
             .withIdColumn(COLUMN_USER_ID)
             .withColumns(COLUMN_EMAIL, COLUMN_PASSWORD, COLUMN_NAME, COLUMN_ROLE)
-            .withGeneratedColumns(COLUMN_APPROVED)
             .build(jdbcTemplate);
         this.rowMapper = (rs, rowNum) -> new UserEntity(
             rs.getLong(COLUMN_USER_ID.getIndex()),
             rs.getString(COLUMN_EMAIL.getIndex()),
             rs.getString(COLUMN_NAME.getIndex()),
             rs.getString(COLUMN_PASSWORD.getIndex()),
-            rs.getString(COLUMN_ROLE.getIndex()),
-            rs.getBoolean(COLUMN_APPROVED.getIndex())
+            rs.getString(COLUMN_ROLE.getIndex())
         );
     }
 
     @Override
-    public void create(UserEntity entity) {
-        ghostFlowJdbcCrud.insert(getValidEmail(entity.getEmail()), entity.getPassword(), entity.getName(), entity.getRoleStr());
+    public UserEntity create(String email, String name, String password, UserEntity.Role role) {
+        long id = ghostFlowJdbcCrud.insertAndReturnKey(getValidEmail(email), password, name, role.name());
+        return new UserEntity(id, email, name, password, role);
     }
 
     @Override
@@ -81,8 +79,8 @@ public class UserRepositoryImpl implements UserRepository {
             "WITH selected_employees AS ( \n" +
             "   SELECT " + columnsBuilder.getSelectClause() + " \n" +
             "   FROM " + TABLE_NAME + " \n" +
-            "   WHERE " + COLUMN_ROLE + " IN (:roles)" +
-            "   ORDER BY " + COLUMN_USER_ID + " \n" +
+            "   WHERE " + COLUMN_ROLE + " IN (:roles) OR " + COLUMN_ROLE + " IS NULL \n" +
+            "   ORDER BY " + COLUMN_USER_ID + " DESC \n" +
             ") \n" +
             "SELECT count(1)::bigint, null::text, null::text, null::text, null::text, null::boolean \n" +
             "FROM selected_employees \n" +
@@ -117,11 +115,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> update(long id, boolean approved) {
+    public Optional<UserEntity> approve(long id, UserEntity.Role role) {
         String sql =
-            "UPDATE " + TABLE_NAME + " SET " + COLUMN_APPROVED + " = ? WHERE " + COLUMN_USER_ID + " = ? \n" +
-            "RETURNING " + columnsBuilder.getSelectClause();
-        return jdbcTemplate.query(sql, rowMapper, approved, id).stream().findAny();
+            "UPDATE " + TABLE_NAME + " SET " + COLUMN_ROLE + " = ? WHERE " + COLUMN_USER_ID + " = ? \n" +
+                "RETURNING " + columnsBuilder.getSelectClause();
+        return jdbcTemplate.query(sql, rowMapper, role.name(), id).stream().findAny();
     }
 
     @Override

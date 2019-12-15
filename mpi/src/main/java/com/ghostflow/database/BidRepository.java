@@ -9,18 +9,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface BidRepository {
-    long create(BidEntity entity);
+    long create(BidEntity<?> entity);
 
     @Transactional
-    Optional<BidEntity> updateSafely(long id, Function<BidEntity, BidEntity> updater) ;
+    Optional<BidEntity<?>> updateSafely(long id, Function<BidEntity<?>, BidEntity<?>> updater) ;
 
     @Transactional
-    boolean delete(long id, Predicate<BidEntity> checker);
+    boolean delete(long id, Predicate<BidEntity<?>> checker);
 
     Extended extended();
 
     interface Extended {
-        Optional<ExtendedBidEntity> findExtended(long id);
+        <T extends BidEntity.Description> Optional<ExtendedBidEntity<T>> findExtended(long id);
 
         Bids findExtended(long limit, long offset, String... typesStates);
 

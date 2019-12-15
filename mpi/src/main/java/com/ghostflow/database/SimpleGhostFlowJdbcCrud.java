@@ -32,7 +32,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     private SimpleGhostFlowJdbcCrud(JdbcTemplate jdbcTemplate, String tableName, List<Column> allColumns, List<Column> idColumns, List<Column> columns, List<Column> generatedColumns) {
         this.jdbcTemplate = jdbcTemplate;
         this.insertSql = buildInsertSQL(tableName, columns);
-        this.insertSqlWithReturningClause = this.insertSql + buildReturningSQL(generatedColumns);
+        this.insertSqlWithReturningClause = this.insertSql + buildReturningSQL(allColumns);
         this.selectByIdSql = buildSelectByIdSQL(tableName, idColumns, allColumns);
         this.selectSql = buildSelectSQL(tableName, allColumns);
         this.selectWithPaginationSql = this.selectSql + " OFFSET ? LIMIT ?";
@@ -53,8 +53,8 @@ public class SimpleGhostFlowJdbcCrud<T> {
         return "INSERT INTO " + tableName + " ( " + intoClause + " ) VALUES ( " + valuesClause + " )";
     }
 
-    private static String buildReturningSQL(List<Column> generatedColumns) {
-        String returningClause = COMMA_JOINER.join(generatedColumns);
+    private static String buildReturningSQL(List<Column> columns) {
+        String returningClause = COMMA_JOINER.join(columns);
         return " RETURNING " + returningClause;
     }
 

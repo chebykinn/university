@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ghostflow.database.Utils;
 import com.ghostflow.utils.TypeStatePair;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,22 +21,26 @@ public class UserEntity {
     private Long      userId;
     private String    email;
     private String    name;
-    @Getter(onMethod = @__({@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)}))
+    @Getter(AccessLevel.NONE)
     private String    password;
     private Role      role;
-    private boolean   approved;
 
     public UserEntity(String email, String name, String password, Role role) {
-        this(null, email, name, password, role, false);
+        this(null, email, name, password, role);
     }
 
-    public UserEntity(Long userId, String email, String name, String password, String roleStr, boolean approved) {
-        this(userId, email, name, password, Role.nullableValueOf(roleStr), approved);
+    public UserEntity(Long userId, String email, String name, String password, String roleStr) {
+        this(userId, email, name, password, Role.nullableValueOf(roleStr));
     }
 
     @JsonIgnore
     public String getRoleStr() {
         return getRole().name();
+    }
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public String getPassword() {
+        return password;
     }
 
     @Getter

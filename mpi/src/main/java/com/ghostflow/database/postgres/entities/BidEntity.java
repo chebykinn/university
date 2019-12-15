@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.postgresql.util.PGTimestamp;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -85,7 +86,7 @@ public class BidEntity<T extends BidEntity.Description> {
 
     @JsonIgnore
     public Timestamp getUpdateTimestamp() {
-        return Timestamp.from(Instant.ofEpochMilli(updateTime));
+        return PGTimestamp.from(Instant.ofEpochMilli(updateTime));
     }
 
 
