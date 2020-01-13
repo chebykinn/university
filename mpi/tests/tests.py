@@ -1,10 +1,18 @@
 import uuid
+import pytest
 
 from time import sleep
+from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+
+@pytest.fixture
+def firefox_profile():
+    profile = FirefoxProfile()
+    profile.set_preference('permissions.default.desktop-notification', 1)
+    return profile
 
 
 def do_login(selenium, user):
@@ -159,7 +167,7 @@ def test_create_repair_ticket(selenium):
     row = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.XPATH, row_path)))
     row.click()
 
-    assert 'Заявка на ремонт' in selenium.title
+    assert 'Заявка R&D' in selenium.title
 
     body_row_path = "//p[contains(text(),'{}')]".format(body_text)
     body_row = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.XPATH, body_row_path)))
@@ -185,7 +193,7 @@ def test_change_repair_ticket_status(selenium):
     ticket_id = first.text
     first.click()
 
-    assert 'Заявка на ремонт' in selenium.title
+    assert 'Заявка R&D' in selenium.title
     id_path = "//td[contains(text(),'{}')]".format(ticket_id)
     print(id_path)
     id_elem = WebDriverWait(selenium, 5).until(EC.presence_of_element_located((By.XPATH, id_path)))

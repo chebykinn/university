@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ghostflow.database.postgres.ColumnsBuilder.COMMA_JOINER;
@@ -85,7 +86,9 @@ public class SimpleGhostFlowJdbcCrud<T> {
     public long insertAndReturnKey(Object... args) {
         Preconditions.checkArgument(idColumnsSize == 1, "must be one id column");
         Preconditions.checkArgument(columnsSize == args.length, "invalid args size");
-        return this.jdbcTemplate.queryForObject(insertSqlWithReturningClause, Long.class, args);
+        List<Map<String, Object>> data =  this.jdbcTemplate.queryForList(insertSqlWithReturningClause, args);
+        return (long) data.get(0).get("user_id");
+//        return this.jdbcTemplate.queryForObject(insertSqlWithReturningClause, Long.class, args);
     }
 
     public T insertAndReturn(RowMapper<T> rowMapper, Object... args) {
