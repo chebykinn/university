@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 
@@ -43,6 +44,23 @@ public class UserEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(userId, that.userId) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(password, that.password) &&
+                role == that.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, email, name, password, role);
     }
 
     public static final ListMultimap<TypeStatePair, Role> WAITING_FOR_TO_ROLES = ArrayListMultimap.create();
