@@ -5,9 +5,13 @@ import com.ghostflow.GhostFlowException;
 import java.sql.ResultSet;
 
 public class Utils {
-    public static final int DEFAULT_LIMIT = 100;
-    public static final int DEFAULT_OFFSET = 0;
+    public static final int DEFAULT_LIMIT;
+    public static final int DEFAULT_OFFSET;
 
+    static {
+        DEFAULT_LIMIT = 100;
+        DEFAULT_OFFSET = 0;
+    }
     public static <T> T getNullable(ResultSet resultSet, T obj) {
         try {
             return resultSet.wasNull() ? null : obj;

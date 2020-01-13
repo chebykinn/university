@@ -9,6 +9,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 @Slf4j
 @Service("userService")
+@Scope("singleton")
 public class UserServiceImpl implements UserService {
 
     private final LoadingCache<String, Optional<UserEntity>> USER_CACHE = CacheBuilder.newBuilder()
@@ -44,16 +46,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo createUser(String email, String name, String password) {
+    public UserEntity createUser(String email, String name, String password) {
         return create(email, name, password, UserEntity.Role.CLIENT);
     }
 
     @Override
-    public UserInfo createEmployee(String email, String name, String password) {
+    public UserEntity createEmployee(String email, String name, String password) {
         return create(email, name, password, null);
     }
 
-    private UserInfo create(String email, String name, String password, UserEntity.Role role) {
+    private UserEntity create(String email, String name, String password, UserEntity.Role role) {
         checkArgument(!(email == null || email.trim().isEmpty()), "email is empty");
         checkArgument(!(name == null || name.trim().isEmpty()), "name is empty");
         checkArgument(!(password == null || password.trim().isEmpty()), "password is empty");
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
         checkArgument(!userRepository.find(email).isPresent(), "user already exists");
 
         USER_CACHE.invalidate(email);
-        return new UserInfo(userRepository.create(email, name, bCryptPasswordEncoder.encode(password), role));
+        return userRepository.create(email, name, bCryptPasswordEncoder.encode(password), role);
     }
 
     @Override
@@ -87,8 +89,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity approve(String email, long userId, UserEntity.Role role) {
         checkArgument(get(email).getRole() == UserEntity.Role.ADMIN, new GhostFlowAccessDeniedException());
-        UserEntity result = userRepository.approve(userId, role).orElseThrow(() -> new IllegalArgumentException("Unknown user id"));
-        USER_CACHE.invalidate(email);
+        checkArgument(role != UserEntity.Role.ADMIN, new IllegalArgumentException("Can't apply admin role to an employee"));
+        UserEntity result = userRepository.approve(userId, role)
+            .orElseThrow(() -> new IllegalArgumentException("Unknown user id"));
+        if (role == UserEntity.Role.CHIEF_OPERATIVE && result.getRole() != role) {
+            throw new IllegalArgumentException("Chief operative already exists");
+        }
+        USER_CACHE.invalidate(result.getEmail());
         return result;
     }
 
@@ -96,5 +103,6 @@ public class UserServiceImpl implements UserService {
     public void delete(String email, long id) {
         checkArgument(get(email).getRole() == UserEntity.Role.ADMIN, new GhostFlowAccessDeniedException());
         userRepository.delete(id);
+        USER_CACHE.invalidate(email);
     }
 }

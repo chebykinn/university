@@ -17,7 +17,7 @@ public class CompanyReviewEntity {
     private final String    review;
     private final Timestamp updateTime;
 
-    public CompanyReviewEntity(Long userId, int rating, String review) {
-        this(null, userId, rating, review, null);
+    public CompanyReviewEntity(long bidId, int rating, String review) {
+        this(null, bidId, rating, review, null);
     }
 }

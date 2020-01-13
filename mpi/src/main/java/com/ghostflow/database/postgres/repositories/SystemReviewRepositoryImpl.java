@@ -24,15 +24,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository("systemReviewRepository")
 public class SystemReviewRepositoryImpl implements SystemReviewRepository {
-    private static final ColumnsBuilder columnsBuilder = new ColumnsBuilder();
+    private static final ColumnsBuilder columnsBuilder;
 
-    private static final String TABLE_NAME = "system_reviews";
+    private static final String TABLE_NAME;
 
-    private static final Column COLUMN_SYSTEM_REVIEW_ID = columnsBuilder.newColumn("system_review_id");
-    private static final Column COLUMN_USER_ID          = columnsBuilder.newColumn("user_id");
-    private static final Column COLUMN_RATING           = columnsBuilder.newColumn("rating");
-    private static final Column COLUMN_REVIEW           = columnsBuilder.newColumn("review");
-    private static final Column COLUMN_UPDATE_TIME      = columnsBuilder.newColumn("update_time");
+    private static final Column COLUMN_SYSTEM_REVIEW_ID;
+    private static final Column COLUMN_USER_ID;
+    private static final Column COLUMN_RATING;
+    private static final Column COLUMN_REVIEW;
+    private static final Column COLUMN_UPDATE_TIME;
+
+    static {
+        columnsBuilder = new ColumnsBuilder();
+        TABLE_NAME = "system_reviews";
+
+        COLUMN_SYSTEM_REVIEW_ID = columnsBuilder.newColumn("system_review_id");
+        COLUMN_USER_ID          = columnsBuilder.newColumn("user_id");
+        COLUMN_RATING           = columnsBuilder.newColumn("rating");
+        COLUMN_REVIEW           = columnsBuilder.newColumn("review");
+        COLUMN_UPDATE_TIME      = columnsBuilder.newColumn("update_time");
+    }
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -113,10 +124,14 @@ public class SystemReviewRepositoryImpl implements SystemReviewRepository {
             );
         }
 
-        private final String EXTENDED_SELECT =
-            "SELECT " + SystemReviewRepositoryImpl.columnsBuilder.asStringStream().map(s -> "r." + s).collect(Collectors.joining(", ")) + ", u." + COLUMN_ROLE + ", u." + COLUMN_NAME + "\n" +
-            "FROM " + SystemReviewRepositoryImpl.TABLE_NAME + " AS r \n" +
-            "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS u USING (" + COLUMN_USER_ID + ") \n";
+        private final String EXTENDED_SELECT;
+
+        {
+            EXTENDED_SELECT =
+                "SELECT " + SystemReviewRepositoryImpl.columnsBuilder.asStringStream().map(s -> "r." + s).collect(Collectors.joining(", ")) + ", u." + COLUMN_ROLE + ", u." + COLUMN_NAME + "\n" +
+                "FROM " + SystemReviewRepositoryImpl.TABLE_NAME + " AS r \n" +
+                "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS u USING (" + COLUMN_USER_ID + ") \n";
+        }
 
         @Override
         public Optional<ExtendedSystemReviewEntity> findExtended(long id) {

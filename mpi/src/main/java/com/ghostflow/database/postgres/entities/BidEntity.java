@@ -49,10 +49,14 @@ public class BidEntity<T extends BidEntity.Description> {
         COMMON,
         REPAIR;
 
-        public static final Map<Class, Type> fromClass = ImmutableMap.of(
-            CommonDescription.class, COMMON,
-            RepairDescription.class, REPAIR
-        );
+        public static final Map<Class, Type> fromClass;
+
+        static {
+            fromClass = ImmutableMap.of(
+                CommonDescription.class, COMMON,
+                RepairDescription.class, REPAIR
+            );
+        }
 
         public static Type nullableValueOf(String name) {
             return Utils.nullableValueOf(Type.class, name);

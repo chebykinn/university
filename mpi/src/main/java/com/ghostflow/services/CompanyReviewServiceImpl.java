@@ -37,7 +37,7 @@ public class CompanyReviewServiceImpl implements CompanyReviewService {
         Optional<CompanyReviewEntity> reviewEntity = companyReviewRepository.findByBidId(bid.getBidId());
         if (isNew) {
             checkArgument(!reviewEntity.isPresent(), new IllegalArgumentException("Review already exists"));
-            return companyReviewRepository.create(new CompanyReviewEntity(userService.get(email).getUserId(), rating, review));
+            return companyReviewRepository.create(new CompanyReviewEntity(bidId, rating, review));
         } else {
             checkArgument(reviewEntity.isPresent(), new IllegalArgumentException("Unable to find company review by bid id"));
             return companyReviewRepository.update(reviewEntity.get().getCompanyReviewId(), rating, review)
@@ -57,7 +57,7 @@ public class CompanyReviewServiceImpl implements CompanyReviewService {
 
     @Override
     public CompanyReviewEntity get(String email, long bidId) {
-        ExtendedBidEntity bid = getBidChecked(email, bidId);
+        ExtendedBidEntity<?> bid = getBidChecked(email, bidId);
         return companyReviewRepository.findByBidId(bid.getBidId())
             .orElseThrow(() -> new IllegalArgumentException("Can't find review by user id"));
     }
@@ -80,9 +80,9 @@ public class CompanyReviewServiceImpl implements CompanyReviewService {
         companyReviewRepository.delete(review.getCompanyReviewId());
     }
 
-    private ExtendedBidEntity getBidChecked(String email, long bidId) {
+    private ExtendedBidEntity<?> getBidChecked(String email, long bidId) {
         UserEntity user = userService.get(email);
-        ExtendedBidEntity bid = bidRepository.extended().findExtended(bidId)
+        ExtendedBidEntity<?> bid = bidRepository.extended().findExtended(bidId)
             .orElseThrow(() -> new IllegalArgumentException("Unknown bid id"));
         checkArgument(user.getUserId().equals(bid.getCustomerId()), new GhostFlowAccessDeniedException());
         return bid;

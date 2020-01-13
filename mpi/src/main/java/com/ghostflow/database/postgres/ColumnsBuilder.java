@@ -9,7 +9,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ColumnsBuilder {
-    public static final Joiner COMMA_JOINER = Joiner.on(", ");
+    public static final Joiner COMMA_JOINER;
+
+    static {
+        COMMA_JOINER = Joiner.on(", ");
+    }
 
     private int index = 0;
     private ArrayList<Column> columns = new ArrayList<>();

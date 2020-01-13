@@ -26,15 +26,26 @@ import java.util.stream.Collectors;
 @Slf4j
 @Repository("companyReviewRepository")
 public class CompanyReviewRepositoryImpl implements CompanyReviewRepository {
-    private static final ColumnsBuilder columnsBuilder = new ColumnsBuilder();
+    private static final ColumnsBuilder columnsBuilder;
 
-    private static final String TABLE_NAME = "company_reviews";
+    public static final String TABLE_NAME;
 
-    private static final Column COLUMN_COMPANY_REVIEW_ID    = columnsBuilder.newColumn("company_review_id");
-    private static final Column COLUMN_BID_ID               = columnsBuilder.newColumn("bid_id");
-    private static final Column COLUMN_RATING               = columnsBuilder.newColumn("rating");
-    private static final Column COLUMN_REVIEW               = columnsBuilder.newColumn("review");
-    private static final Column COLUMN_UPDATE_TIME          = columnsBuilder.newColumn("update_time");
+    public static final Column COLUMN_COMPANY_REVIEW_ID;
+    private static final Column COLUMN_BID_ID;
+    private static final Column COLUMN_RATING;
+    private static final Column COLUMN_REVIEW;
+    private static final Column COLUMN_UPDATE_TIME;
+
+    static {
+        columnsBuilder = new ColumnsBuilder();
+        TABLE_NAME = "company_reviews";
+
+        COLUMN_COMPANY_REVIEW_ID    = columnsBuilder.newColumn("company_review_id");
+        COLUMN_BID_ID               = columnsBuilder.newColumn("bid_id");
+        COLUMN_RATING               = columnsBuilder.newColumn("rating");
+        COLUMN_REVIEW               = columnsBuilder.newColumn("review");
+        COLUMN_UPDATE_TIME          = columnsBuilder.newColumn("update_time");
+    }
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -114,11 +125,13 @@ public class CompanyReviewRepositoryImpl implements CompanyReviewRepository {
             );
         }
 
-        private final String EXTENDED_SELECT =
-            "SELECT " + CompanyReviewRepositoryImpl.columnsBuilder.asStringStream().map(s -> "c." + s).collect(Collectors.joining(", ")) + ", u." + COLUMN_NAME + "\n" +
-            "FROM " + CompanyReviewRepositoryImpl.TABLE_NAME + " AS c \n" +
-            "LEFT JOIN " + BidRepositoryImpl.TABLE_NAME + " AS b USING (" + COLUMN_BID_ID + ") \n" +
-            "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS u ON (" + BidRepositoryImpl.COLUMN_CUSTOMER_ID + " = " + UserRepositoryImpl.COLUMN_USER_ID + ") \n";
+        private final String EXTENDED_SELECT;
+        {
+            EXTENDED_SELECT = "SELECT " + CompanyReviewRepositoryImpl.columnsBuilder.asStringStream().map(s -> "c." + s).collect(Collectors.joining(", ")) + ", u." + COLUMN_NAME + "\n" +
+                "FROM " + CompanyReviewRepositoryImpl.TABLE_NAME + " AS c \n" +
+                "LEFT JOIN " + BidRepositoryImpl.TABLE_NAME + " AS b USING (" + COLUMN_BID_ID + ") \n" +
+                "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS u ON (" + BidRepositoryImpl.COLUMN_CUSTOMER_ID + " = " + UserRepositoryImpl.COLUMN_USER_ID + ") \n";
+        }
 
         @Override
         public Optional<ExtendedCompanyReviewEntity> findExtended(long id) {

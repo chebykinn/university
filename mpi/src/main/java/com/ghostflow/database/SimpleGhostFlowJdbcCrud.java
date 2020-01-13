@@ -19,6 +19,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     private final JdbcTemplate jdbcTemplate;
 
     private final String insertSql;
+    private final String insertSqlWithIdReturningClause;
     private final String insertSqlWithReturningClause;
     private final String selectByIdSql;
     private final String selectSql;
@@ -32,6 +33,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     private SimpleGhostFlowJdbcCrud(JdbcTemplate jdbcTemplate, String tableName, List<Column> allColumns, List<Column> idColumns, List<Column> columns, List<Column> generatedColumns) {
         this.jdbcTemplate = jdbcTemplate;
         this.insertSql = buildInsertSQL(tableName, columns);
+        this.insertSqlWithIdReturningClause = this.insertSql + buildReturningSQL(idColumns);
         this.insertSqlWithReturningClause = this.insertSql + buildReturningSQL(allColumns);
         this.selectByIdSql = buildSelectByIdSQL(tableName, idColumns, allColumns);
         this.selectSql = buildSelectSQL(tableName, allColumns);
@@ -85,7 +87,7 @@ public class SimpleGhostFlowJdbcCrud<T> {
     public long insertAndReturnKey(Object... args) {
         Preconditions.checkArgument(idColumnsSize == 1, "must be one id column");
         Preconditions.checkArgument(columnsSize == args.length, "invalid args size");
-        return this.jdbcTemplate.queryForObject(insertSqlWithReturningClause, Long.class, args);
+        return this.jdbcTemplate.queryForObject(insertSqlWithIdReturningClause, Long.class, args);
     }
 
     public T insertAndReturn(RowMapper<T> rowMapper, Object... args) {

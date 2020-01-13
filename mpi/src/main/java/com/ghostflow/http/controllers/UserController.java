@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_LIMIT;
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_OFFSET;
-
 @Slf4j
 @Controller
 @RequestMapping("/api/users")
@@ -34,7 +31,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> get(Principal principal) {
-        return ResponseEntity.ok(userService.getUserInfo(principal.getName()));
+        return ResponseEntity.ok(userService.get(principal.getName()));
     }
 
 
@@ -52,9 +49,15 @@ public class UserController {
 
     @RequestMapping(value = "/employees", method = RequestMethod.GET)
     public ResponseEntity<?> getEmployees(Principal principal,
-                                                  @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                                  @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
+                                                  @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                                  @RequestParam(value = "offset", defaultValue = "0") long offset) {
         return ResponseEntity.ok(userService.getEmployees(principal.getName(), limit, offset));
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(Principal principal, @PathVariable("id") long id) {
+        userService.delete(principal.getName(), id);
+        return ResponseEntity.ok().build();
     }
 
     @AllArgsConstructor
@@ -70,8 +73,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{id}/role", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(Principal principal, @PathVariable("id") long id) {
-        userService.delete(principal.getName(), id);
+    public ResponseEntity<?> deleteRole(Principal principal, @PathVariable("id") long id) {
+        userService.approve(principal.getName(), id, null);
         return ResponseEntity.ok().build();
     }
 }

@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_LIMIT;
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_OFFSET;
-
 @Slf4j
 @Controller
 @RequestMapping("/api/bids")
@@ -42,42 +39,42 @@ public class BidController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Bids<?>> get(Principal principal,
-                                    @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                    @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset,
+                                    @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                    @RequestParam(value = "offset", defaultValue = "0") long offset,
                                     @RequestParam(value = "type", required = false) String type) {
         return ResponseEntity.ok(longPollingBidService.getBidsByRole(principal.getName(), BidEntity.Type.nullableValueOf(type), limit, offset));
     }
 
     @RequestMapping(value = "/repair", method = RequestMethod.GET)
     public ResponseEntity<Bids<?>> getRepair(Principal principal,
-                                          @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                          @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
+                                          @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                          @RequestParam(value = "offset", defaultValue = "0") long offset) {
         return ResponseEntity.ok(longPollingBidService.getBidsByRole(principal.getName(), BidEntity.Type.REPAIR, limit, offset));
     }
 
     @RequestMapping(value = "/common", method = RequestMethod.GET)
     public ResponseEntity<Bids<?>> getCommon(Principal principal,
-                                          @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                          @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
+                                          @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                          @RequestParam(value = "offset", defaultValue = "0") long offset) {
         return ResponseEntity.ok(longPollingBidService.getBidsByRole(principal.getName(), BidEntity.Type.COMMON, limit, offset));
     }
 
     @RequestMapping(value = "/created", method = RequestMethod.GET)
     public ResponseEntity<Bids<?>> getCreated(Principal principal,
-                                           @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                           @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
+                                           @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                           @RequestParam(value = "offset", defaultValue = "0") long offset) {
         return ResponseEntity.ok(longPollingBidService.getCreatedBids(principal.getName(), limit, offset));
     }
 
     @RequestMapping(value = "/accepted", method = RequestMethod.GET)
     public ResponseEntity<Bids<?>> getAccepted(Principal principal,
-                                           @RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) long limit,
-                                           @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) long offset) {
+                                           @RequestParam(value = "limit", defaultValue = "60") long limit,
+                                           @RequestParam(value = "offset", defaultValue = "0") long offset) {
         return ResponseEntity.ok(longPollingBidService.getAcceptedBids(principal.getName(), limit, offset));
     }
 
     @RequestMapping(value = "/wait", method = RequestMethod.GET)
-    public ResponseEntity<Bids<?>> getCreated(Principal principal, @RequestParam(value = "last_update_time") Long lastUpdateTime) {
+    public ResponseEntity<Bids<?>> getCreated(Principal principal, @RequestParam(value = "last_update_time", required = false) Long lastUpdateTime) {
         return ResponseEntity.ok(longPollingBidService.waitForNewBidsByRole(principal.getName(), lastUpdateTime));
     }
 
@@ -87,7 +84,7 @@ public class BidController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<BidEntity<?>> update(Principal principal, @PathVariable("id") long id, UpdateRequest updateRequest) {
+    public ResponseEntity<BidEntity<?>> update(Principal principal, @PathVariable("id") long id, @RequestBody UpdateRequest updateRequest) {
         return ResponseEntity.ok(longPollingBidService.updateBid(principal.getName(), id, updateRequest.getDescription(), updateRequest.getAction()));
     }
 
@@ -101,7 +98,7 @@ public class BidController {
     @AllArgsConstructor
     @Getter
     @Setter
-    private static class UpdateRequest {
+    public static class UpdateRequest {
         private final BidEntity.Description description;
         private final Action action;
     }
