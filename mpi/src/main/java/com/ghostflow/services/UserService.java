@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Objects;
+
 public interface UserService extends UserDetailsService {
     UserInfo createUser(String email, String name, String password);
 
@@ -36,6 +38,21 @@ public interface UserService extends UserDetailsService {
 
         public UserInfo(UserEntity entity) {
             this(entity.getUserId(), entity.getEmail(), entity.getName());
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            UserInfo userInfo = (UserInfo) o;
+            return Objects.equals(userId, userInfo.userId) &&
+                    Objects.equals(email, userInfo.email) &&
+                    Objects.equals(name, userInfo.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(userId, email, name);
         }
     }
 }
