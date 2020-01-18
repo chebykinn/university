@@ -49,12 +49,12 @@ public class BidControllerTest {
     @WithMockUser()
     public void getCommon() throws Exception {
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd",
+                (long)0, "name", "email", "asd",
                 (long)1);
         List<ExtendedBidEntity> bidsList = new ArrayList<>();
         bidsList.add(bid);

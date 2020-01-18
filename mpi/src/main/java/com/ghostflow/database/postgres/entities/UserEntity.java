@@ -69,9 +69,9 @@ public class UserEntity {
     public enum Role{
         ADMIN,
         CLIENT,
-        INVESTIGATION(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.PENDING),            new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.ACCEPTED)),
-        RESEARCH_AND_DEVELOPMENT(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.CAUGHT),  new TypeStatePair(BidEntity.Type.REPAIR, BidEntity.State.PENDING), new TypeStatePair(BidEntity.Type.REPAIR, BidEntity.State.ACCEPTED_BY_RESEARCHER)),
-        CHIEF_OPERATIVE(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.APPROVED),         new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.ACCEPTED_BY_OPERATIVE)),
+        INVESTIGATION(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.PENDING)),
+        RESEARCH_AND_DEVELOPMENT(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.CAUGHT),  new TypeStatePair(BidEntity.Type.REPAIR, BidEntity.State.PENDING)),
+        CHIEF_OPERATIVE(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.APPROVED)),
         OPERATIVE(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.ACCEPTED_BY_OPERATIVE));
 
         private final List<TypeStatePair> waitingFor;

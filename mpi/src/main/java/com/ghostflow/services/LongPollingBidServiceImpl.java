@@ -86,7 +86,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
     @Override
     public Bids<?> getBidsByRole(String email, BidEntity.Type typeFilter, long limit, long offset) {
         UserEntity user = userService.get(email);
-        return bidRepository.extended().findExtended(limit, offset, getTypesStatesByRole(user.getRole(), typeFilter));
+        return bidRepository.extended().findExtended(limit, offset, user.getUserId(), getTypesStatesByRole(user.getRole(), typeFilter));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class LongPollingBidServiceImpl implements LongPollingBidService {
                     oldValue.getEmployeeId(),
                     oldValue.getState(),
                     oldValue.getUpdateTime(),
-                    oldValue.getDescription(),
+                    description,
                     null
                 );
             }

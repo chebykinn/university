@@ -71,12 +71,12 @@ public class CompanyReviewServiceImplTest {
         Mockito.when(userService.get("kek@kek")).thenReturn(userEntity);
 
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd",
+                (long)0, "name", "email", "asd",
                 (long)1);
         Mockito.when(bidExtended.findExtended((long)1)).thenReturn(Optional.of(bid));
 
