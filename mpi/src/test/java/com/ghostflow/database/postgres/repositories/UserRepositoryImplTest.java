@@ -17,8 +17,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -37,7 +36,11 @@ public class UserRepositoryImplTest {
     @Test
     public void create() {
         UserEntity userEntity = new UserEntity((long)1, "kek@kek", "usr", "pass", "CLIENT");
-        Mockito.when(jdbcTemplate.queryForObject(anyString(), (Class<Object>) any(), anyVararg())).thenReturn((long)1);
+        Map<String, Object> elem = new HashMap<>();
+        List<Map<String, Object>> out = new ArrayList<>();
+        elem.put("user_id", (long)1);
+        out.add(elem);
+        Mockito.when(jdbcTemplate.queryForList(anyString(), (Object) anyVararg())).thenReturn(out);
         userRepository = new UserRepositoryImpl(jdbcTemplate, namedParameterJdbcTemplate);
         UserEntity actualEnt = userRepository.create("kek@kek", "usr", "pass", UserEntity.Role.CLIENT);
         assertEquals(userEntity, actualEnt);
