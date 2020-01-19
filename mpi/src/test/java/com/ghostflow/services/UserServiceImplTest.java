@@ -29,13 +29,12 @@ public class UserServiceImplTest {
     @Test
     public void createUser() {
         UserEntity ent = new UserEntity((long)1, "kek@kek", "kek", "pass", "CLIENT");
-        UserService.UserInfo info = new UserService.UserInfo(ent);
         Mockito.when(userRepository.find(anyString())).thenReturn(Optional.empty());
         Mockito.when(userRepository.create(anyString(), eq("kek"), anyString(),
             eq(UserEntity.Role.CLIENT))).thenReturn(ent);
         userService = new UserServiceImpl(userRepository, bCryptPasswordEncoder);
-        UserService.UserInfo actualInfo = userService.createUser("kek", "kek", "pass");
-        assertEquals(info, actualInfo);
+        UserEntity actualEntity = userService.createUser("kek", "kek", "pass");
+        assertEquals(ent, actualEntity);
     }
 
     @Test

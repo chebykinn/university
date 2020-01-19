@@ -10,6 +10,7 @@ import com.ghostflow.database.postgres.ColumnsBuilder.Column;
 import com.ghostflow.database.postgres.entities.BidEntity;
 import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.util.PGTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -31,23 +32,38 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.ghostflow.database.Utils.getNullable;
+import static com.ghostflow.database.postgres.repositories.CompanyReviewRepositoryImpl.COLUMN_COMPANY_REVIEW_ID;
 
 @Slf4j
 @Repository("bidRepository")
 public class BidRepositoryImpl implements BidRepository {
-    private static final ColumnsBuilder columnsBuilder = new ColumnsBuilder();
+    private static final int RETRIEVED_BIDS_LIMIT;
 
-    private static final int RETRIEVED_BIDS_LIMIT = 100;
+    private static final ColumnsBuilder columnsBuilder;
 
-    public static final String TABLE_NAME = "bids";
+    public static final String TABLE_NAME;
 
-    public static final Column COLUMN_BID_ID       = columnsBuilder.newColumn("bid_id");
-    public static final Column COLUMN_CUSTOMER_ID  = columnsBuilder.newColumn("customer_id");
-    public static final Column COLUMN_EMPLOYEE_ID  = columnsBuilder.newColumn("employee_id");
-    public static final Column COLUMN_STATE        = columnsBuilder.newColumn("state");
-    public static final Column COLUMN_UPDATE_TIME  = columnsBuilder.newColumn("update_time");
-    public static final Column COLUMN_DESCRIPTION  = columnsBuilder.newColumn("description", "jsonb");
-    public static final Column COLUMN_CREATE_TIME  = columnsBuilder.newColumn("create_time", true);
+    public static final Column COLUMN_BID_ID;
+    public static final Column COLUMN_CUSTOMER_ID;
+    public static final Column COLUMN_EMPLOYEE_ID;
+    public static final Column COLUMN_STATE;
+    public static final Column COLUMN_UPDATE_TIME;
+    public static final Column COLUMN_DESCRIPTION;
+    public static final Column COLUMN_CREATE_TIME;
+
+    static {
+        RETRIEVED_BIDS_LIMIT = 100;
+        columnsBuilder = new ColumnsBuilder();
+        TABLE_NAME = "bids";
+
+        COLUMN_BID_ID       = columnsBuilder.newColumn("bid_id");
+        COLUMN_CUSTOMER_ID  = columnsBuilder.newColumn("customer_id");
+        COLUMN_EMPLOYEE_ID  = columnsBuilder.newColumn("employee_id");
+        COLUMN_STATE        = columnsBuilder.newColumn("state");
+        COLUMN_UPDATE_TIME  = columnsBuilder.newColumn("update_time");
+        COLUMN_DESCRIPTION  = columnsBuilder.newColumn("description", "jsonb");
+        COLUMN_CREATE_TIME  = columnsBuilder.newColumn("create_time", true);
+    }
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -131,15 +147,22 @@ public class BidRepositoryImpl implements BidRepository {
                 rs.getString(COLUMN_DESCRIPTION.getIndex()),
                 rs.getTimestamp(COLUMN_CREATE_TIME.getIndex()).getTime(),
                 rs.getString(COLUMN_CREATE_TIME.getIndex() + 1),
-                rs.getString(COLUMN_CREATE_TIME.getIndex() + 2)
+                rs.getString(COLUMN_CREATE_TIME.getIndex() + 2),
+                rs.getString(COLUMN_CREATE_TIME.getIndex() + 3),
+                rs.getLong(COLUMN_CREATE_TIME.getIndex() + 4)
             );
         }
 
-        private final String EXTENDED_SELECT =
-            "SELECT " + BidRepositoryImpl.columnsBuilder.asStringStream().map(s -> "b." + s).collect(Collectors.joining(", ")) + ", c." + COLUMN_NAME + ", e." + COLUMN_NAME + "\n" +
-            "FROM " + BidRepositoryImpl.TABLE_NAME + " AS b \n" +
-            "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS c ON(b." + COLUMN_CUSTOMER_ID + " = c." + COLUMN_USER_ID + ") \n" +
-            "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS e ON(b." + COLUMN_EMPLOYEE_ID + " = e." + COLUMN_USER_ID + ") \n";
+        private final String EXTENDED_SELECT;
+        {
+            EXTENDED_SELECT =
+                "SELECT " + BidRepositoryImpl.columnsBuilder.asStringStream().map(s -> "b." + s).collect(Collectors.joining(", ")) +
+                    "   , c." + COLUMN_NAME + ", c." + COLUMN_EMAIL + ", e." + COLUMN_NAME + ", r." + COLUMN_COMPANY_REVIEW_ID + "\n" +
+                    "FROM " + BidRepositoryImpl.TABLE_NAME + " AS b \n" +
+                    "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS c ON(b." + COLUMN_CUSTOMER_ID + " = c." + COLUMN_USER_ID + ") \n" +
+                    "LEFT JOIN " + UserRepositoryImpl.TABLE_NAME + " AS e ON(b." + COLUMN_EMPLOYEE_ID + " = e." + COLUMN_USER_ID + ") \n" +
+                    "LEFT JOIN " + CompanyReviewRepositoryImpl.TABLE_NAME + " AS r USING(" + COLUMN_BID_ID + ") \n";
+        }
 
         @Override
         public Optional<ExtendedBidEntity<?>> findExtended(long id) {
@@ -155,12 +178,12 @@ public class BidRepositoryImpl implements BidRepository {
             whereClause = whereClause.isEmpty() ? whereClause : whereClause + " AND ";
             String sql =
                 EXTENDED_SELECT +
-                "WHERE " + whereClause + COLUMN_UPDATE_TIME + " > ? \n" +
-                "ORDER BY " + COLUMN_UPDATE_TIME + " ASC \n" +
+                "WHERE " + whereClause + "b." + COLUMN_UPDATE_TIME + " > ? \n" +
+                "ORDER BY b." + COLUMN_UPDATE_TIME + " ASC \n" +
                 "LIMIT ?";
             List<Object> args = new ArrayList<>(typesStates.length + 2);
             Collections.addAll(args, typesStates);
-            args.add(Timestamp.from(Instant.ofEpochMilli(updateTime)));
+            args.add(PGTimestamp.from(Instant.ofEpochMilli(updateTime)));
             args.add(RETRIEVED_BIDS_LIMIT);
             return new Bids(jdbcTemplate.query(sql, rowMapper, args.toArray()), updateTime);
         }
@@ -181,7 +204,7 @@ public class BidRepositoryImpl implements BidRepository {
                     "   " + EXTENDED_SELECT +
                     "   WHERE b." + column + " = ? \n" +
                     ") \n" +
-                    "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::timestamp, null::text, null::text \n" +
+                    "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, null::timestamp, null::jsonb, null::timestamp, null::text, null::text, null::text, null::bigint \n" +
                     "FROM selected_bids \n" +
                     "UNION ALL \n" +
                     "(SELECT * \n" +
@@ -192,21 +215,22 @@ public class BidRepositoryImpl implements BidRepository {
         }
 
         @Override
-        public Bids findExtended(long limit, long offset, String ... typesStates) {
+        public Bids findExtended(long limit, long offset, long userId, String ... typesStates) {
             String whereClause = typesStatesToWhere(typesStates);
             String sql =
                 "WITH selected_bids AS ( \n" +
                 "   " + EXTENDED_SELECT +
-                "   WHERE " + whereClause + " \n" +
+                "   WHERE " + COLUMN_EMPLOYEE_ID + " = ? OR " + whereClause + " \n" +
                 ") \n" +
-                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, coalesce(max(" + COLUMN_UPDATE_TIME + "), to_timestamp(0)), null::jsonb, null::timestamp, null::text, null::text \n" +
+                "SELECT count(1)::bigint, null::bigint, null::bigint, null::text, coalesce(max(" + COLUMN_UPDATE_TIME + "), to_timestamp(0)), null::jsonb, null::timestamp, null::text, null::text, null::text, null::bigint \n" +
                 "FROM selected_bids \n" +
                 "UNION ALL \n" +
                 "(SELECT * \n" +
                 "FROM selected_bids \n" +
                 "ORDER BY " + COLUMN_UPDATE_TIME + " ASC \n" +
                 "LIMIT ? OFFSET ?)";
-            List<Object> args = new ArrayList<>(typesStates.length + 2);
+            List<Object> args = new ArrayList<>(typesStates.length + 3);
+            args.add(userId);
             Collections.addAll(args, typesStates);
             args.add(limit);
             args.add(offset);
@@ -216,7 +240,7 @@ public class BidRepositoryImpl implements BidRepository {
         private String typesStatesToWhere(String... typesStates) {
             return IntStream.range(0, typesStates.length / 2)
                 .mapToObj(i -> "(b." + COLUMN_DESCRIPTION + "->>'type' = ? AND b." + COLUMN_STATE + " = ?)")
-                .collect(Collectors.joining(" OR "));
+                .collect(Collectors.joining(" OR ", "(", ")"));
         }
 
         private Bids rsToBids(ResultSet rs, long limit) throws SQLException {

@@ -22,14 +22,19 @@ import java.util.function.Function;
 @ControllerAdvice
 public class GhostFlowExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(GhostFlowExceptionHandler.class);
+    private static final Logger log;
 
-    private final static ImmutableMap<Class<? extends Throwable>, Message> typeToMessage = ImmutableMap.<Class<? extends Throwable>, Message>builder()
-        .put(IllegalArgumentException.class, new Message(HttpStatus.BAD_REQUEST))
-        .put(GhostFlowAccessDeniedException.class, new Message(HttpStatus.FORBIDDEN))
-        .put(DataIntegrityViolationException.class, Message.INTERNAL)
-        .put(BadSqlGrammarException.class, Message.INTERNAL)
-        .build();
+    private final static ImmutableMap<Class<? extends Throwable>, Message> typeToMessage;
+
+    static {
+        log = LoggerFactory.getLogger(GhostFlowExceptionHandler.class);
+        typeToMessage = ImmutableMap.<Class<? extends Throwable>, Message>builder()
+            .put(IllegalArgumentException.class, new Message(HttpStatus.BAD_REQUEST))
+            .put(GhostFlowAccessDeniedException.class, new Message(HttpStatus.FORBIDDEN))
+            .put(DataIntegrityViolationException.class, Message.INTERNAL)
+            .put(BadSqlGrammarException.class, Message.INTERNAL)
+            .build();
+    }
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<?> handleException(Exception e) {
@@ -45,8 +50,14 @@ public class GhostFlowExceptionHandler extends ResponseEntityExceptionHandler {
     @AllArgsConstructor
     @Getter
     private static class Message {
-        private static final Message DEFAULT = new Message(HttpStatus.INTERNAL_SERVER_ERROR);
-        private static final Message INTERNAL = new Message(HttpStatus.INTERNAL_SERVER_ERROR, e -> "Internal Server Error");
+        private static final Message DEFAULT;
+        private static final Message INTERNAL;
+
+        static {
+            DEFAULT = new Message(HttpStatus.INTERNAL_SERVER_ERROR);
+            INTERNAL = new Message(HttpStatus.INTERNAL_SERVER_ERROR, e -> "Internal Server Error");
+        }
+
         private final HttpStatus status;
         private final Function<Exception, String> messageFunction;
 

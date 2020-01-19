@@ -1,20 +1,21 @@
 package com.ghostflow.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ghostflow.database.BidRepository;
 import com.ghostflow.database.CompanyReviewRepository;
 import com.ghostflow.database.CompanyReviews;
-import com.ghostflow.database.postgres.entities.*;
+import com.ghostflow.database.postgres.entities.BidEntity;
+import com.ghostflow.database.postgres.entities.CompanyReviewEntity;
+import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
+import com.ghostflow.database.postgres.entities.ExtendedCompanyReviewEntity;
+import com.ghostflow.database.postgres.entities.UserEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Matchers.any;
 
 @RunWith(SpringRunner.class)
@@ -70,12 +71,13 @@ public class CompanyReviewServiceImplTest {
         Mockito.when(userService.get("kek@kek")).thenReturn(userEntity);
 
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd");
+                (long)0, "name", "email", "asd",
+                (long)1);
         Mockito.when(bidExtended.findExtended((long)1)).thenReturn(Optional.of(bid));
 
         Mockito.when(bidRepository.extended()).thenReturn(bidExtended);

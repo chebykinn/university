@@ -22,12 +22,12 @@ public interface BidRepository {
     interface Extended {
         <T extends BidEntity.Description> Optional<ExtendedBidEntity<T>> findExtended(long id);
 
-        Bids findExtended(long limit, long offset, String... typesStates);
-
         Bids findGtThanUpdateTimeExtended(long updateTime, String... typesStates);
 
         Bids findByCustomerExtended(long ownerId, long limit, long offset);
 
         Bids findByEmployeeExtended(long employeeId, long limit, long offset);
+
+        Bids findExtended(long limit, long offset, long userId, String... typesStates);
     }
 }

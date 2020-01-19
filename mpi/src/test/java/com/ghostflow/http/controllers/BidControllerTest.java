@@ -2,7 +2,6 @@ package com.ghostflow.http.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ghostflow.database.BidRepository;
 import com.ghostflow.database.Bids;
 import com.ghostflow.database.postgres.entities.BidEntity;
 import com.ghostflow.database.postgres.entities.ExtendedBidEntity;
@@ -14,13 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -31,8 +23,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BidController.class)
@@ -57,12 +54,13 @@ public class BidControllerTest {
     @WithMockUser()
     public void getCommon() throws Exception {
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd");
+                (long)0, "name", "email", "asd",
+                (long)1);
         List<ExtendedBidEntity> bidsList = new ArrayList<>();
         bidsList.add(bid);
         Bids bids = new Bids(bidsList, (long)bidsList.size(), (long)0);

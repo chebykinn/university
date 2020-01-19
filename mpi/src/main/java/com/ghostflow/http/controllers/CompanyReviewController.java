@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_LIMIT;
-import static com.ghostflow.http.beans.PaginationParameters.DEFAULT_OFFSET;
-
 @Slf4j
 @Controller
 @RequestMapping("/api")
@@ -59,8 +56,8 @@ public class CompanyReviewController {
     }
 
     @RequestMapping(path = "/reviews", method = RequestMethod.GET)
-    public ResponseEntity<CompanyReviews> get(@RequestParam(value = "limit", defaultValue = DEFAULT_LIMIT) int limit,
-                                              @RequestParam(value = "offset", defaultValue = DEFAULT_OFFSET) int offset) {
+    public ResponseEntity<CompanyReviews> get(@RequestParam(value = "limit", defaultValue = "60") int limit,
+                                              @RequestParam(value = "offset", defaultValue = "0") int offset) {
         return ResponseEntity.ok(companyReviewService.all(offset, limit));
     }
 }

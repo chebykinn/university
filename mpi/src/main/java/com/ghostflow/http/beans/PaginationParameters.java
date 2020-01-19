@@ -8,8 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 public class PaginationParameters {
-    public static final String DEFAULT_OFFSET = "0";
-    public static final String DEFAULT_LIMIT = "60";
+    public static final String DEFAULT_OFFSET;
+    public static final String DEFAULT_LIMIT;
+
+    static {
+        DEFAULT_OFFSET = "0";
+        DEFAULT_LIMIT = "60";
+    }
 
     private final Integer offset;
     private final Integer limit;

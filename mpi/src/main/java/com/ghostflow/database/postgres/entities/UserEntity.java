@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ghostflow.database.Utils;
 import com.ghostflow.utils.TypeStatePair;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -65,12 +67,14 @@ public class UserEntity {
         return Objects.hash(userId, email, name, password, role);
     }
 
+    public static final ListMultimap<TypeStatePair, Role> WAITING_FOR_TO_ROLES = ArrayListMultimap.create();
+
     @Getter
     public enum Role{
         ADMIN,
         CLIENT,
         INVESTIGATION(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.PENDING)),
-        RESEARCH_AND_DEVELOPMENT(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.CAUGHT), new TypeStatePair(BidEntity.Type.REPAIR, BidEntity.State.PENDING)),
+        RESEARCH_AND_DEVELOPMENT(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.CAUGHT),  new TypeStatePair(BidEntity.Type.REPAIR, BidEntity.State.PENDING)),
         CHIEF_OPERATIVE(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.APPROVED)),
         OPERATIVE(new TypeStatePair(BidEntity.Type.COMMON, BidEntity.State.ACCEPTED_BY_OPERATIVE));
 
@@ -78,6 +82,7 @@ public class UserEntity {
 
         Role(TypeStatePair ... pairs) {
             this.waitingFor = Arrays.asList(pairs);
+            waitingFor.forEach(tsp -> WAITING_FOR_TO_ROLES.put(tsp, this));
         }
 
         public static String[] waitingForToStr(Stream<TypeStatePair> waitingFor) {

@@ -23,15 +23,26 @@ import java.util.Optional;
 @Repository("userRepository")
 public class UserRepositoryImpl implements UserRepository {
 
-    protected static final ColumnsBuilder columnsBuilder = new ColumnsBuilder();
+    protected static final ColumnsBuilder columnsBuilder;
 
-    protected static final String TABLE_NAME = "users";
+    protected static final String TABLE_NAME;
 
-    protected static final Column COLUMN_USER_ID    = columnsBuilder.newColumn("user_id");
-    protected static final Column COLUMN_EMAIL      = columnsBuilder.newColumn("email");
-    protected static final Column COLUMN_PASSWORD   = columnsBuilder.newColumn("password");
-    protected static final Column COLUMN_NAME       = columnsBuilder.newColumn("name");
-    protected static final Column COLUMN_ROLE       = columnsBuilder.newColumn("role");
+    protected static final Column COLUMN_USER_ID;
+    protected static final Column COLUMN_EMAIL;
+    protected static final Column COLUMN_PASSWORD;
+    protected static final Column COLUMN_NAME;
+    protected static final Column COLUMN_ROLE;
+
+    static {
+        columnsBuilder = new ColumnsBuilder();
+        TABLE_NAME = "users";
+
+        COLUMN_USER_ID    = columnsBuilder.newColumn("user_id");
+        COLUMN_EMAIL      = columnsBuilder.newColumn("email");
+        COLUMN_PASSWORD   = columnsBuilder.newColumn("password");
+        COLUMN_NAME       = columnsBuilder.newColumn("name");
+        COLUMN_ROLE       = columnsBuilder.newColumn("role");
+    }
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -58,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserEntity create(String email, String name, String password, UserEntity.Role role) {
-        long id = ghostFlowJdbcCrud.insertAndReturnKey(getValidEmail(email), password, name, role.name());
+        long id = ghostFlowJdbcCrud.insertAndReturnKey(getValidEmail(email), password, name, role == null ? null : role.name());
         return new UserEntity(id, email, name, password, role);
     }
 
@@ -82,7 +93,7 @@ public class UserRepositoryImpl implements UserRepository {
             "   WHERE " + COLUMN_ROLE + " IN (:roles) OR " + COLUMN_ROLE + " IS NULL \n" +
             "   ORDER BY " + COLUMN_USER_ID + " DESC \n" +
             ") \n" +
-            "SELECT count(1)::bigint, null::text, null::text, null::text, null::text, null::boolean \n" +
+            "SELECT count(1)::bigint, null::text, null::text, null::text, null::text \n" +
             "FROM selected_employees \n" +
             "UNION ALL \n" +
             "(SELECT * \n" +
@@ -116,10 +127,16 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> approve(long id, UserEntity.Role role) {
+        String roleSetter;
+        if (role == UserEntity.Role.CHIEF_OPERATIVE) {
+            roleSetter = "CASE WHEN EXISTS(SELECT 1 FROM users WHERE role = '" + role.name() + "') THEN role ELSE ? END";
+        } else {
+            roleSetter = "?";
+        }
         String sql =
-            "UPDATE " + TABLE_NAME + " SET " + COLUMN_ROLE + " = ? WHERE " + COLUMN_USER_ID + " = ? \n" +
+            "UPDATE " + TABLE_NAME + " SET " + COLUMN_ROLE + " = " + roleSetter + " WHERE " + COLUMN_USER_ID + " = ?\n" +
                 "RETURNING " + columnsBuilder.getSelectClause();
-        return jdbcTemplate.query(sql, rowMapper, role.name(), id).stream().findAny();
+        return jdbcTemplate.query(sql, rowMapper, role == null ? null : role.name(), id).stream().findAny();
     }
 
     @Override

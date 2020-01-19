@@ -1,9 +1,7 @@
 package com.ghostflow.integrational.http.controllers;
 
-import com.ghostflow.Main;
 import com.ghostflow.database.UserRepository;
 import com.ghostflow.database.postgres.entities.UserEntity;
-import com.ghostflow.services.UserService;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +20,8 @@ import java.util.Optional;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

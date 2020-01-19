@@ -23,10 +23,17 @@ import static com.google.common.base.Preconditions.checkArgument;
 @Component("commonClient")
 public class HttpClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpClient.class);
+    private static final Logger logger;
 
-    private static final int MAX_ATTEMPTS = 100_000;
-    private static final String AVG_NAME = "timeouts_count";
+    private static final int MAX_ATTEMPTS;
+    private static final String AVG_NAME;
+
+    static {
+        logger = LoggerFactory.getLogger(HttpClient.class);
+
+        MAX_ATTEMPTS = 100_000;
+        AVG_NAME = "timeouts_count";
+    }
 
     private final OkHttpClient httpClient;
     private final ObjectMapper objectMapper;

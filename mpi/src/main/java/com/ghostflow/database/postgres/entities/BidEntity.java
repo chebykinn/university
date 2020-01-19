@@ -49,10 +49,14 @@ public class BidEntity<T extends BidEntity.Description> {
         COMMON,
         REPAIR;
 
-        public static final Map<Class, Type> fromClass = ImmutableMap.of(
-            CommonDescription.class, COMMON,
-            RepairDescription.class, REPAIR
-        );
+        public static final Map<Class, Type> fromClass;
+
+        static {
+            fromClass = ImmutableMap.of(
+                CommonDescription.class, COMMON,
+                RepairDescription.class, REPAIR
+            );
+        }
 
         public static Type nullableValueOf(String name) {
             return Utils.nullableValueOf(Type.class, name);
@@ -104,6 +108,7 @@ public class BidEntity<T extends BidEntity.Description> {
         private final String phoneNumber;
         private final String address;
         private final String body;
+        private final String comment;
     }
 
     @NoArgsConstructor(force = true)
@@ -111,8 +116,8 @@ public class BidEntity<T extends BidEntity.Description> {
     public static class CommonDescription extends Description {
         private final String ghostDescription;
 
-        public CommonDescription(String title, String phoneNumber, String address, String body, String ghostDescription) {
-            super(title, phoneNumber, address, body);
+        public CommonDescription(String title, String phoneNumber, String address, String body, String comment, String ghostDescription) {
+            super(title, phoneNumber, address, body, comment);
             this.ghostDescription = ghostDescription;
         }
     }
@@ -120,12 +125,10 @@ public class BidEntity<T extends BidEntity.Description> {
     @NoArgsConstructor(force = true)
     @Getter
     public static class RepairDescription extends Description {
-        private final String comment;
         private final String status;
 
         public RepairDescription(String title, String phoneNumber, String address, String body, String comment, String status) {
-            super(title, phoneNumber, address, body);
-            this.comment = comment;
+            super(title, phoneNumber, address, body, comment);
             this.status = status;
         }
     }
