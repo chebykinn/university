@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor(force = true)
 @Getter
@@ -33,5 +34,20 @@ public class Bids<T extends BidEntity.Description> {
 
     public Bids(List<ExtendedBidEntity<T>> bids, long lastUpdateTime) {
         this(bids, null, lastUpdateTime);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bids<?> bids1 = (Bids<?>) o;
+        return Objects.equals(bids, bids1.bids) &&
+                Objects.equals(count, bids1.count) &&
+                Objects.equals(lastUpdateTime, bids1.lastUpdateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bids, count, lastUpdateTime);
     }
 }

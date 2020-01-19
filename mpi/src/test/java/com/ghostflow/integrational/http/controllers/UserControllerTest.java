@@ -16,7 +16,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import java.util.Optional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import static org.junit.Assert.*;
@@ -41,7 +44,11 @@ public class UserControllerTest {
 
     @Before
     public void setUp() {
-        UserEntity ent = userRepository.create("kek@kek", "admin", "pass", UserEntity.Role.ADMIN);
+        if (!userRepository.find("kek@kek").isPresent()) {
+            UserEntity ent = userRepository.create("kek@kek", "admin", "pass", UserEntity.Role.ADMIN);
+        }
+        Optional<UserEntity> ololoUser = userRepository.find("ololo@ololo");
+        ololoUser.ifPresent(userEntity -> userRepository.delete(userEntity.getUserId()));
     }
 
     @Test
@@ -54,22 +61,34 @@ public class UserControllerTest {
     }
 
     @Test
-    public void createUser() {
+    public void createUser() throws Exception {
+        mvc.perform(post("/api/users/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"ololo@ololo\", \"name\": \"ololo\", \"password\": \"ololo\"}"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void createEmployee() {
+    @WithMockUser(username = "kek@kek")
+    public void approve() throws Exception {
+        mvc.perform(post("/api/users/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"ololo@ololo\", \"name\": \"ololo\", \"password\": \"ololo\"}"))
+                .andExpect(status().isOk());
+        mvc.perform(post("/api/users/1/role")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"role\": \"CLIENT\"}"))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void getEmployees() throws Exception {
-    }
-
-    @Test
-    public void approve() {
-    }
-
-    @Test
-    public void delete() {
+    @WithMockUser(username = "kek@kek")
+    public void testDelete() throws Exception {
+        mvc.perform(post("/api/users/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"ololo@ololo\", \"name\": \"ololo\", \"password\": \"ololo\"}"))
+                .andExpect(status().isOk());
+        mvc.perform(delete("/api/users/1/role"))
+                .andExpect(status().isOk());
     }
 }

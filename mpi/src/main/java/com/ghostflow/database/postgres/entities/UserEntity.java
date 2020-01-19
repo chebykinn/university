@@ -19,6 +19,10 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @Getter
 public class UserEntity {
+    public Long getUserId() {
+        return userId;
+    }
+
     private Long      userId;
     private String    email;
     private String    name;
