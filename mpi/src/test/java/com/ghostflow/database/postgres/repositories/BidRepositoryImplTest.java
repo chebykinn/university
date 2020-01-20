@@ -21,9 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Matchers.*;
 
 @RunWith(SpringRunner.class)
 public class BidRepositoryImplTest {
@@ -46,7 +44,7 @@ public class BidRepositoryImplTest {
         List<Map<String, Object>> out = new ArrayList<>();
         elem.put("user_id", (long)1);
         out.add(elem);
-        Mockito.when(jdbcTemplate.queryForList(anyString(), (Object) anyVararg())).thenReturn(out);
+        Mockito.when(jdbcTemplate.queryForObject(anyString(), eq(Long.class), (Object) anyVararg())).thenReturn((long) 1);
 
         long id = bidRepository.create(new BidEntity<BidEntity.CommonDescription>(objectMapper, (long)1, (long)1, (long)1,
                 "DONE", 0, "", (long)0));
@@ -64,9 +62,9 @@ public class BidRepositoryImplTest {
 
     @Test
     public void find() {
-        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long)1,
-            (long)1, (long)1,"DONE", (long)1, "desc",
-            (long)1, "customer", "employee");
+        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long) 1,
+                (long) 1, (long) 1, "DONE", (long) 1, "desc",
+                (long) 1, "customer", "cu@cu", "employee", (long) 1);
 //        BidEntity ent = new BidEntity<BidEntity.CommonDescription>(objectMapper, (long)1, (long)1, (long)1, "DONE", 0, "", (long)0);
         Mockito.when(jdbcTemplate.query(anyString(), (RowMapper<Object>) any(), anyVararg())).thenReturn(Collections.singletonList(ent));
         bidRepository = new BidRepositoryImpl(jdbcTemplate, namedParameterJdbcTemplate, objectMapper);
@@ -77,9 +75,9 @@ public class BidRepositoryImplTest {
 
     @Test
     public void findExtended() {
-        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long)1,
-                (long)1, (long)1,"DONE", (long)1, "desc",
-                (long)1, "customer", "employee");
+        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long) 1,
+                (long) 1, (long) 1, "DONE", (long) 1, "desc",
+                (long) 1, "customer", "cu@cu", "employee", (long) 1);
         Bids bids = new Bids(Collections.singletonList(ent), 0);
         Mockito.when(jdbcTemplate.query(anyString(), (RowMapper<Object>) any(), anyVararg())).thenReturn(Collections.singletonList(ent));
 
@@ -90,9 +88,9 @@ public class BidRepositoryImplTest {
 
     @Test
     public void findByCustomerExtended() {
-        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long)1,
-                (long)1, (long)1,"DONE", (long)1, "desc",
-                (long)1, "customer", "employee");
+        ExtendedBidEntity<BidEntity.CommonDescription> ent = new ExtendedBidEntity<>(objectMapper, (long) 1,
+                (long) 1, (long) 1, "DONE", (long) 1, "desc",
+                (long) 1, "customer", "cu@cu", "employee", (long) 1);
         Bids bids = new Bids(Collections.singletonList(ent), 0);
         Mockito.when(jdbcTemplate.query(anyString(), (ResultSetExtractor<Object>) any(), anyVararg())).thenReturn(bids);
 

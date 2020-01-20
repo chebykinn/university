@@ -13,4 +13,9 @@ import java.util.List;
 public class CompanyReviews {
     private final List<ExtendedCompanyReviewEntity> reviews;
     private final long count;
+
+    public CompanyReviews(List<ExtendedCompanyReviewEntity> reviews) {
+        this.reviews = reviews;
+        this.count = reviews.size();
+    }
 }

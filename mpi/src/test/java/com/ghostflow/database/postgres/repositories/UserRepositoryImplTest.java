@@ -36,11 +36,7 @@ public class UserRepositoryImplTest {
     @Test
     public void create() {
         UserEntity userEntity = new UserEntity((long)1, "kek@kek", "usr", "pass", "CLIENT");
-        Map<String, Object> elem = new HashMap<>();
-        List<Map<String, Object>> out = new ArrayList<>();
-        elem.put("user_id", (long)1);
-        out.add(elem);
-        Mockito.when(jdbcTemplate.queryForList(anyString(), (Object) anyVararg())).thenReturn(out);
+        Mockito.when(jdbcTemplate.queryForObject(anyString(), eq(Long.class), (Object) anyVararg())).thenReturn((long) 1);
         userRepository = new UserRepositoryImpl(jdbcTemplate, namedParameterJdbcTemplate);
         UserEntity actualEnt = userRepository.create("kek@kek", "usr", "pass", UserEntity.Role.CLIENT);
         assertEquals(userEntity, actualEnt);

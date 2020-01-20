@@ -95,7 +95,7 @@ public class CompanyReviewServiceImplTest {
     public void all() {
         List<ExtendedCompanyReviewEntity> reviewsList = new ArrayList<>();
         reviewsList.add(new ExtendedCompanyReviewEntity((long)1, 1, 100, "lol", Timestamp.from(Instant.EPOCH), "user"));
-        CompanyReviews reviews = new CompanyReviews(reviewsList, reviewsList.size());
+        CompanyReviews reviews = new CompanyReviews(reviewsList);
         Mockito.when(companyReviewRepository.extended())
                 .thenReturn(extended);
         Mockito.when(extended.all(0,10)).thenReturn(reviews);

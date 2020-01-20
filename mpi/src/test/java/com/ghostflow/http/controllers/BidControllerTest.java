@@ -28,6 +28,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -77,12 +78,12 @@ public class BidControllerTest {
     @WithMockUser()
     public void getCreated() throws Exception {
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd");
+                (long)0, "name", "asd@as", "emp", (long) 1);
         List<ExtendedBidEntity> bidsList = new ArrayList<>();
         bidsList.add(bid);
         Bids bids = new Bids(bidsList, (long)bidsList.size(), (long)0);
@@ -99,12 +100,12 @@ public class BidControllerTest {
     @WithMockUser()
     public void getAccepted() throws Exception {
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "", ""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd");
+                (long)0, "name", "asd@as", "emp", (long) 1);
         List<ExtendedBidEntity> bidsList = new ArrayList<>();
         bidsList.add(bid);
         Bids bids = new Bids(bidsList, (long)bidsList.size(), (long)0);
@@ -122,12 +123,12 @@ public class BidControllerTest {
     @WithMockUser()
     public void getRepair() throws Exception {
         Mockito.when(objectMapper.readValue("{}", new TypeReference<BidEntity.Description>(){}))
-                .thenReturn(new BidEntity.CommonDescription("", "", "", "", ""));
+                .thenReturn(new BidEntity.CommonDescription("", "", "", "", "" ,""));
 
 
         ExtendedBidEntity bid = new ExtendedBidEntity(objectMapper, (long)1, (long)1, (long)1, "DONE",
                 (long)0, "{}",
-                (long)0, "name", "asd");
+                (long)0, "name", "asd@as", "emp", (long) 1);
         List<ExtendedBidEntity> bidsList = new ArrayList<>();
         bidsList.add(bid);
         Bids bids = new Bids(bidsList, (long)bidsList.size(), (long)0);
@@ -143,10 +144,10 @@ public class BidControllerTest {
     @Test
     @WithMockUser()
     public void create() throws Exception {
-//        BidEntity.Description desc = new BidEntity.CommonDescription("", "", "", "", "");
+//        BidEntity.Description desc = new BidEntity.CommonDescription("", "", "", "", "", "");
 //        ExtendedBidEntity ent = new ExtendedBidEntity<BidEntity.CommonDescription>(objectMapper, (long)1,
 //                (long)1, (long)1,"DONE", (long)1, "desc",
-//                (long)1, "customer", "employee");
+//                (long)1, "customer", "cu@cu", "em", (long) 1);
 //        Mockito.when(bidService.createBid("kek@kek", desc)).thenReturn(ent);
 //
 //        String json = "{\"title\": \"\",\"phoneNumber\": \"address\",\"\": \"body\",\"\": \"ghostDescription\"}";
